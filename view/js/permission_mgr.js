@@ -1,8 +1,6 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/4/12.
  */
-// 全局用户密码保存变量
-
 Ext.Loader.setConfig({
     enabled: true
 });
@@ -27,7 +25,6 @@ var gameStore = Ext.create('Ext.data.Store', {
     proxy: {
         type: "jsonp",
         url: gamelist_url,
-        extraParams: "game_identifer",
         callbackKey: "function",
         reader: {
             type: 'json',
@@ -54,14 +51,12 @@ var permissionListStore = Ext
             }
         });
 
-
 Ext.onReady(function () {
 
-    var applyOrdersGrid = new Ext.grid.Panel(
+    var permissionGrid = new Ext.grid.Panel(
         {
             layout: "fit",
-            //title : parent.getTitle(jq("#requesturlId").val()),
-            //iconCls : parent.getIcoCls(jq("#requesturlId").val()),
+            renderTo: Ext.getBody(),
             multiSelect: true,// 支持多选
             selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
             id: "authGridId",
@@ -89,6 +84,7 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePermission(\'{id}\',\'{name}\',\'{cname}\');"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePermission(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
@@ -116,14 +112,16 @@ Ext.onReady(function () {
                             },
                             afterrender: function (_this, eOpts) {
                                 var data = gameStore.getAt(0);
+                                //防止组件加载完后store还未接收到数据的情况，100ms获取一次
                                 (function sleepFn() {
                                     setTimeout(function () {
                                         data = gameStore.getAt(0);
                                         if (!data) {
                                             sleepFn();
                                         } else {
-                                            //默认加载第一个游戏的权限
-                                            _this.setValue(data.get("gid"));
+                                            var gid = data.get("gid");
+                                            //默认加载第一个游戏的权限列表
+                                            _this.setValue(gid);
                                         }
                                     }, 100);
                                 })();
@@ -142,149 +140,120 @@ Ext.onReady(function () {
 
         });
 
-    /**
-     * 布局
-     */
-    var viewport = new Ext.Viewport({
-        layout: "fit",
-        items: [applyOrdersGrid],
-        renderTo: Ext.getBody()
-    });
-
-
-    // var addDataWindow = new Ext.Window({
-    //     title : "添加权限",
-    //     width : 300,
-    //     height : 200,
-    //     resizable : false,
-    //     modal : true,
-    //     autoShow : true,
-    //     layout : 'fit',
-    //     items : new Ext.form.Panel({
-    //         fieldDefaults : {
-    //             labelAlign : 'right',
-    //             labelWidth : 60,
-    //             anchor : '99%'
-    //         },
-    //         frame : false,
-    //         bodyStyle : 'padding:10 10',
-    //         items : [{
-    //             html : headInfo,
-    //             border : 0,
-    //             bodyStyle : 'padding:0 0 20 0'
-    //         }, {
-    //             xtype : "textfield",
-    //             fieldLabel : oldFieldLabel,
-    //             value : name,
-    //             disabled : true,
-    //             labelWidth : 50
-    //         }, {
-    //             xtype : 'combobox',
-    //             fieldLabel : newFieldLabel,
-    //             labelWidth : 50,
-    //             displayField : displayField,
-    //             valueField : valueField,
-    //             editable : false,
-    //             emptyText : '--请选择--',
-    //             store : store,
-    //             queryMode : 'local',
-    //             allowBlank : false,
-    //             listeners : {
-    //                 beforerender : function() {
-    //                     if (this.store.count() == 0) {
-    //                         this.emptyText = '没有可选择的数据';
-    //                     }
-    //                 }
-    //             }
-    //         }]
-    //     }),
-    //     buttons : [{
-    //         text : '确定',
-    //         listeners : {
-    //             click : function(v) {
-    //                 var window = v.up().up();
-    //                 var panel = window.items.first();
-    //                 var combobox = panel.items.last();
-    //                 if (combobox.isValid()) {
-    //                     CKGobal.ajax({
-    //                         url : url,
-    //                         method : 'post',
-    //                         async : false,
-    //                         params : {
-    //                             'cloudContext.params.id' : id,
-    //                             'cloudContext.params.replaceId' : combobox
-    //                                 .getValue()
-    //                         },
-    //                         autoMsgTip : false,
-    //                         success : function(response, options, resultJSON,
-    //                                            havaMsgFlag) {
-    //                             if (resultJSON.cloudContext.msgList.length == 0) {
-    //                                 Ext.MessageBox.alert('提示', "操作成功");
-    //                                 // 刷新列表
-    //                                 data.store.load();
-    //                                 window.close();
-    //                                 return;
-    //                             }
-    //                             for (var index in resultJSON.cloudContext.msgList) {
-    //                                 Ext.MessageBox
-    //                                     .alert(
-    //                                         '提示',
-    //                                         resultJSON.cloudContext.msgList[index]);
-    //                             }
-    //                             panel.getForm().reset();
-    //                         }
-    //                     });
-    //                 }
-    //             }
-    //         }
-    //     }, {
-    //         text : '取消',
-    //         listeners : {
-    //             click : function(v) {
-    //                 v.up().up().close();
-    //             }
-    //         }
-    //     }]
+    // /**
+    //  * 布局
+    //  */
+    // new Ext.Viewport({
+    //     layout: "fit",
+    //     items: [permissionGrid],
+    //     renderTo: Ext.getBody()
     // });
 
-    var addDataWindow = new Ext.Window({
-        title: "添加权限",
-        width: 300,
-        height: 200,
-        resizable: false,
-        modal: true,
-        autoShow: false,
-        layout: 'fit',
-        items: [new Ext.form.Panel({
-            fieldDefaults : {
-                labelAlign : 'right',
-                labelWidth : 60,
-                anchor : '99%'
-            },
-            frame : false,
-            bodyStyle : 'padding:10 10',
-            items:[],
-        buttons: [{
-            text: '确定',
-            formBind: true,
-            handler: function (v) {
-                alert("submit");
-            }
-        }, {
-            text: '取消',
-            handler: function (v) {
-                v.up().up().hide();
-            }
-        }]
-            }
-        )],
-    });
 
-    function addPermission() {
-        addDataWindow.show();
-    }
 });
-
+var addDataWindow = new Ext.Window({
+    title: "添加权限",
+    width: 300,
+    height: 200,
+    resizable: false,
+    modal: true,
+    autoShow: false,
+    layout: 'fit',
+    listeners: {
+        beforeshow: function (_this, eOpts) {
+            Ext.getCmp("addSubmitBtn").enable();
+        }
+    },
+    items: [
+        new Ext.form.Panel({
+                id: "permissionForm",
+                fieldDefurlaults: {
+                    labelAlign: 'right',
+                    labelWidth: 60,
+                    anchor: '100%'
+                },
+                frame: false,
+                bodyStyle: 'padding:10 10',
+                items: [
+                    {
+                        id:"nameField",
+                        xtype: "textfield",
+                        fieldLabel: "权限名称",
+                        name: "name",
+                        allowBlank: false
+                    }, {
+                        id:"cnameField",
+                        xtype: "textfield",
+                        fieldLabel: "权限key",
+                        name: "cname",
+                        allowBlank: false
+                    }, {
+                        id: "idField",
+                        xtype: "hiddenfield",
+                        name: "id"
+                    }, {
+                        id: "gameIdentiferField",
+                        xtype: "hiddenfield",
+                        name: "game_identifer"
+                    }],
+                listeners: {
+                    beforeaction: function (_this, action, eOpts) {
+                        Ext.getCmp("gameIdentiferField").setValue(Ext.getCmp("gameCombo").getValue());
+                        Ext.data.JsonP.request({
+                            params: _this.getValues(), // values from form fields..
+                            url: Ext.getCmp("permissionForm").url,
+                            callbackKey: 'function',
+                            scope: 'this',
+                            success: function (res) {
+                                console.log(res);
+                                if (res && res.status==1) {
+                                    Ext.MessageBox.alert("提示", Ext.getCmp("permissionForm").operate+"成功");
+                                    permissionListStore.reload();
+                                    addDataWindow.hide();
+                                    return;
+                                }
+                                Ext.MessageBox.alert("提示",Ext.getCmp("permissionForm").operate+"失败");
+                            },
+                            failure: function (response) {
+                                Ext.MessageBox.alert("提示",Ext.getCmp("permissionForm").operate+"失败");
+                            }
+                        });
+                        return false;
+                    }
+                },
+                buttons: [{
+                    text: '确定',
+                    id: "addSubmitBtn",
+                    handler: function (v) {
+                        v.disable();
+                        v.up("form").submit();
+                    }
+                }, {
+                    text: '取消',
+                    handler: function (v) {
+                        v.up("window").hide();
+                    }
+                }]
+            }
+        )]
+});
+function addPermission() {
+    addDataWindow.setTitle("添加权限");
+    Ext.getCmp("permissionForm").getForm().reset();
+    Ext.getCmp("permissionForm").url=addpermission_url;
+    Ext.getCmp("permissionForm").operate="添加";
+    addDataWindow.show();
+}
+function updatePermission(id,name,cname) {
+    addDataWindow.setTitle("修改权限");
+    Ext.getCmp("permissionForm").operate="修改";
+    Ext.getCmp("permissionForm").getForm().reset();
+    Ext.getCmp("permissionForm").url = updatepermission_url;
+    Ext.getCmp("idField").setValue(id);
+    Ext.getCmp("nameField").setValue(name);
+    Ext.getCmp("cnameField").setValue(cname);
+    addDataWindow.show();
+}
 
 function deletePermission(id) {
     Ext.MessageBox.confirm("删除确认", "是否要删除权限：", function (res) {
@@ -293,7 +262,4 @@ function deletePermission(id) {
         }
     });
 }
-
-
-
 
