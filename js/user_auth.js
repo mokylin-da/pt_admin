@@ -182,7 +182,7 @@ var userAuthWindow = new Ext.Window({
                                             var gid = data.get("gid");
                                             //默认加载第一个游戏的权限列表
                                             _this.setValue(gid);
-                                            // loadUserPermission(gid);
+                                            Ext.getCmp("addSubmitBtn").enable();
                                         }
                                     }, 100);
                                 })();
@@ -197,9 +197,32 @@ var userAuthWindow = new Ext.Window({
                     v.disable();
                     var selModel=v.up("grid").getSelectionModel();
                     var selArr= selModel.getSelection();
-                    for(var i=0;i<selArr.length;i++){
-                        // sel[i]
+                    var pms_ids = [];
+                    if(selArr && selArr.length>0){
+                        for(var i=0;i<selArr.length;i++){
+                            pms_ids.push(selArr[i].get("id"));
+                        }
                     }
+                    Ext.data.JsonP.request({
+                        url: setuserauth_url,
+                        params: {
+                            game_identifer: Ext.getCmp("gameCombo").getValue(),
+                            uid:userAuthWindow.uid,
+                            pms_ids:pms_ids
+                        },
+                        callbackKey: 'function',
+                        success: function (res) {
+                            if (res && res.status==1) {
+                                 Ext.MessageBox.alert("提示","操作成功");
+                                 permissionListStore.reload();
+                            }else{
+                                Ext.MessageBox.alert("提示","操作失败");
+                            }
+                        },
+                        failure: function (response) {
+                            Ext.MessageBox.alert("提示","操作失败");
+                        }
+                    });
                 }
             }, {
                 text: '取消',
@@ -220,17 +243,21 @@ function loadUserPermission(gid){
         callbackKey: 'function',
         // scope: 'this',
         success: function (res) {
-            console.dir(res);
             if (res && res.status==1) {
                 // TODO
                 var selectedData = res.data;
+                if(!selectedData){
+                    return;
+                }
                 var datas = permissionListStore.getRange();
                 var indexArr = [];
                 for(var i=0;i<datas.length;i++){
 
                 }
+
+            }else{
+                Ext.MessageBox.alert("提示","获取权限数据失败");
             }
-            Ext.MessageBox.alert("提示","获取权限数据失败");
         },
         failure: function (response) {
             Ext.MessageBox.alert("提示","获取权限数据失败");

@@ -1,9 +1,6 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/4/15.
  */
-/**
- * Created by 李朝(Li.Zhao) on 2016/4/12.
- */
 Ext.Loader.setConfig({
     enabled: true,
     paths: {
@@ -42,7 +39,7 @@ var serverStore = Ext
     .create(
         "Ext.data.Store",
         {
-            fields: ["gid", "sid", "sname", 'surl'],
+            fields: ["gid", "sid", "sname", 'surl','opentime','addtime'],
             proxy: {
                 type: "jsonp",
                 url: serverlist_url,
@@ -84,6 +81,16 @@ Ext.onReady(function () {
                     text: "游戏区地址",
                     width: 150,
                     dataIndex: "surl"
+                },
+                {
+                    text: "开服时间",
+                    width: 150,
+                    dataIndex: "opentime"
+                },
+                {
+                    text: "添加时间",
+                    width: 150,
+                    dataIndex: "addtime"
                 },
                 {
                     header: "操作",
@@ -223,15 +230,15 @@ var addDataWindow = new Ext.Window({
                             success: function (res) {
                                 console.log(res);
                                 if (res && res.status==1) {
-                                    Ext.MessageBox.alert("提示", Ext.getCmp("serverForm").operate + "成功");
+                                    top.Ext.MessageBox.alert("提示", Ext.getCmp("serverForm").operate + "成功");
                                     serverStore.reload();
                                     addDataWindow.hide();
                                     return;
                                 }
-                                Ext.MessageBox.alert("提示",Ext.getCmp("serverForm").operate + "失败");
+                                top.Ext.MessageBox.alert("提示",Ext.getCmp("serverForm").operate + "失败");
                             },
                             failure: function (response) {
-                                Ext.MessageBox.alert("提示",Ext.getCmp("serverForm").operate + "失败");
+                                top.Ext.MessageBox.alert("提示",Ext.getCmp("serverForm").operate + "失败");
                             }
                         });
                         return false;

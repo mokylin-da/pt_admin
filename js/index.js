@@ -214,7 +214,7 @@ Ext.onReady(function () {
                         tabpanel.setActiveTab(tab.previousSibling());
                     }
                 },
-                html: "<iframe id=cloudKing_"
+                html: "<iframe id=mokylin_"
                 + tabId
                 + " scrolling='auto' frameborder='0' width='100%' height='100%' src="
                 + url + "></iframe>"
@@ -245,7 +245,7 @@ Ext.onReady(function () {
      * 获取Title
      */
     function getTitle(url) {
-        var url = url.substring(1);
+        url = url.substring(1);
         var text = findJSON(moduleTree, "\"url\":\"" + url + "\"").text;
         if (Ext.isEmpty(text)) {
             text = "";
@@ -257,16 +257,16 @@ Ext.onReady(function () {
      * 注销用户
      */
     function logout() {
-        parent.location.href = logout_url;
+        location.href = logout_url;
     }
 
     /**
      * 刷新当前tab
      */
     function reloadCurrentTab(currentItem) {
-        var frameName = 'cloudKing_' + currentItem.id;
-        var url = jq("#" + frameName).attr("src");
-        jq("#" + frameName).attr("src", url);
+        var frameName = 'mokylin_' + currentItem.id;
+        var url = Ext.get(frameName).getAttribute("src");
+        Ext.get(frameName).set({src: url});
     }
 
 });
@@ -276,11 +276,10 @@ var findJSON = function (jsonCollection, findStr) {
     var m = jsonCollStr.match(re);
     if (m) {
         return eval("(" + m[0] + ")");
-        ;
     } else {
         return {};
     }
-}
+};
 
 var jsonToString = function (obj) {
     var THIS = this;
@@ -312,4 +311,4 @@ var jsonToString = function (obj) {
         case false :
             return obj;
     }
-}
+};
