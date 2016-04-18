@@ -92,19 +92,19 @@ Ext.onReady(function () {
 // 权限列表存储块
 var permissionListStore = Ext
     .create(
-        "Ext.data.Store",
-        {
-            fields: ["id", "name", "cname"],
-            proxy: {
-                type: "jsonp",
-                url: permission_list_url,
-                callbackKey: "function",
-                reader: {
-                    type: 'json',
-                    root: 'data'
-                }
+    "Ext.data.Store",
+    {
+        fields: ["id", "name", "cname"],
+        proxy: {
+            type: "jsonp",
+            url: permission_list_url,
+            callbackKey: "function",
+            reader: {
+                type: 'json',
+                root: 'data'
             }
-        });
+        }
+    });
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['gname', 'gid'],
@@ -119,12 +119,14 @@ var gameStore = Ext.create('Ext.data.Store', {
     }
 });
 var userAuthWindow = new Ext.Window({
+    id: "authWindowId",
     title: "用户授权",
     width: 500,
     height: 500,
     resizable: true,
     modal: true,
     autoShow: false,
+    closable: false,
     layout: 'fit',
     items: [new Ext.grid.Panel(
         {
@@ -167,7 +169,7 @@ var userAuthWindow = new Ext.Window({
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"game_identifer": newValue};//游戏改变的时候重新加载权限数据
-                                permissionListStore.load();
+                                permissionListStore.reload();
                                 loadUserPermission(newValue);
                             },
                             afterrender: function (_this, eOpts) {
@@ -195,11 +197,11 @@ var userAuthWindow = new Ext.Window({
                 id: "addSubmitBtn",
                 handler: function (v) {
                     v.disable();
-                    var selModel=v.up("grid").getSelectionModel();
-                    var selArr= selModel.getSelection();
+                    var selModel = v.up("grid").getSelectionModel();
+                    var selArr = selModel.getSelection();
                     var pms_ids = [];
-                    if(selArr && selArr.length>0){
-                        for(var i=0;i<selArr.length;i++){
+                    if (selArr && selArr.length > 0) {
+                        for (var i = 0; i < selArr.length; i++) {
                             pms_ids.push(selArr[i].get("id"));
                         }
                     }
@@ -207,67 +209,81 @@ var userAuthWindow = new Ext.Window({
                         url: setuserauth_url,
                         params: {
                             game_identifer: Ext.getCmp("gameCombo").getValue(),
-                            uid:userAuthWindow.uid,
-                            pms_ids:pms_ids
+                            uid: userAuthWindow.uid,
+                            pms_ids: pms_ids
                         },
                         callbackKey: 'function',
                         success: function (res) {
-                            if (res && res.status==1) {
-                                 Ext.MessageBox.alert("提示","操作成功");
-                                 permissionListStore.reload();
-                            }else{
-                                Ext.MessageBox.alert("提示","操作失败");
+                            if (res && res.status == 1) {
+                                Ext.MessageBox.alert("提示", "操作成功");
+                                permissionListStore.reload();
+                                Ext.getCmp("authWindowId").hide();
+                            } else {
+                                Ext.MessageBox.alert("提示", "操作失败");
                             }
                         },
                         failure: function (response) {
-                            Ext.MessageBox.alert("提示","操作失败");
+                            Ext.MessageBox.alert("提示", "操作失败");
                         }
                     });
                 }
             }, {
                 text: '取消',
                 handler: function (v) {
-                    v.up("window").hide();
+                    Ext.getCmp("authWindowId").hide();
                 }
             }]
         })]
 });
 
-function loadUserPermission(gid){
+function contains(arr, val) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] == val)return true;
+    }
+    return false;
+}
+
+function loadUserPermission(gid) {
     Ext.data.JsonP.request({
         url: userpermission_url,
         params: {
             game_identifer: gid,
-            uid:userAuthWindow.uid
+            uid: userAuthWindow.uid
         },
         callbackKey: 'function',
         // scope: 'this',
         success: function (res) {
-            if (res && res.status==1) {
-                // TODO
+            if (res && res.status == 1) {
                 var selectedData = res.data;
-                if(!selectedData){
+                if (!selectedData) {
                     return;
                 }
                 var datas = permissionListStore.getRange();
                 var indexArr = [];
-                for(var i=0;i<datas.length;i++){
-
+                for (var i = 0; i < datas.length; i++) {
+                    if (contains(selectedData, datas[i].get("name"))) {
+                        indexArr.push(datas[i]);
+                    }
                 }
+                var selModel = Ext.getCmp("permissionGridId").getSelectionModel();
+                selModel.select(indexArr);
 
-            }else{
-                Ext.MessageBox.alert("提示","获取权限数据失败");
+            } else {
+                Ext.MessageBox.alert("提示", "获取权限数据失败");
             }
         },
         failure: function (response) {
-            Ext.MessageBox.alert("提示","获取权限数据失败");
+            Ext.MessageBox.alert("提示", "获取权限数据失败");
         }
     });
 }
 
 function updateAuth(uid) {
     userAuthWindow.uid = uid;
-    userAuthWindow.show();
+    Ext.getCmp("authWindowId").show();
+    Ext.getCmp("addSubmitBtn").enable();
+    Ext.getCmp("permissionGridId").getSelectionModel().deselectAll();
+    loadUserPermission(Ext.getCmp("gameCombo").getValue());
 }
 function search() {
     var params = {};

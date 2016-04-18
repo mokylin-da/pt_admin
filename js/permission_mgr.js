@@ -158,6 +158,7 @@ var addDataWindow = new Ext.Window({
     resizable: false,
     modal: true,
     autoShow: false,
+    closable: false,
     layout: 'fit',
     listeners: {
         beforeshow: function (_this, eOpts) {
@@ -178,13 +179,13 @@ var addDataWindow = new Ext.Window({
                     {
                         id:"nameField",
                         xtype: "textfield",
-                        fieldLabel: "权限名称",
+                        fieldLabel: "权限名称（key）",
                         name: "name",
                         allowBlank: false
                     }, {
                         id:"cnameField",
                         xtype: "textfield",
-                        fieldLabel: "权限key",
+                        fieldLabel: "权限中文名",
                         name: "cname",
                         allowBlank: false
                     }, {

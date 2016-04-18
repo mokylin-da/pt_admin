@@ -171,6 +171,7 @@ var addDataWindow = new Ext.Window({
     resizable: true,
     modal: true,
     autoShow: false,
+    closable: false,
     layout: 'fit',
     listeners: {
         beforeshow: function (_this, eOpts) {
