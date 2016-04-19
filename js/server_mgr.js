@@ -78,7 +78,7 @@ Ext.onReady(function () {
                     dataIndex: "sname"
                 },
                 {
-                    text: "游戏区地址",
+                    text: "登陆接口",
                     width: 150,
                     dataIndex: "surl"
                 },
@@ -204,8 +204,20 @@ var addDataWindow = new Ext.Window({
                     }, {
                         id: "surlField",
                         xtype: "textfield",
-                        fieldLabel: "区服链接地址",
+                        fieldLabel: "登陆接口",
                         name: "surl",
+                        allowBlank: false
+                    }, {
+                        id: "api_getplayerid_linkField",
+                        xtype: "textfield",
+                        fieldLabel: "用户查询接口",
+                        name: "api_getplayerid_link",
+                        allowBlank: false
+                    }, {
+                        id: "recharge_urlField",
+                        xtype: "textfield",
+                        fieldLabel: "充值接口",
+                        name: "recharge_url",
                         allowBlank: false
                     }, Ext.create('Ext.ux.form.DateTimeField', {
                         id: "opentimeField",
