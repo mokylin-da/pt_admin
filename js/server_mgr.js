@@ -225,7 +225,7 @@ var addDataWindow = new Ext.Window({
                         fieldLabel: "区服开服时间",
                         name: "opentime",
                         value: new Date(),
-                        format: 'Y-m-d H:i:s ',
+                        format: 'Y-m-d H:i:s',
                         allowBlank: false
                     }),{
                         id: "gidField",
