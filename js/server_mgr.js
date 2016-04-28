@@ -282,9 +282,9 @@ function addServer() {
 }
 function updatePermission(id, name, cname) {
     addDataWindow.setTitle("修改权限");
-    Ext.getCmp("permissionForm").operate = "修改";
-    Ext.getCmp("permissionForm").getForm().reset();
-    Ext.getCmp("permissionForm").url = updatepermission_url;
+    Ext.getCmp("serverForm").operate = "修改";
+    Ext.getCmp("serverForm").getForm().reset();
+    Ext.getCmp("serverForm").url = updatepermission_url;
     Ext.getCmp("idField").setValue(id);
     Ext.getCmp("nameField").setValue(name);
     Ext.getCmp("cnameField").setValue(cname);

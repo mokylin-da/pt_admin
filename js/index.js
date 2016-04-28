@@ -22,6 +22,12 @@ var menuTree = [{
     leaf: true,
     url: "server_mgr.html",
     tabId: "2"
+}, {
+    text: "游戏管理",
+    contentTitle: "游戏管理",
+    leaf: true,
+    url: "game_mgr.html",
+    tabId: "3"
 }];
 var treeNodes = {
     root: {
@@ -44,12 +50,9 @@ Ext.onReady(function () {
         enableTabScroll: true,
         width: 600,
         height: 250,
-        width: 400,
-        height: 400,
         activeTab: 0,
         defaults: {
             autoScroll: true,
-            autoScroll: true
         },
         items: [{
             title: "信息面板",
@@ -303,7 +306,7 @@ var jsonToString = function (obj) {
                 var string = [];
                 for (var property in obj)
                     string.push(THIS.jsonToString(property) + ':'
-                        + THIS.jsonToString(obj[property]));
+                    + THIS.jsonToString(obj[property]));
                 return '{' + string.join(',') + '}';
             }
         case 'number' :
