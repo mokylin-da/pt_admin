@@ -22,7 +22,7 @@ Ext.QuickTips.init();
 
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
-    fields: ['gname', 'gid'],
+    fields: ['gname', 'gid','gurl','gtag','opentime','addtime'],
     proxy: {
         type: "jsonp",
         url: gamelist_url,
@@ -109,7 +109,7 @@ Ext.onReady(function () {
 var addDataWindow = new Ext.Window({
     title: "添加游戏",
     width: 300,
-    height: 300,
+    height: 350,
     resizable: true,
     modal: true,
     autoShow: false,
@@ -125,8 +125,8 @@ var addDataWindow = new Ext.Window({
                 id: "dataForm",
                 fieldDefurlaults: {
                     labelAlign: 'right',
-                    labelWidth: 60,
-                    anchor: '100%'
+                    labelWidth: 150,
+                    anchor: '150%'
                 },
                 frame: false,
                 bodyStyle: 'padding:10 10',
@@ -162,6 +162,12 @@ var addDataWindow = new Ext.Window({
                         name: "recharge_ratio",
                         allowBlank: false
                     }, {
+                        id: "recharge_tokenField",
+                        xtype: "textfield",
+                        fieldLabel: "充值token",
+                        name: "recharge_token",
+                        allowBlank: false
+                    }, {
                         id: "login_tokenField",
                         xtype: "textfield",
                         fieldLabel: "游戏登录token",
@@ -175,7 +181,29 @@ var addDataWindow = new Ext.Window({
                         value: new Date(),
                         format: 'Y-m-d H:i:s',
                         allowBlank: false
-                    })],
+                    }), {
+                        id: "stateField",
+                        xtype: 'combo',
+                        triggerAction: 'all',
+                        forceSelection: true,
+                        editable: false,
+                        displayField: 'name',
+                        valueField: 'value',
+                        emptyText: "--请选择--",
+                        store: new Ext.data.Store({
+                            fields:["name","value"],
+                            data:[{name:"关服",value:0},{name:"开服",value:1}]
+                        }),
+                        fieldLabel: "状态",
+                        name: "state",
+                        value:1,
+                        allowBlank: false
+                    },{
+                        id:"recharge_platField",
+                        xtype:"hiddenfield",
+                        name:"recharge_plat",
+                        value:"0"
+                    }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
                         Ext.data.JsonP.request({

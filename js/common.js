@@ -19,7 +19,7 @@ var setuserauth_url = user_url + "/user/pms/adduserpms";
 // var queryuser_url="http://localhost:8002/user.json";//user_url+"/user/pms/updateitem";
 var queryuser_url = user_url + "/user/pms/searchuserbynickname";
 
-var gamelist_url = gameinfo_url + "/gameinfo/gamelist";
+var gamelist_url = gameinfo_url + "/gameinfo/allgamelist";
 var addgame_url = gameinfo_url + "/gameinfo/alter/addgame";
 var updategame_url = gameinfo_url + "/gameinfo/alter/addgame";
 
