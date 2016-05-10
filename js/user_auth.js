@@ -176,14 +176,16 @@ var userAuthWindow = new Ext.Window({
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
-                                permissionListStore.reload();
-                                loadUserPermission(newValue);
+                                permissionListStore.load(function(){
+                                    loadUserPermission(newValue);
+                                });
                             },
                             afterrender: function (_this, eOpts) {
                                 Ext.getCmp("gameCombo").setValue(0);
                                 permissionListStore.getProxy().extraParams = {"gid": defaultGid};//游戏改变的时候重新加载权限数据
-                                permissionListStore.reload();
-                                loadUserPermission(defaultGid);
+                                permissionListStore.load(function(){
+                                    loadUserPermission(defaultGid);
+                                });
                             }
                         }
                     }]
