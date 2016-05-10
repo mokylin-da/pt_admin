@@ -28,6 +28,8 @@ var serverlist_url = gameinfo_url + "/gameinfo/allserverlist";
 var addserver_url = gameinfo_url + "/gameinfo/alter/addserver";
 var deleteserver_url = gameinfo_url + "/gameinfo/alter/deleteserver";
 
+var platform_identifier = 0;
+
 Ext.onReady(function () {
     Ext.data.JsonP.request({
         url: currentuser_utl,

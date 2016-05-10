@@ -105,6 +105,7 @@ var permissionListStore = Ext
             }
         }
     });
+var defaultGid=0;
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['gname', 'gid'],
@@ -115,6 +116,11 @@ var gameStore = Ext.create('Ext.data.Store', {
         reader: {
             type: 'json',
             root: 'data'
+        }
+    },
+    listeners:{
+        load:function(_this, records, successful,eOpts){
+            gameStore.add({gid:0,gname:"官网管理平台"});
         }
     }
 });
@@ -166,28 +172,18 @@ var userAuthWindow = new Ext.Window({
                         valueField: 'gid',
                         emptyText: "--请选择--",
                         store: gameStore,
+                        value:defaultGid,
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
-                                permissionListStore.getProxy().extraParams = {"game_identifer": newValue};//游戏改变的时候重新加载权限数据
+                                permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
                                 permissionListStore.reload();
                                 loadUserPermission(newValue);
                             },
                             afterrender: function (_this, eOpts) {
-                                var data = gameStore.getAt(0);
-                                //防止组件加载完后store还未接收到数据的情况，100ms获取一次
-                                (function sleepFn() {
-                                    setTimeout(function () {
-                                        data = gameStore.getAt(0);
-                                        if (!data) {
-                                            sleepFn();
-                                        } else {
-                                            var gid = data.get("gid");
-                                            //默认加载第一个游戏的权限列表
-                                            _this.setValue(gid);
-                                            Ext.getCmp("addSubmitBtn").enable();
-                                        }
-                                    }, 100);
-                                })();
+                                Ext.getCmp("gameCombo").setValue(0);
+                                permissionListStore.getProxy().extraParams = {"gid": defaultGid};//游戏改变的时候重新加载权限数据
+                                permissionListStore.reload();
+                                loadUserPermission(defaultGid);
                             }
                         }
                     }]
@@ -208,7 +204,7 @@ var userAuthWindow = new Ext.Window({
                     Ext.data.JsonP.request({
                         url: setuserauth_url,
                         params: {
-                            game_identifer: Ext.getCmp("gameCombo").getValue(),
+                            gid: Ext.getCmp("gameCombo").getValue(),
                             uid: userAuthWindow.uid,
                             pms_ids: pms_ids
                         },
@@ -247,7 +243,7 @@ function loadUserPermission(gid) {
     Ext.data.JsonP.request({
         url: userpermission_url,
         params: {
-            game_identifer: gid,
+            gid: gid,
             uid: userAuthWindow.uid
         },
         callbackKey: 'function',

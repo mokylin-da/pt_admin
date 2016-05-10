@@ -4,43 +4,36 @@ Ext.Loader.setConfig({
 Ext.Loader.setPath('Ext.ux', 'js/extjs/ux');
 
 var linkflag;
-var menuTree = [{
+var allMenuTree = [{
     text: "权限管理",
     contentTitle: "权限管理",
     leaf: true,
     url: "permission_mgr.html",
-    tabId: "0"
+    tabId: "0",
+    permission:"menu_permission"
 }, {
     text: "授权中心",
     contentTitle: "授权中心",
     leaf: true,
     url: "user_auth.html",
-    tabId: "1"
+    tabId: "1",
+    permission:"menu_auth"
 }, {
     text: "区服管理",
     contentTitle: "区服管理",
     leaf: true,
     url: "server_mgr.html",
-    tabId: "2"
+    tabId: "2",
+    permission:"menu_server"
 }, {
     text: "游戏管理",
     contentTitle: "游戏管理",
     leaf: true,
     url: "game_mgr.html",
-    tabId: "3"
+    tabId: "3",
+    permission:"menu_game"
 }];
-var treeNodes = {
-    root: {
-        tabId: "treeid_0",
-        text: 'Root',
-        children: [{
-            text: "个人中心",
-            expanded: true,
-            noClick: true,
-            children: menuTree
-        }]
-    }
-};
+
 var tabpanel;
 Ext.onReady(function () {
     // 标签panel
@@ -85,7 +78,49 @@ Ext.onReady(function () {
 
 
     // 树的panel
-    var treeStore = Ext.create("Ext.data.TreeStore", treeNodes);
+    var treeStore = Ext.create("Ext.data.TreeStore");
+
+
+    Ext.data.JsonP.request({
+        url: currentpermission_url,
+        callbackKey: 'function',
+        params:{gid:0},
+        // scope: 'this',
+        success: function (res) {
+            if (res && res.status == 1) {
+                var pms = res.data;
+
+                var menuTree=[];
+
+                var rootNodes =  {
+                        tabId: "treeid_0",
+                        text: 'Root',
+                        children: [{
+                            text: "个人中心",
+                            expanded: true,
+                            noClick: true,
+                            children: menuTree
+                        }]
+                };
+                var pmsMap ={};
+                for(var i=0;i<pms.length;i++){
+                    pmsMap[pms[i]]=true;
+                }
+                for(var i=0;i<allMenuTree.length;i++){
+                    if(pmsMap[allMenuTree[i].permission]){
+                        menuTree.push(allMenuTree[i])
+                    }
+                }
+
+                treeStore.setRootNode(rootNodes);
+            } else {
+                Ext.MessageBox.alert("提示", "获取权限数据失败");
+            }
+        },
+        failure: function (response) {
+            Ext.MessageBox.alert("提示", "获取权限数据失败");
+        }
+    });
 
     // 树的panel
     // var treeStore = Ext.create("Ext.data.TreeStore", jsonTree);

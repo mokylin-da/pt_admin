@@ -30,6 +30,11 @@ var gameStore = Ext.create('Ext.data.Store', {
             type: 'json',
             root: 'data'
         }
+    },
+    listeners:{
+        load:function(_this, records, successful,eOpts){
+            gameStore.add({gid:0,gname:"官网管理平台"});
+        }
     }
 });
 
@@ -38,7 +43,7 @@ var permissionListStore = Ext
     .create(
         "Ext.data.Store",
         {
-            // autoLoad: true,
+            autoLoad: true,
             fields: ["id", "name", "cname"],
             proxy: {
                 type: "jsonp",
@@ -48,8 +53,12 @@ var permissionListStore = Ext
                     type: 'json',
                     root: 'data'
                 }
+                //extraParams: {"gid": 0}
             }
         });
+var defaultGid = 0;
+permissionListStore.getProxy().extraParams = {"gid": defaultGid};//默认加载0；
+permissionListStore.load();
 
 Ext.onReady(function () {
 
@@ -85,7 +94,7 @@ Ext.onReady(function () {
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePermission(\'{id}\',\'{name}\',\'{cname}\');"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePermission(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                    //+ '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePermission(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -105,26 +114,11 @@ Ext.onReady(function () {
                         valueField: 'gid',
                         emptyText: "--请选择--",
                         store: gameStore,
+                        value:defaultGid,
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
-                                permissionListStore.getProxy().extraParams = {"game_identifer": newValue};//游戏改变的时候重新加载权限数据
+                                permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
                                 permissionListStore.load();
-                            },
-                            afterrender: function (_this, eOpts) {
-                                var data = gameStore.getAt(0);
-                                //防止组件加载完后store还未接收到数据的情况，100ms获取一次
-                                (function sleepFn() {
-                                    setTimeout(function () {
-                                        data = gameStore.getAt(0);
-                                        if (!data) {
-                                            sleepFn();
-                                        } else {
-                                            var gid = data.get("gid");
-                                            //默认加载第一个游戏的权限列表
-                                            _this.setValue(gid);
-                                        }
-                                    }, 100);
-                                })();
                             }
                         }
                     },
@@ -195,7 +189,7 @@ var addDataWindow = new Ext.Window({
                     }, {
                         id: "gameIdentiferField",
                         xtype: "hiddenfield",
-                        name: "game_identifer"
+                        name: "gid"
                     }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
