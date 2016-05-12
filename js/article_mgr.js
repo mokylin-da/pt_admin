@@ -61,7 +61,7 @@ var articleStore = Ext
     });
 Ext.onReady(function () {
 
-    var permissionGrid = new Ext.grid.Panel(
+    var articleGrid = new Ext.grid.Panel(
         {
             layout: "fit",
             //renderTo: Ext.getBody(),
@@ -198,7 +198,7 @@ Ext.onReady(function () {
       */
     new Ext.Viewport({
          layout: "fit",
-         items: [permissionGrid],
+         items: [articleGrid],
          renderTo: Ext.getBody()
     });
 
