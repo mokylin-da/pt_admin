@@ -1,13 +1,6 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/4/15.
  */
-Ext.Loader.setConfig({
-    enabled: true,
-    paths: {
-        'Ext.ux': 'js/extjs/ux'
-    }
-});
-
 Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel']);
 
 /**
@@ -25,7 +18,7 @@ var gameStore = Ext.create('Ext.data.Store', {
     fields: ['gname', 'gid','gurl','gtag','opentime','addtime'],
     proxy: {
         type: "jsonp",
-        url: gamelist_url,
+        url: URLS.GAME_INFO.GAME_LIST,
         callbackKey: "function",
         reader: {
             type: 'json',
@@ -247,7 +240,7 @@ var addDataWindow = new Ext.Window({
 function addGame() {
     addDataWindow.setTitle("添加游戏");
     Ext.getCmp("dataForm").getForm().reset();
-    Ext.getCmp("dataForm").url = addgame_url;
+    Ext.getCmp("dataForm").url = URLS.GAME_INFO.ADD_GAME;
     Ext.getCmp("dataForm").operate = "添加";
     addDataWindow.show();
 }
@@ -255,7 +248,7 @@ function updateGame(gid, gname, gurl,recharge_ratio,login_token) {
     addDataWindow.setTitle("修改游戏");
     Ext.getCmp("dataForm").operate = "修改";
     Ext.getCmp("dataForm").getForm().reset();
-    Ext.getCmp("dataForm").url = updategame_url;
+    Ext.getCmp("dataForm").url = URLS.GAME_INFO.UPDATE_GAME;
     Ext.getCmp("gidField").setValue(gid);
     Ext.getCmp("gname").setValue(gname);
     Ext.getCmp("gurl").setValue(gurl);
@@ -268,7 +261,7 @@ function deleteGame(gid) {
     Ext.MessageBox.confirm("删除确认", "是否要删除游戏区：", function (res) {
         if (res == "yes") {
             Ext.data.JsonP.request({
-                url: deleteserver_url,
+                url: URLS.GAME_INFO.DELETE_SERVER,
                 params: {
                     gid: gid
                 },

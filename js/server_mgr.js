@@ -1,12 +1,6 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/4/15.
  */
-Ext.Loader.setConfig({
-    enabled: true,
-    paths: {
-        'Ext.ux': 'js/extjs/ux'
-    }
-});
 
 Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel']);
 
@@ -25,7 +19,7 @@ var gameStore = Ext.create('Ext.data.Store', {
     fields: ['gname', 'gid'],
     proxy: {
         type: "jsonp",
-        url: gamelist_url,
+        url: URLS.GAME_INFO.GAME_LIST,
         callbackKey: "function",
         reader: {
             type: 'json',
@@ -42,7 +36,7 @@ var serverStore = Ext
             fields: ["gid", "sid", "sname", 'surl','opentime','addtime'],
             proxy: {
                 type: "jsonp",
-                url: serverlist_url,
+                url: URLS.GAME_INFO.SERVER_LIST,
                 callbackKey: "function",
                 reader: {
                     type: 'json',
@@ -261,8 +255,11 @@ var addDataWindow = new Ext.Window({
                     text: '确定',
                     id: "addSubmitBtn",
                     handler: function (v) {
-                        v.disable();
-                        v.up("form").submit();
+                        var form=v.up("form");
+                        if(form.form.isValid()){
+                            v.disable();
+                            form.submit();
+                        }
                     }
                 }, {
                     text: '取消',
@@ -276,7 +273,7 @@ var addDataWindow = new Ext.Window({
 function addServer() {
     addDataWindow.setTitle("添加权限");
     Ext.getCmp("serverForm").getForm().reset();
-    Ext.getCmp("serverForm").url = addserver_url;
+    Ext.getCmp("serverForm").url = URLS.GAME_INFO.ADD_SERVER;
     Ext.getCmp("serverForm").operate = "添加";
     addDataWindow.show();
 }
@@ -284,7 +281,7 @@ function updatePermission(id, name, cname) {
     addDataWindow.setTitle("修改权限");
     Ext.getCmp("serverForm").operate = "修改";
     Ext.getCmp("serverForm").getForm().reset();
-    Ext.getCmp("serverForm").url = updatepermission_url;
+    Ext.getCmp("serverForm").url = URLS.USER.UPDATE_PERMISSION;
     Ext.getCmp("idField").setValue(id);
     Ext.getCmp("nameField").setValue(name);
     Ext.getCmp("cnameField").setValue(cname);
@@ -295,7 +292,7 @@ function deleteServer(gid, sid) {
     Ext.MessageBox.confirm("删除确认", "是否要删除游戏区：", function (res) {
         if (res == "yes") {
             Ext.data.JsonP.request({
-                url: deleteserver_url,
+                url: URLS.GAME_INFO.DELETE_SERVER,
                 params: {
                     gid: gid,
                     sid: sid

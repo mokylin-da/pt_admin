@@ -83,7 +83,7 @@ Ext.define("Ext.locale.zh_CN.form.field.Base", {
 // changing the msg text below will affect the LoadMask
 Ext.define("Ext.locale.zh_CN.view.AbstractView", {
     override: "Ext.view.AbstractView",
-    loadingText: "读取中..."
+    loadingText: "讀取中..."
 });
 
 Ext.define("Ext.locale.zh_CN.picker.Date", {
@@ -104,11 +104,11 @@ Ext.define("Ext.locale.zh_CN.picker.Date", {
     ariaTitle: '{0}',
     ariaTitleDateFormat: 'Y\u5e74m\u6708d\u65e5',
     longDayFormat: 'Y\u5e74m\u6708d\u65e5',
-    monthYearFormat: 'Y\u5e74m\u6708'
-    // getDayInitial: function (value) {
-    //     // Grab the last character
-    //     return value.substr(value.length - 1);
-    // }
+    monthYearFormat: 'Y\u5e74m\u6708',
+    //getDayInitial: function (value) {
+    //    // Grab the last character
+    //    return value.substr(value.length - 1);
+    //}
 });
 
 Ext.define("Ext.locale.zh_CN.picker.Month", {

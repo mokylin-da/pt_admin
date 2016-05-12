@@ -1,11 +1,6 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/4/12.
  */
-Ext.Loader.setConfig({
-    enabled: true
-});
-Ext.Loader.setPath('Ext.ux', 'js/extjs/ux');
-
 Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.ux.RowExpander',
     'Ext.selection.CheckboxModel']);
 
@@ -24,7 +19,7 @@ var gameStore = Ext.create('Ext.data.Store', {
     fields: ['gname', 'gid'],
     proxy: {
         type: "jsonp",
-        url: gamelist_url,
+        url: URLS.GAME_INFO.GAME_LIST,
         callbackKey: "function",
         reader: {
             type: 'json',
@@ -47,7 +42,7 @@ var permissionListStore = Ext
             fields: ["id", "name", "cname"],
             proxy: {
                 type: "jsonp",
-                url: permission_list_url,
+                url: URLS.USER.PERMISSION_LIST,
                 callbackKey: "function",
                 reader: {
                     type: 'json',
@@ -56,8 +51,7 @@ var permissionListStore = Ext
                 //extraParams: {"gid": 0}
             }
         });
-var defaultGid = 0;
-permissionListStore.getProxy().extraParams = {"gid": defaultGid};//默认加载0；
+permissionListStore.getProxy().extraParams = {"gid": platform_identifier};//默认加载0；
 permissionListStore.load();
 
 Ext.onReady(function () {
@@ -114,7 +108,7 @@ Ext.onReady(function () {
                         valueField: 'gid',
                         emptyText: "--请选择--",
                         store: gameStore,
-                        value:defaultGid,
+                        value:platform_identifier,
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
@@ -235,7 +229,7 @@ var addDataWindow = new Ext.Window({
 function addPermission() {
     addDataWindow.setTitle("添加权限");
     Ext.getCmp("permissionForm").getForm().reset();
-    Ext.getCmp("permissionForm").url=addpermission_url;
+    Ext.getCmp("permissionForm").url=URLS.USER.ADD_PERMISSION;
     Ext.getCmp("permissionForm").operate="添加";
     addDataWindow.show();
 }
@@ -243,7 +237,7 @@ function updatePermission(id,name,cname) {
     addDataWindow.setTitle("修改权限");
     Ext.getCmp("permissionForm").operate="修改";
     Ext.getCmp("permissionForm").getForm().reset();
-    Ext.getCmp("permissionForm").url = updatepermission_url;
+    Ext.getCmp("permissionForm").url = URLS.USER.UPDATE_PERMISSION;
     Ext.getCmp("idField").setValue(id);
     Ext.getCmp("nameField").setValue(name);
     Ext.getCmp("cnameField").setValue(cname);

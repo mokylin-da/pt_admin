@@ -1,9 +1,5 @@
-Ext.Loader.setConfig({
-    enabled: true
-});
-Ext.Loader.setPath('Ext.ux', 'js/extjs/ux');
 
-var linkflag;
+//var linkflag;
 var allMenuTree = [{
     text: "权限管理",
     contentTitle: "权限管理",
@@ -32,6 +28,13 @@ var allMenuTree = [{
     url: "game_mgr.html",
     tabId: "3",
     permission:"menu_game"
+}, {
+    text: "文章管理",
+    contentTitle: "文章管理",
+    leaf: true,
+    url: "article_mgr.html",
+    tabId: "4",
+    permission:"menu_article"
 }];
 
 var tabpanel;
@@ -45,7 +48,7 @@ Ext.onReady(function () {
         height: 250,
         activeTab: 0,
         defaults: {
-            autoScroll: true,
+            autoScroll: true
         },
         items: [{
             title: "信息面板",
@@ -53,27 +56,7 @@ Ext.onReady(function () {
             contentTitle: "基础管理平台->信息面板",
             closable: false,
             html: "欢迎进入管理平台！！！"
-        }],
-        plugins: Ext.create('Ext.ux.TabCloseMenu', {
-            closeTabText: '关闭当前',
-            closeOthersTabsText: '关闭其他',
-            closeAllTabsText: '关闭所有',
-            extraItemsTail: ['-', {
-                text: '刷新页面',
-                handler: function (item) {
-                    reloadCurrentTab(currentItem);
-
-                }
-            }],
-            listeners: {
-                aftermenu: function () {
-                    currentItem = null;
-                },
-                beforemenu: function (menu, item) {
-                    currentItem = item;
-                }
-            }
-        })
+        }]
     });
 
 
@@ -82,7 +65,7 @@ Ext.onReady(function () {
 
 
     Ext.data.JsonP.request({
-        url: currentpermission_url,
+        url: URLS.USER.CURRENT_USER_PERMISSION,
         callbackKey: 'function',
         params:{gid:0},
         // scope: 'this',
@@ -114,11 +97,11 @@ Ext.onReady(function () {
 
                 treeStore.setRootNode(rootNodes);
             } else {
-                Ext.MessageBox.alert("提示", "获取权限数据失败");
+                //alert("获取权限数据失败");
             }
         },
         failure: function (response) {
-            Ext.MessageBox.alert("提示", "获取权限数据失败");
+            //alert("获取权限数据失败");
         }
     });
 
@@ -199,20 +182,6 @@ Ext.onReady(function () {
             logout();
         }
     });
-//	// 首页
-//	var indexButton = new Ext.Button({
-//				iconCls : "indexIcon",
-//				iconAlign : "left",
-//				scale : "medium",
-//				autoWidth : true,
-//				tooltip : "<span style='font-size:12px'>返回首页</span>",
-//				pressed : true,
-//				arrowAlign : "right",
-//				renderTo : "indexButton",
-//				handler : function() {
-//					location.href = "index.jsp";
-//				}
-//			});
 
     /**
      * 创建节点
@@ -261,11 +230,11 @@ Ext.onReady(function () {
         tabpanel.setActiveTab(tab);
     }
 
-    if (linkflag && menuTree[linkflag]) {
-        addTab(menuTree[linkflag].text, menuTree[linkflag].contentTitle,
-            menuTree[linkflag].tabId, menuTree[linkflag].url,
-            menuTree[linkflag].iconCls);
-    }
+    //if (linkflag && allMenuTree[linkflag]) {
+    //    addTab(allMenuTree[linkflag].text, allMenuTree[linkflag].contentTitle,
+    //        allMenuTree[linkflag].tabId, allMenuTree[linkflag].url,
+    //        allMenuTree[linkflag].iconCls);
+    //}
 
     /**
      * 获取样式
@@ -295,7 +264,7 @@ Ext.onReady(function () {
      * 注销用户
      */
     function logout() {
-        location.href = logout_url;
+        location.href = URLS.USER.LOGOUT;
     }
 
     /**

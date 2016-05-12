@@ -1,17 +1,13 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/4/14.
  */
-Ext.Loader.setConfig({
-    enabled: true
-});
-Ext.Loader.setPath('Ext.ux', 'js/extjs/ux');
 Ext.require(['Ext.grid.*']);
 
 var userStore = Ext.create('Ext.data.Store', {
     fields: ['uid', 'nickname', 'email', 'cDate', 'emailVerifyed', 'status'],
     proxy: {
         type: "jsonp",
-        url: queryuser_url,
+        url: URLS.USER.QUERY_USER,
         callbackKey: "function",
         reader: {
             type: 'json',
@@ -68,12 +64,20 @@ Ext.onReady(function () {
                         xtype: 'textfield',
                         fieldLabel: 'uid',
                         name: 'uid',
+                        inputAttrTpl: [
+                            "autocomplete=\"on\""
+                        ],
+                        submitEmptyText:false,
                         emptyText: "请输入uid"
                     }, {
                         id: "nicknameField",
                         xtype: 'textfield',
                         fieldLabel: '昵称',
                         name: 'nickname',
+                        inputAttrTpl: [
+                            "autocomplete=\"on\""
+                        ],
+                        submitEmptyText:false,
                         emptyText: "请输入昵称"
                     },
                     "-",
@@ -97,7 +101,7 @@ var permissionListStore = Ext
         fields: ["id", "name", "cname"],
         proxy: {
             type: "jsonp",
-            url: permission_list_url,
+            url: URLS.USER.PERMISSION_LIST,
             callbackKey: "function",
             reader: {
                 type: 'json',
@@ -105,13 +109,12 @@ var permissionListStore = Ext
             }
         }
     });
-var defaultGid=0;
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['gname', 'gid'],
     proxy: {
         type: "jsonp",
-        url: gamelist_url,
+        url: URLS.GAME_INFO.GAME_LIST,
         callbackKey: "function",
         reader: {
             type: 'json',
@@ -172,7 +175,7 @@ var userAuthWindow = new Ext.Window({
                         valueField: 'gid',
                         emptyText: "--请选择--",
                         store: gameStore,
-                        value:defaultGid,
+                        value:platform_identifier,
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
@@ -181,10 +184,10 @@ var userAuthWindow = new Ext.Window({
                                 });
                             },
                             afterrender: function (_this, eOpts) {
-                                Ext.getCmp("gameCombo").setValue(0);
-                                permissionListStore.getProxy().extraParams = {"gid": defaultGid};//游戏改变的时候重新加载权限数据
+                                Ext.getCmp("gameCombo").setValue(platform_identifier);
+                                permissionListStore.getProxy().extraParams = {"gid": platform_identifier};//游戏改变的时候重新加载权限数据
                                 permissionListStore.load(function(){
-                                    loadUserPermission(defaultGid);
+                                    loadUserPermission(platform_identifier);
                                 });
                             }
                         }
@@ -204,7 +207,7 @@ var userAuthWindow = new Ext.Window({
                         }
                     }
                     Ext.data.JsonP.request({
-                        url: setuserauth_url,
+                        url: URLS.USER.SET_USER_AUTH,
                         params: {
                             gid: Ext.getCmp("gameCombo").getValue(),
                             uid: userAuthWindow.uid,
@@ -243,7 +246,7 @@ function contains(arr, val) {
 
 function loadUserPermission(gid) {
     Ext.data.JsonP.request({
-        url: userpermission_url,
+        url: URLS.USER.USER_PERMISSION,
         params: {
             gid: gid,
             uid: userAuthWindow.uid
