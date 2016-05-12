@@ -1,36 +1,30 @@
 
-//var linkflag;
 var allMenuTree = [{
     text: "权限管理",
-    contentTitle: "权限管理",
     leaf: true,
     url: "permission_mgr.html",
     tabId: "0",
     permission:"menu_permission"
 }, {
     text: "授权中心",
-    contentTitle: "授权中心",
     leaf: true,
     url: "user_auth.html",
     tabId: "1",
     permission:"menu_auth"
 }, {
     text: "区服管理",
-    contentTitle: "区服管理",
     leaf: true,
     url: "server_mgr.html",
     tabId: "2",
     permission:"menu_server"
 }, {
     text: "游戏管理",
-    contentTitle: "游戏管理",
     leaf: true,
     url: "game_mgr.html",
     tabId: "3",
     permission:"menu_game"
 }, {
     text: "文章管理",
-    contentTitle: "文章管理",
     leaf: true,
     url: "article_mgr.html",
     tabId: "4",
@@ -53,15 +47,19 @@ Ext.onReady(function () {
         items: [{
             title: "信息面板",
             id: "tab_dashboard",
-            contentTitle: "基础管理平台->信息面板",
             closable: false,
-            html: "欢迎进入管理平台！！！"
+            html: "欢迎进入管理平台！！！",
+            listeners: {
+                activate: function (tab) {
+                    Ext.getCmp("content-panel").setTitle("当前位置：基础管理平台->信息面板");
+                }
+            }
         }]
     });
 
 
     // 树的panel
-    var treeStore = Ext.create("Ext.data.TreeStore");
+    var treeStore = new Ext.data.TreeStore();
 
 
     Ext.data.JsonP.request({
@@ -76,14 +74,10 @@ Ext.onReady(function () {
                 var menuTree=[];
 
                 var rootNodes =  {
-                        tabId: "treeid_0",
-                        text: 'Root',
-                        children: [{
-                            text: "个人中心",
+                            text: "菜单",
                             expanded: true,
                             noClick: true,
                             children: menuTree
-                        }]
                 };
                 var pmsMap ={};
                 for(var i=0;i<pms.length;i++){
@@ -106,29 +100,21 @@ Ext.onReady(function () {
     });
 
     // 树的panel
-    // var treeStore = Ext.create("Ext.data.TreeStore", jsonTree);
-    var treePanel = Ext.create("Ext.tree.Panel", {
-        id: "tree-panel",
-        title: "系统导航",
-        region: "north",
-        split: true,
-        rootVisible: false,// root否可见
-        autoScroll: true,
+    var treePanel = new Ext.tree.Panel({
+        rootVisible:false,
         store: treeStore,
         listeners: {
             itemclick: function (node, record) {
                 if (record.raw.noClick) {
                     return;
                 } else {
-                    addTab(record.raw.text, record.raw.contentTitle,
+                    addTab(record.raw.text,
                         record.raw.tabId, record.raw.url,
                         record.raw.iconCls);
                 }
             }
         }
-
     });
-    treePanel.expandAll();
 
 //	// 主要的布局
     Ext.create("Ext.container.Viewport", {
@@ -144,18 +130,13 @@ Ext.onReady(function () {
             layout: "fit",
             region: "south",
             html: "基础管理平台 - V.1.0.0"
-        }, {
+        },{
             collapsible: true,
-            split: true,
             region: "west",
-            width: 300,
+            width: 160,
             maxWidth: 300,
             title: "系统导航",
-            layout: "accordion",
-            layoutConfig: {
-                animate: true,
-                activeOnTop: true
-            },
+            layout: "fit",
             items: [treePanel]
         }, {
             id: "content-panel",
@@ -189,9 +170,8 @@ Ext.onReady(function () {
      * @param {}
      *            closable
      */
-    function addTab(title, contentTitle, tabId, url, iconCls) {
+    function addTab(title, tabId, url, iconCls) {
         var tab = tabpanel.getComponent(tabId);
-        contentTitle = "当前位置：" + contentTitle;
         if (tab) {
             reloadCurrentTab({
                 id: tabId
@@ -205,59 +185,27 @@ Ext.onReady(function () {
                 title: title,
                 id: tabId,
                 iconCls: iconCls,
-                contentTitle: contentTitle,
                 closable: true,
                 layout: "fit",
                 listeners: {
-                    activate: function () {
-                        Ext.getCmp("content-panel").setTitle(contentTitle)
-                    },
-                    beforeclose: function (tab, eOpts) {
-                        Ext.getCmp("content-panel").setTitle(tab
-                            .previousSibling().contentTitle);
-                        return true;
+                    activate: function (tab) {
+                        Ext.getCmp("content-panel").setTitle( "当前位置：基础管理平台->"+tab.title)
                     },
                     close: function (tab, eOpts) {
+                        var actTab = tabpanel.getActiveTab();
+                        if(actTab.id!=tab.id){
+                            return;
+                        }
                         tabpanel.setActiveTab(tab.previousSibling());
                     }
                 },
-                html: "<iframe id=mokylin_"
-                + tabId
-                + " scrolling='auto' frameborder='0' width='100%' height='100%' src="
+                html: "<iframe id='"
+                + iframeId(tabId)
+                + "' scrolling='auto' frameborder='0' width='100%' height='100%' src="
                 + url + "></iframe>"
             }).show();
         }
         tabpanel.setActiveTab(tab);
-    }
-
-    //if (linkflag && allMenuTree[linkflag]) {
-    //    addTab(allMenuTree[linkflag].text, allMenuTree[linkflag].contentTitle,
-    //        allMenuTree[linkflag].tabId, allMenuTree[linkflag].url,
-    //        allMenuTree[linkflag].iconCls);
-    //}
-
-    /**
-     * 获取样式
-     */
-    function getIcoCls(url) {
-        var url = url.substring(1);
-        var iconCls = findJSON(moduleTree, "\"url\":\"" + url + "\"").iconCls;
-        if (Ext.isEmpty(iconCls)) {
-            iconCls = "";
-        }
-        return iconCls;
-    }
-
-    /**
-     * 获取Title
-     */
-    function getTitle(url) {
-        url = url.substring(1);
-        var text = findJSON(moduleTree, "\"url\":\"" + url + "\"").text;
-        if (Ext.isEmpty(text)) {
-            text = "";
-        }
-        return "<span style='font-weight:normal'>" + text + "</span>";
     }
 
     /**
@@ -268,54 +216,22 @@ Ext.onReady(function () {
     }
 
     /**
+     * 生成IframeId
+     * @param tabId
+     * @returns {string}
+     */
+    function iframeId(tabId){
+        return "mokylin_"+tabId;
+    }
+    /**
      * 刷新当前tab
      */
     function reloadCurrentTab(currentItem) {
-        var frameName = 'mokylin_' + currentItem.id;
+        var frameName = iframeId(currentItem.id);
         var url = Ext.get(frameName).getAttribute("src");
         Ext.get(frameName).set({src: url});
     }
 
 });
-var findJSON = function (jsonCollection, findStr) {
-    var jsonCollStr = jsonToString(jsonCollection);
-    var re = new RegExp("{[^{]*" + findStr + "[^}]*}", "i");
-    var m = jsonCollStr.match(re);
-    if (m) {
-        return eval("(" + m[0] + ")");
-    } else {
-        return {};
-    }
-};
 
-var jsonToString = function (obj) {
-    var THIS = this;
-    switch (typeof(obj)) {
-        case 'string' :
-            return '"' + obj.replace(/(["\\])/g, '\\$1') + '"';
-        case 'array' :
-            return '[' + obj.map(THIS.jsonToString).join(',') + ']';
-        case 'object' :
-            if (obj instanceof Array) {
-                var strArr = [];
-                var len = obj.length;
-                for (var i = 0; i < len; i++) {
-                    strArr.push(THIS.jsonToString(obj[i]));
-                }
-                return '[' + strArr.join(',') + ']';
-            } else if (obj == null) {
-                return 'null';
 
-            } else {
-                var string = [];
-                for (var property in obj)
-                    string.push(THIS.jsonToString(property) + ':'
-                    + THIS.jsonToString(obj[property]));
-                return '{' + string.join(',') + '}';
-            }
-        case 'number' :
-            return obj;
-        case false :
-            return obj;
-    }
-};

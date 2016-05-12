@@ -64,13 +64,17 @@ Ext.onReady(function () {
     var permissionGrid = new Ext.grid.Panel(
         {
             layout: "fit",
-            renderTo: Ext.getBody(),
+            //renderTo: Ext.getBody(),
             multiSelect: true,// 支持多选
             selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
             id: "authGridId",
             store: articleStore,
             loadMask: {
                 msg: "正在加载数据,请稍等..."
+            },
+            viewConfig:{
+                stripeRows:true,//在表格中显示斑马线
+                enableTextSelection:true //可以复制单元格文字
             },
             columns: [
                 Ext.create("Ext.grid.RowNumberer"),
@@ -156,23 +160,23 @@ Ext.onReady(function () {
                                 articleStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
                                 articleStore.load();
                             }
-                            //,
-                            //afterrender: function (_this, eOpts) {//数据加载后自动选择第一个游戏加载数据
-                            //    var data = gameStore.getAt(0);
-                            //    //防止组件加载完后store还未接收到数据的情况，100ms获取一次
-                            //    (function sleepFn() {
-                            //        setTimeout(function () {
-                            //            data = gameStore.getAt(0);
-                            //            if (!data) {
-                            //                sleepFn();
-                            //            } else {
-                            //                var gid = data.get("gid");
-                            //                //默认加载第一个游戏的权限列表
-                            //                _this.setValue(gid);
-                            //            }
-                            //        }, 200);
-                            //    })();
-                            //}
+                            ,
+                            afterrender: function (_this, eOpts) {//数据加载后自动选择第一个游戏加载数据
+                                var data = gameStore.getAt(0);
+                                //防止组件加载完后store还未接收到数据的情况，100ms获取一次
+                                (function sleepFn() {
+                                    setTimeout(function () {
+                                        data = gameStore.getAt(0);
+                                        if (!data) {
+                                            sleepFn();
+                                        } else {
+                                            var gid = data.get("gid");
+                                            //默认加载第一个游戏的权限列表
+                                            _this.setValue(gid);
+                                        }
+                                    }, 200);
+                                })();
+                            }
                         }
                     },
                     "-",
@@ -189,14 +193,14 @@ Ext.onReady(function () {
 
         });
 
-    // /**
-    //  * 布局
-    //  */
-    // new Ext.Viewport({
-    //     layout: "fit",
-    //     items: [permissionGrid],
-    //     renderTo: Ext.getBody()
-    // });
+    /**
+      * 布局
+      */
+    new Ext.Viewport({
+         layout: "fit",
+         items: [permissionGrid],
+         renderTo: Ext.getBody()
+    });
 
 
 });

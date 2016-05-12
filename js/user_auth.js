@@ -20,12 +20,14 @@ Ext.onReady(function () {
 
     var userGrid = new Ext.grid.Panel(
         {
-            layout: "fit",
-            renderTo: Ext.getBody(),
             multiSelect: true,// 支持多选
             // selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
             id: "authGridId",
             store: userStore,
+            viewConfig:{
+                stripeRows:true,//在表格中显示斑马线
+                enableTextSelection:true //可以复制单元格文字
+            },
             loadMask: {
                 msg: "正在加载数据,请稍等..."
             },
@@ -91,6 +93,16 @@ Ext.onReady(function () {
             }]
 
         });
+
+    /**
+     * 布局
+     */
+    new Ext.Viewport({
+        layout: "fit",
+        items: [userGrid],
+        renderTo: Ext.getBody()
+    });
+
 
 });
 // 权限列表存储块
