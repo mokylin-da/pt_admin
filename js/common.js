@@ -50,15 +50,15 @@ Ext.onReady(function () {
             if (res && res.status == 1) {
                 return
             }
-            Ext.MessageBox.alert("提示", "未登录", function () {
-
-                location = URLS.USER.LOGIN;
-            });
+            location.href = URLS.USER.LOGIN;
+            //Ext.MessageBox.alert("提示", "未登录", function () {
+            //
+            //});
         },
         failure: function (response) {
-            Ext.MessageBox.alert("提示", "未登录", function () {
-                location = URLS.USER.LOGIN;
-            });
+            location.href = URLS.USER.LOGIN;
+            //Ext.MessageBox.alert("提示", "未登录", function () {
+            //});
         }
     });
 });

@@ -97,11 +97,11 @@ Ext.onReady(function () {
 
                 treeStore.setRootNode(rootNodes);
             } else {
-                //alert("获取权限数据失败");
+                Ext.MessageBox.alert("提示","获取权限数据失败");
             }
         },
         failure: function (response) {
-            //alert("获取权限数据失败");
+            Ext.MessageBox.alert("提示","获取权限数据失败");
         }
     });
 
