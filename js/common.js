@@ -31,6 +31,7 @@ URLS.MISC = {
     ARTICLE_ADD: URLS.MISC_BASE + "/misc/article/add",//文章发布
     ARTICLE_UPDATE: URLS.MISC_BASE + "/misc/article/update"//文章修改
 };
+SUPER_ADMIN_UID="ef8af187-d37b-4ad2-96d0-6a88a9c8fa46";
 
 var platform_identifier = 0;
 
@@ -41,26 +42,26 @@ Ext.Loader.setConfig({
     }
 });
 
-Ext.onReady(function () {
-    Ext.data.JsonP.request({
-        url: URLS.USER.CURRENT_USER,
-        callbackKey: 'function',
-        // scope: 'this',
-        success: function (res) {
-            if (res && res.status == 1) {
-                return
-            }
-            location.href = URLS.USER.LOGIN;
-            //Ext.MessageBox.alert("提示", "未登录", function () {
-            //
-            //});
-        },
-        failure: function (response) {
-            location.href = URLS.USER.LOGIN;
-            //Ext.MessageBox.alert("提示", "未登录", function () {
-            //});
+Ext.data.JsonP.request({
+    url: URLS.USER.CURRENT_USER,
+    callbackKey: 'function',
+    // scope: 'this',
+    success: function (res) {
+        if (res && res.status == 1) {
+            var isSuperAdmin = res.data&&res.data.uid==SUPER_ADMIN_UID;
+            GlobalUtil.isSuperAdmin = function(){return isSuperAdmin;}
+            return
         }
-    });
+        location.href = URLS.USER.LOGIN;
+        //Ext.MessageBox.alert("提示", "未登录", function () {
+        //
+        //});
+    },
+    failure: function (response) {
+        location.href = URLS.USER.LOGIN;
+        //Ext.MessageBox.alert("提示", "未登录", function () {
+        //});
+    }
 });
 
 /**
@@ -85,5 +86,8 @@ GlobalUtil = {
             }
         }
         return false;
+    },
+    isSuperAdmin:function(){
+
     }
 };

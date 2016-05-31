@@ -1,34 +1,33 @@
-
 var allMenuTree = [{
     text: "权限管理",
     leaf: true,
     url: "permission_mgr.html",
     tabId: "0",
-    permission:"menu_permission"
+    permission: "menu_permission"
 }, {
     text: "授权中心",
     leaf: true,
     url: "user_auth.html",
     tabId: "1",
-    permission:"menu_auth"
+    permission: "menu_auth"
 }, {
     text: "区服管理",
     leaf: true,
     url: "server_mgr.html",
     tabId: "2",
-    permission:"menu_server"
+    permission: "menu_server"
 }, {
     text: "游戏管理",
     leaf: true,
     url: "game_mgr.html",
     tabId: "3",
-    permission:"menu_game"
+    permission: "menu_game"
 }, {
     text: "文章管理",
     leaf: true,
     url: "article_mgr.html",
     tabId: "4",
-    permission:"menu_article"
+    permission: "menu_article"
 }];
 
 var tabpanel;
@@ -62,46 +61,55 @@ Ext.onReady(function () {
     var treeStore = new Ext.data.TreeStore();
 
 
-    Ext.data.JsonP.request({
-        url: URLS.USER.CURRENT_USER_PERMISSION,
-        callbackKey: 'function',
-        params:{gid:0},
-        // scope: 'this',
-        success: function (res) {
-            if (res && res.status == 1) {
-                var pms = res.data;
+    if (GlobalUtil.isSuperAdmin()) {
+        treeStore.setRootNode({
+            text: "菜单",
+            expanded: true,
+            noClick: true,
+            children:allMenuTree});
+    } else {
 
-                var menuTree=[];
+        Ext.data.JsonP.request({
+            url: URLS.USER.CURRENT_USER_PERMISSION,
+            callbackKey: 'function',
+            params: {gid: 0},
+            // scope: 'this',
+            success: function (res) {
+                if (res && res.status == 1) {
+                    var pms = res.data || [];
 
-                var rootNodes =  {
-                            text: "菜单",
-                            expanded: true,
-                            noClick: true,
-                            children: menuTree
-                };
-                var pmsMap ={};
-                for(var i=0;i<pms.length;i++){
-                    pmsMap[pms[i]]=true;
-                }
-                for(var i=0;i<allMenuTree.length;i++){
-                    if(pmsMap[allMenuTree[i].permission]){
-                        menuTree.push(allMenuTree[i])
+                    var menuTree = [];
+
+                    var rootNodes = {
+                        text: "菜单",
+                        expanded: true,
+                        noClick: true,
+                        children: menuTree
+                    };
+                    var pmsMap = {};
+                    for (var i = 0; i < pms.length; i++) {
+                        pmsMap[pms[i]] = true;
                     }
-                }
+                    for (var i = 0; i < allMenuTree.length; i++) {
+                        if (pmsMap[allMenuTree[i].permission]) {
+                            menuTree.push(allMenuTree[i])
+                        }
+                    }
 
-                treeStore.setRootNode(rootNodes);
-            } else {
-                Ext.MessageBox.alert("提示","获取权限数据失败");
+                    treeStore.setRootNode(rootNodes);
+                } else {
+                    Ext.MessageBox.alert("提示", "获取权限数据失败");
+                }
+            },
+            failure: function (response) {
+                Ext.MessageBox.alert("提示", "获取权限数据失败");
             }
-        },
-        failure: function (response) {
-            Ext.MessageBox.alert("提示","获取权限数据失败");
-        }
-    });
+        });
+    }
 
     // 树的panel
     var treePanel = new Ext.tree.Panel({
-        rootVisible:false,
+        rootVisible: false,
         store: treeStore,
         listeners: {
             itemclick: function (node, record) {
@@ -130,7 +138,7 @@ Ext.onReady(function () {
             layout: "fit",
             region: "south",
             html: "基础管理平台 - V.1.0.0"
-        },{
+        }, {
             collapsible: true,
             region: "west",
             width: 160,
@@ -189,11 +197,11 @@ Ext.onReady(function () {
                 layout: "fit",
                 listeners: {
                     activate: function (tab) {
-                        Ext.getCmp("content-panel").setTitle( "当前位置：基础管理平台->"+tab.title)
+                        Ext.getCmp("content-panel").setTitle("当前位置：基础管理平台->" + tab.title)
                     },
                     close: function (tab, eOpts) {
                         var actTab = tabpanel.getActiveTab();
-                        if(actTab.id!=tab.id){
+                        if (actTab.id != tab.id) {
                             return;
                         }
                         tabpanel.setActiveTab(tab.previousSibling());
@@ -220,9 +228,10 @@ Ext.onReady(function () {
      * @param tabId
      * @returns {string}
      */
-    function iframeId(tabId){
-        return "mokylin_"+tabId;
+    function iframeId(tabId) {
+        return "mokylin_" + tabId;
     }
+
     /**
      * 刷新当前tab
      */
