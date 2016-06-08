@@ -2,7 +2,7 @@
  * Created by 李朝(Li.Zhao) on 2016/4/15.
  */
 
-Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel']);
+Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel','Ext.ux.form.DateTimeField']);
 
 /**
  *权限管理
@@ -214,9 +214,9 @@ var addDataWindow = new Ext.Window({
                         fieldLabel: "充值接口",
                         name: "recharge_url",
                         allowBlank: false
-                    }, Ext.create('Ext.ux.form.DateTimeField', {
+                    }, Ext.create("Ext.ux.form.DateTimeField",{
                         id: "opentimeField",
-                        // xtype: "datetimefield",
+                        xtype: "datetimefield",
                         fieldLabel: "区服开服时间",
                         name: "opentime",
                         value: new Date(),
@@ -278,7 +278,7 @@ function addServer() {
     Ext.getCmp("serverForm").operate = "添加";
     addDataWindow.show();
 }
-function updatePermission(id, name, cname) {
+function updatePermission(sid, name, cname) {
     addDataWindow.setTitle("修改权限");
     Ext.getCmp("serverForm").operate = "修改";
     Ext.getCmp("serverForm").getForm().reset();

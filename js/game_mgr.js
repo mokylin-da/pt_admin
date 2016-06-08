@@ -250,11 +250,12 @@ function updateGame(gid, gname, gurl,recharge_ratio,login_token) {
     Ext.getCmp("dataForm").operate = "修改";
     Ext.getCmp("dataForm").getForm().reset();
     Ext.getCmp("dataForm").url = URLS.GAME_INFO.UPDATE_GAME;
-    Ext.getCmp("gidField").setValue(gid);
-    Ext.getCmp("gname").setValue(gname);
-    Ext.getCmp("gurl").setValue(gurl);
-    Ext.getCmp("recharge_ratio").setValue(recharge_ratio);
-    Ext.getCmp("login_token").setValue(login_token);
+    Ext.getCmp("dataForm").getForm().setValues({gid:gid,gname:gname,gurl:gurl,recharge_ratio:recharge_ratio,login_token:login_token });
+    //Ext.getCmp("gidField").setValue(gid);
+    //Ext.getCmp("gname").setValue(gname);
+    //Ext.getCmp("gurl").setValue(gurl);
+    //Ext.getCmp("recharge_ratio").setValue(recharge_ratio);
+    //Ext.getCmp("login_token").setValue(login_token);
     addDataWindow.show();
 }
 

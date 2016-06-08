@@ -29,7 +29,11 @@ URLS.MISC = {
     ARTICLE_LIST: URLS.MISC_BASE + "/misc/article/pagebygid",//文章列表
     ARTICLE_DETAIL: URLS.MISC_BASE + "/misc/article/findbyid",//文章详情
     ARTICLE_ADD: URLS.MISC_BASE + "/misc/article/add",//文章发布
-    ARTICLE_UPDATE: URLS.MISC_BASE + "/misc/article/update"//文章修改
+    ARTICLE_UPDATE: URLS.MISC_BASE + "/misc/article/update",//文章修改
+    ARTICLE_CAT_ADD: URLS.MISC_BASE + "/misc/articlecat/add",//文章分类添加
+    ARTICLE_CAT_UPDATE: URLS.MISC_BASE + "/misc/articlecat/update",//文章分类添加
+    ARTICLE_CAT_LIST: URLS.MISC_BASE + "/misc/articlecat/list",//文章分类列表
+    FILE_UPLOAD: URLS.MISC_BASE + "/misc/attachment/upload"//文件上传
 };
 SUPER_ADMIN_UID="ef8af187-d37b-4ad2-96d0-6a88a9c8fa46";
 
@@ -88,6 +92,6 @@ GlobalUtil = {
         return false;
     },
     isSuperAdmin:function(){
-
+        //加载用户信息的时候赋值
     }
 };

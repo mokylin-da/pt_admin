@@ -51,8 +51,6 @@ var permissionListStore = Ext
                 //extraParams: {"gid": 0}
             }
         });
-permissionListStore.getProxy().extraParams = {"gid": platform_identifier};//默认加载0；
-permissionListStore.load();
 
 Ext.onReady(function () {
 
@@ -115,6 +113,22 @@ Ext.onReady(function () {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
                                 permissionListStore.load();
+                            },
+                            afterrender: function (_this, eOpts) {
+                                var data = gameStore.getAt(0);
+                                //防止组件加载完后store还未接收到数据的情况，100ms获取一次
+                                (function sleepFn() {
+                                    setTimeout(function () {
+                                        data = gameStore.getAt(0);
+                                        if (!data) {
+                                            sleepFn();
+                                        } else {
+                                            var gid = data.get("gid");
+                                            //默认加载第一个游戏的权限列表
+                                            _this.setValue(gid);
+                                        }
+                                    }, 100);
+                                })();
                             }
                         }
                     },
@@ -240,9 +254,7 @@ function updatePermission(id,name,cname) {
     Ext.getCmp("permissionForm").operate="修改";
     Ext.getCmp("permissionForm").getForm().reset();
     Ext.getCmp("permissionForm").url = URLS.USER.UPDATE_PERMISSION;
-    Ext.getCmp("idField").setValue(id);
-    Ext.getCmp("nameField").setValue(name);
-    Ext.getCmp("cnameField").setValue(cname);
+    Ext.getCmp("permissionForm").getForm().setValues({id:id,name:name,cname:cname});
     addDataWindow.show();
 }
 
