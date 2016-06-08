@@ -2,6 +2,7 @@ var URLS = {
     USER_BASE: "https://user-dev.36b.me",
     GAME_INFO_BASE: "https://gameinfo-dev.36b.me",
     MISC_BASE: "https://misc-dev.36b.me",
+    FILE_BASE:"",
     SELF: location.protocol + '//' + location.host
 };
 
@@ -53,7 +54,11 @@ Ext.data.JsonP.request({
     success: function (res) {
         if (res && res.status == 1) {
             var isSuperAdmin = res.data&&res.data.uid==SUPER_ADMIN_UID;
-            GlobalUtil.isSuperAdmin = function(){return isSuperAdmin;}
+            GlobalUtil.isSuperAdmin = function(){return isSuperAdmin;};
+            var userDiv = document.getElementById("userDiv");
+            if(userDiv){
+                userDiv.innerHTML="当前用户:"+res.data.nickname;
+            }
             return
         }
         location.href = URLS.USER.LOGIN;

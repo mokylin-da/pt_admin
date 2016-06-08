@@ -238,6 +238,7 @@ Ext.onReady(function () {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 articleTreeStore.getProxy().extraParams = {"gid": newValue};
                                 articleTreeStore.load();
+                                articleStore.removeAll();
                             }
                             ,
                             afterrender: function (_this, eOpts) {//数据加载后自动选择第一个游戏加载数据
@@ -440,6 +441,7 @@ var addDataWindow = new Ext.Window({
                         xtype: "mohtmleditor",
                         fieldLabel: "内容",
                         name: "content",
+                        url:URLS.MISC.FILE_UPLOAD,
                         //width:,
                         height: 300,
                         allowBlank: false
