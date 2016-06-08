@@ -324,6 +324,10 @@ var addCatDataWindow = new Ext.Window({
                         width: 200,
                         allowBlank: false
                     }, {
+                        id: "catIdField",
+                        xtype: "hiddenfield",
+                        name: "id"
+                    }, {
                         id: "gidCatField",
                         xtype: "hiddenfield",
                         name: "gid"
