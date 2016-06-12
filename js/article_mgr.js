@@ -341,14 +341,14 @@ var addCatDataWindow = new Ext.Window({
                             url: Ext.getCmp("articleCatForm").url,
                             callbackKey: 'function',
                             success: function (res) {
-                                if (res && res.status == 1) {
+                                if (res && res.status == "1") {
                                     Ext.MessageBox.alert("提示", Ext.getCmp("articleCatForm").operate + "成功");
                                     articleTreeStore.reload();
                                     addCatDataWindow.hide();
                                     return;
                                 }
                                 GlobalUtil.status(res.status, function () {
-                                    addDataWindow.hide();
+                                    addCatDataWindow.hide();
                                 });
                             },
                             failure: function (response) {
@@ -438,10 +438,11 @@ var addDataWindow = new Ext.Window({
                         ]
                     }, Ext.create("Ext.ux.form.MoHtmlEditor", {
                         id: "contentField",
-                        xtype: "mohtmleditor",
                         fieldLabel: "内容",
                         name: "content",
                         url:URLS.MISC.FILE_UPLOAD,
+                        enforceMaxLength: true,
+                        maxLength:10,
                         //width:,
                         height: 300,
                         allowBlank: false
@@ -462,24 +463,16 @@ var addDataWindow = new Ext.Window({
                     beforeaction: function (_this, action, eOpts) {
                         Ext.getCmp("gidField").setValue(Ext.getCmp("gameCombo").getValue());
                         Ext.getCmp("catenameField").setValue(addDataWindow.ename);
-                        Ext.data.JsonP.request({
-                            params: _this.getValues(), // values from form fields..
-                            url: Ext.getCmp("articleForm").url,
-                            callbackKey: 'function',
-                            success: function (res) {
-                                if (res && res.status == 1) {
-                                    Ext.MessageBox.alert("提示", Ext.getCmp("articleForm").operate + "成功");
-                                    articleStore.reload();
-                                    addDataWindow.hide();
-                                    return;
-                                }
-                                GlobalUtil.status(res.status, function () {
-                                    addDataWindow.hide();
-                                });
-                            },
-                            failure: function (response) {
-                                Ext.MessageBox.alert("提示", Ext.getCmp("articleForm").operate + "失败");
+                        postData( Ext.getCmp("articleForm").url,_this.getValues(),function(v){
+                            if (v == 1) {
+                                Ext.MessageBox.alert("提示", Ext.getCmp("articleForm").operate + "成功");
+                                articleStore.reload();
+                                addDataWindow.hide();
+                                return;
                             }
+                            GlobalUtil.status(parseInt(v), function () {
+                                addDataWindow.hide();
+                            });
                         });
                         return false;
                     }
@@ -540,3 +533,49 @@ function deletePermission(id) {
     });
 }
 
+/**
+ * 跨域请求，post form提交
+ * @param url 跨域URL
+ * @param data 请求参数,json对象
+ * @param callbackFn 回调方法
+ */
+function postData(url,data,callbackFn){
+    var iframe = document.createElement('iframe');
+    iframe.style.display="none";
+    document.body.appendChild(iframe);
+    var stats = 0;
+    function fload(){
+        if(stats==1){
+            iframe.contentWindow.location="blank.html";
+            stats=2;
+        }else if(stats==2){
+            callbackFn(iframe.contentWindow.name);
+            iframe.contentWindow.document.write('');
+            iframe.contentWindow.close();
+            document.body.removeChild(iframe);
+        }
+    }
+    if (iframe.attachEvent) {
+        iframe.attachEvent('onload', fload);
+    } else {
+        iframe.onload  = fload;
+    }
+    var fd = iframe.contentWindow.document;
+    var form = fd.createElement("form");
+    form.action=url;
+    form.method="post";
+    if(typeof data == "object"){
+        function appendFormField(doc,form,name,value){
+            var ipt = doc.createElement("input");
+            ipt.name=name;
+            ipt.value=value;
+            form.appendChild(ipt);
+        }
+        for(var i in data){
+            appendFormField(fd,form,i,data[i]);
+        }
+    }
+    fd.body.appendChild(form);
+    form.submit();
+    stats=1;
+}
