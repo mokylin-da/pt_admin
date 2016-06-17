@@ -28,7 +28,7 @@ var gameStore = Ext.create('Ext.data.Store', {
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
-    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img'],
+    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','gname'],
     listeners: {
         beforeload: function (_this) {
             Ext.data.JsonP.request({
