@@ -1,34 +1,62 @@
-var allMenuTree = [{
-    text: "权限管理",
-    leaf: true,
-    url: "permission_mgr.html",
-    tabId: "0",
-    permission: "menu_permission"
-}, {
-    text: "授权中心",
-    leaf: true,
-    url: "user_auth.html",
-    tabId: "1",
-    permission: "menu_auth"
-}, {
-    text: "区服管理",
-    leaf: true,
-    url: "server_mgr.html",
-    tabId: "2",
-    permission: "menu_server"
-}, {
-    text: "游戏管理",
-    leaf: true,
-    url: "game_mgr.html",
-    tabId: "3",
-    permission: "menu_game"
-}, {
-    text: "文章管理",
-    leaf: true,
-    url: "article_mgr.html",
-    tabId: "4",
-    permission: "menu_article"
-}];
+var allMenuTree = {
+    index:[{
+        text: "轮播图",
+        leaf: true,
+        url: "pic_turn_mgr.html",
+        tabId: "10",
+        permission: "menu_pic_turn"
+    },{
+        text: "推荐游戏",
+        leaf: true,
+        url: "recommend_game_mgr.html",
+        tabId: "11",
+        permission: "menu_recommend_game"
+    },{
+        text: "精品游戏",
+        leaf: true,
+        url: "quality_game_mgr.html",
+        tabId: "12",
+        permission: "menu_quality_game"
+    },{
+        text: "文章管理",
+        leaf: true,
+        url: "article_mgr.html",
+        tabId: "13",
+        permission: "menu_article"
+    }],
+    game:[ {
+        text: "区服管理",
+        leaf: true,
+        url: "server_mgr.html",
+        tabId: "20",
+        permission: "menu_server"
+    }, {
+        text: "游戏类型",
+        leaf: true,
+        url: "game_cat_mgr.html",
+        tabId: "21",
+        permission: "menu_game_cat"
+    }, {
+        text: "游戏列表",
+        leaf: true,
+        url: "game_mgr.html",
+        tabId: "22",
+        permission: "menu_game"
+    }],
+    user:[{
+        text: "权限管理",
+        leaf: true,
+        url: "permission_mgr.html",
+        tabId: "30",
+        permission: "menu_permission"
+    }, {
+        text: "授权中心",
+        leaf: true,
+        url: "user_auth.html",
+        tabId: "31",
+        permission: "menu_auth"
+    }]
+};
 
 var tabpanel;
 Ext.onReady(function () {
@@ -58,17 +86,40 @@ Ext.onReady(function () {
 
 
     // 树的panel
-    var treeStore = new Ext.data.TreeStore();
+    var indexStore = new Ext.data.TreeStore({
+        root:{
+            expanded: true,
+            noClick: true,
+            children:[]
+        }
+    });
+    var gameStore = new Ext.data.TreeStore({
+        root:{
+            expanded: true,
+            noClick: true,
+            children:[]
+        }
+    });
+    var userStore = new Ext.data.TreeStore({
+        root:{
+            expanded: true,
+            noClick: true,
+            children:[]
+        }
+    });
+
+    var storeMap = {index:indexStore,game:gameStore,user:userStore};
 
 
     if (GlobalUtil.isSuperAdmin()) {
-        treeStore.setRootNode({
-            text: "菜单",
-            expanded: true,
-            noClick: true,
-            children:allMenuTree});
+        for(var i in allMenuTree){
+            var e = allMenuTree[i];
+            if(e.constructor!=Array){
+                continue;
+            }
+            storeMap[i].getRootNode().appendChild(e);
+        }
     } else {
-
         Ext.data.JsonP.request({
             url: URLS.USER.CURRENT_USER_PERMISSION,
             callbackKey: 'function',
@@ -77,26 +128,21 @@ Ext.onReady(function () {
             success: function (res) {
                 if (res && res.status == 1) {
                     var pms = res.data || [];
-
-                    var menuTree = [];
-
-                    var rootNodes = {
-                        text: "菜单",
-                        expanded: true,
-                        noClick: true,
-                        children: menuTree
-                    };
                     var pmsMap = {};
                     for (var i = 0; i < pms.length; i++) {
                         pmsMap[pms[i]] = true;
                     }
-                    for (var i = 0; i < allMenuTree.length; i++) {
-                        if (pmsMap[allMenuTree[i].permission]) {
-                            menuTree.push(allMenuTree[i])
+                    for (var i in allMenuTree) {
+                        var m = allMenuTree[i];
+                        if(m.constructor!=Array){
+                            continue;
+                        }
+                        for(var j=0;j< m.length;j++){
+                            if (pmsMap[m[j].permission]) {
+                                storeMap[i].getRootNode().appendChild(m[j]);
+                            }
                         }
                     }
-
-                    treeStore.setRootNode(rootNodes);
                 } else {
                     Ext.MessageBox.alert("提示", "获取权限数据失败");
                 }
@@ -108,9 +154,44 @@ Ext.onReady(function () {
     }
 
     // 树的panel
-    var treePanel = new Ext.tree.Panel({
+    var indexPanel = new Ext.tree.Panel({
         rootVisible: false,
-        store: treeStore,
+        title:"首页管理",
+        store: indexStore,
+        listeners: {
+            itemclick: function (node, record) {
+                if (record.raw.noClick) {
+                    return;
+                } else {
+                    addTab(record.raw.text,
+                        record.raw.tabId, record.raw.url,
+                        record.raw.iconCls);
+                }
+            }
+        }
+    });
+
+    var gamePanel = new Ext.tree.Panel({
+        rootVisible: false,
+        title:"游戏中心管理",
+        store: gameStore,
+        listeners: {
+            itemclick: function (node, record) {
+                if (record.raw.noClick) {
+                    return;
+                } else {
+                    addTab(record.raw.text,
+                        record.raw.tabId, record.raw.url,
+                        record.raw.iconCls);
+                }
+            }
+        }
+    });
+
+    var userPanel = new Ext.tree.Panel({
+        rootVisible: false,
+        title:"用户中心管理",
+        store: userStore,
         listeners: {
             itemclick: function (node, record) {
                 if (record.raw.noClick) {
@@ -144,8 +225,12 @@ Ext.onReady(function () {
             width: 160,
             maxWidth: 300,
             title: "系统导航",
-            layout: "fit",
-            items: [treePanel]
+            layout : "accordion",
+            layoutConfig : {
+                animate : true,
+                activeOnTop : true
+            },
+            items: [indexPanel,gamePanel,userPanel]
         }, {
             id: "content-panel",
             region: "center",
@@ -242,5 +327,3 @@ Ext.onReady(function () {
     }
 
 });
-
-

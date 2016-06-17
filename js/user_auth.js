@@ -62,32 +62,65 @@ Ext.onReady(function () {
                 xtype: "toolbar",
                 items: [
                     {
-                        id: "uidField",
-                        xtype: 'textfield',
-                        fieldLabel: 'uid',
-                        name: 'uid',
-                        inputAttrTpl: [
-                            "autocomplete=\"on\""
+                        xtype: 'form',
+                        id: "dataForm",
+                        fieldDefaults: {
+                            labelAlign: 'left',
+                            labelWidth: 100,
+                            anchor: '150%'
+                        },
+                        frame: false,
+                        border: false,
+                        bodyStyle: 'padding:10 10',
+                        layout: 'hbox',
+                        items: [
+                            {
+                                id: "uidField",
+                                xtype: 'textfield',
+                                fieldLabel: 'uid',
+                                name: 'uid',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入uid"
+                            }, {
+                                id: "nicknameField",
+                                xtype: 'textfield',
+                                fieldLabel: '昵称',
+                                name: 'nickname',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入昵称"
+                            }
                         ],
-                        submitEmptyText:false,
-                        emptyText: "请输入uid"
-                    }, {
-                        id: "nicknameField",
-                        xtype: 'textfield',
-                        fieldLabel: '昵称',
-                        name: 'nickname',
-                        inputAttrTpl: [
-                            "autocomplete=\"on\""
-                        ],
-                        submitEmptyText:false,
-                        emptyText: "请输入昵称"
-                    },
-                    "-",
-                    {
-                        text: "搜索",
-                        icon: "js/extjs/resources/icons/search.png",
-                        handler: function () {
-                            search();
+                        dockedItems: [{
+                            xtype: 'toolbar',
+                            dock: 'right',
+                            layout: 'hbox',
+                            border: false,
+                            items: [{
+                                text: "搜索",
+                                icon: "js/extjs/resources/icons/search.png",
+                                formBind: true,
+                                handler: function (v) {
+                                    v.up("form").submit({
+                                        submitEmptyText:false
+                                    });
+                                }
+                            }, {
+                                text: '重置',
+                                handler: function (v) {
+                                    v.up("form").getForm().reset()
+                                }
+                            }]
+                        }],
+                        listeners: {
+                            beforeaction: function (form, action, options) {
+                                userStore.getProxy().extraParams = action.getParams();
+                                userStore.reload();
+                                return false;
+                            }
                         }
                     }]
             }]
@@ -187,7 +220,7 @@ var userAuthWindow = new Ext.Window({
                         valueField: 'gid',
                         emptyText: "--请选择--",
                         store: gameStore,
-                        value:platform_identifier,
+                        value:PLATFORM_IDENTIFIER,
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
@@ -196,10 +229,10 @@ var userAuthWindow = new Ext.Window({
                                 });
                             },
                             afterrender: function (_this, eOpts) {
-                                Ext.getCmp("gameCombo").setValue(platform_identifier);
-                                permissionListStore.getProxy().extraParams = {"gid": platform_identifier};//游戏改变的时候重新加载权限数据
+                                Ext.getCmp("gameCombo").setValue(PLATFORM_IDENTIFIER);
+                                permissionListStore.getProxy().extraParams = {"gid": PLATFORM_IDENTIFIER};//游戏改变的时候重新加载权限数据
                                 permissionListStore.load(function(){
-                                    loadUserPermission(platform_identifier);
+                                    loadUserPermission(PLATFORM_IDENTIFIER);
                                 });
                             }
                         }
@@ -297,19 +330,4 @@ function updateAuth(uid) {
     Ext.getCmp("addSubmitBtn").enable();
     Ext.getCmp("permissionGridId").getSelectionModel().deselectAll();
     loadUserPermission(Ext.getCmp("gameCombo").getValue());
-}
-function search() {
-    var params = {};
-    var uid = Ext.getCmp("uidField").getValue();
-    if (uid) {
-        params.uid = uid;
-    }
-    var nickname = Ext.getCmp("nicknameField").getValue();
-    if (nickname) {
-        params.nickname = nickname;
-    }
-    if (params.uid || params.nickname) {
-        userStore.getProxy().extraParams = params;
-        userStore.reload();
-    }
 }

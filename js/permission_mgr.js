@@ -48,7 +48,6 @@ var permissionListStore = Ext
                     type: 'json',
                     root: 'data'
                 }
-                //extraParams: {"gid": 0}
             }
         });
 
@@ -108,7 +107,7 @@ Ext.onReady(function () {
                         valueField: 'gid',
                         emptyText: "--请选择--",
                         store: gameStore,
-                        value:platform_identifier,
+                        value:PLATFORM_IDENTIFIER,
                         listeners: {
                             change: function (_this, newValue, oldValue, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据

@@ -173,7 +173,11 @@ Ext.onReady(function () {
     var articleTreePanel = new Ext.grid.Panel({
         //title:"分类",
         tbar: [{
-            text: "添加分类", icon: "js/extjs/resources/icons/add.png", handler: function () {
+            id:'articleCatAddBtn',
+            text: "添加分类",
+            disabled:true,
+            icon: "js/extjs/resources/icons/add.png",
+            handler: function () {
                 addArticleCat();
             }
         }],
@@ -227,20 +231,21 @@ Ext.onReady(function () {
                         xtype: 'combo',
                         triggerAction: 'all',
                         forceSelection: true,
-                        editable: false,
+                        editable: true,
                         fieldLabel: '游戏名称',
                         name: 'gid',
                         displayField: 'gname',
                         valueField: 'gid',
-                        emptyText: "--请选择--",
+                        queryMode : 'local',
+                        emptyText: "输入游戏名称",
+                        typeAhead : false,
                         store: gameStore,
                         listeners: {
-                            change: function (_this, newValue, oldValue, eOpts) {
-                                articleTreeStore.getProxy().extraParams = {"gid": newValue};
+                            select: function (_this, records, eOpts) {
+                                articleTreeStore.getProxy().extraParams = {"gid": records[0].get('gid')};
                                 articleTreeStore.load();
                                 articleStore.removeAll();
-                            }
-                            ,
+                            },
                             afterrender: function (_this, eOpts) {//数据加载后自动选择第一个游戏加载数据
                                 var data = gameStore.getAt(0);
                                 //防止组件加载完后store还未接收到数据的情况，100ms获取一次
@@ -253,6 +258,10 @@ Ext.onReady(function () {
                                             var gid = data.get("gid");
                                             //默认加载第一个游戏的权限列表
                                             _this.setValue(gid);
+                                            articleTreeStore.getProxy().extraParams = {"gid": gid};
+                                            articleTreeStore.load();
+                                            articleStore.removeAll();
+                                            Ext.getCmp('articleCatAddBtn').enable();
                                         }
                                     }, 200);
                                 })();
@@ -392,7 +401,7 @@ function updateArticleCat(data){
 var addDataWindow = new Ext.Window({
     title: "发布文章",
     width: 700,
-    height: 500,
+    //height: 500,
     //resizable: false,
     modal: true,
     autoShow: false,
@@ -433,19 +442,30 @@ var addDataWindow = new Ext.Window({
                         cls: 'x-check-group-alt',
                         items: [
                             {boxLabel: '草稿', name: 'state', inputValue: 0, checked: true},
-                            {boxLabel: '等待发布', name: 'state', inputValue: 1},
-                            {boxLabel: '已发布', name: 'state', inputValue: 2}
+                            //{boxLabel: '等待发布', name: 'state', inputValue: 1},
+                            {boxLabel: '发布', name: 'state', inputValue: 2}
                         ]
                     }, Ext.create("Ext.ux.form.MoHtmlEditor", {
                         id: "contentField",
                         fieldLabel: "内容",
                         name: "content",
                         url:URLS.MISC.FILE_UPLOAD,
-                        enforceMaxLength: true,
-                        maxLength:10,
+                        maxLength:65535,
                         //width:,
                         height: 300,
-                        allowBlank: false
+                        allowBlank: false,
+                        listeners:{
+                            change: function(editor, newValue, oldValue) {
+                                if (newValue && newValue.length > editor.maxLength) {
+                                    Ext.MessageBox.alert("提示","内容长度超过65535",function(){
+                                        Ext.getCmp("addSubmitBtn").enable();
+                                    });
+                                    editor.setValue("");
+                                    editor.insertAtCursor(oldValue);
+                                    editor.clearInvalid();
+                                }
+                            }
+                        }
                     }), {
                         id: "aidField",
                         xtype: "hiddenfield",
@@ -463,7 +483,15 @@ var addDataWindow = new Ext.Window({
                     beforeaction: function (_this, action, eOpts) {
                         Ext.getCmp("gidField").setValue(Ext.getCmp("gameCombo").getValue());
                         Ext.getCmp("catenameField").setValue(addDataWindow.ename);
-                        postData( Ext.getCmp("articleForm").url,_this.getValues(),function(v){
+                        var values = _this.getValues();
+                        if(values.content.length>65535){
+                            Ext.MessageBox.alert("提示","内容长度超过65535",function(){
+                                Ext.getCmp("addSubmitBtn").enable();
+                            });
+                            return;
+                        }
+                        var crossDomain = new CrossDomain();
+                        crossDomain.init(Ext.getCmp("articleForm").url,values,function(v){
                             if (v == 1) {
                                 Ext.MessageBox.alert("提示", Ext.getCmp("articleForm").operate + "成功");
                                 articleStore.reload();
@@ -471,9 +499,10 @@ var addDataWindow = new Ext.Window({
                                 return;
                             }
                             GlobalUtil.status(parseInt(v), function () {
-                                addDataWindow.hide();
+                                Ext.getCmp("addSubmitBtn").enable();
                             });
                         });
+                        crossDomain.submit();
                         return false;
                     }
                 },
@@ -533,49 +562,3 @@ function deletePermission(id) {
     });
 }
 
-/**
- * 跨域请求，post form提交
- * @param url 跨域URL
- * @param data 请求参数,json对象
- * @param callbackFn 回调方法
- */
-function postData(url,data,callbackFn){
-    var iframe = document.createElement('iframe');
-    iframe.style.display="none";
-    document.body.appendChild(iframe);
-    var stats = 0;
-    function fload(){
-        if(stats==1){
-            iframe.contentWindow.location="blank.html";
-            stats=2;
-        }else if(stats==2){
-            callbackFn(iframe.contentWindow.name);
-            iframe.contentWindow.document.write('');
-            iframe.contentWindow.close();
-            document.body.removeChild(iframe);
-        }
-    }
-    if (iframe.attachEvent) {
-        iframe.attachEvent('onload', fload);
-    } else {
-        iframe.onload  = fload;
-    }
-    var fd = iframe.contentWindow.document;
-    var form = fd.createElement("form");
-    form.action=url;
-    form.method="post";
-    if(typeof data == "object"){
-        function appendFormField(doc,form,name,value){
-            var ipt = doc.createElement("input");
-            ipt.name=name;
-            ipt.value=value;
-            form.appendChild(ipt);
-        }
-        for(var i in data){
-            appendFormField(fd,form,i,data[i]);
-        }
-    }
-    fd.body.appendChild(form);
-    form.submit();
-    stats=1;
-}
