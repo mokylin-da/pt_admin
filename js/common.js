@@ -74,10 +74,7 @@ Ext.data.JsonP.request({
         // alert(JSON.stringify(res));
         if (res && res.status == 1) {
             isLogin = true;
-            var isSuperAdmin = res.data && res.data.uid == SUPER_ADMIN_UID;
-            GlobalUtil.isSuperAdmin = function () {
-                return isSuperAdmin;
-            };
+            GlobalUtil.superAdmin = res.data && res.data.uid == SUPER_ADMIN_UID;
             var userDiv = document.getElementById("userDiv");
             if (userDiv) {
                 userDiv.innerHTML = "当前用户:" + res.data.nickname;
@@ -194,9 +191,9 @@ GlobalUtil = {
         }
         return false;
     },
+    superAdmin:undefined,
     isSuperAdmin: function () {
-        //加载用户信息的时候赋值
-        return true;
+        return GlobalUtil.superAdmin;
     },
     stringToJson: function (s) {
         return JSON.parse(s);

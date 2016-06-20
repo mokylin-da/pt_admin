@@ -60,6 +60,19 @@ var allMenuTree = {
 
 var tabpanel;
 Ext.onReady(function () {
+    delayInit(100);
+});
+
+function delayInit(delay){
+    if(GlobalUtil.isSuperAdmin()==undefined){
+        setTimeout(delayInit,delay);
+    }else {
+        init();
+    }
+}
+
+function init(){
+
     // 标签panel
     tabpanel = Ext.create("Ext.tab.Panel", {
         layout: "fit",
@@ -326,4 +339,4 @@ Ext.onReady(function () {
         Ext.get(frameName).set({src: url});
     }
 
-});
+}
