@@ -22,7 +22,7 @@ URLS.GAME_INFO = {
     GAME_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/allgamelist",
     GAME_PAGE_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/pagegamelist",
     ADD_GAME: URLS.GAME_INFO_BASE + "/gameinfo/game/add",
-    UPDATE_GAME: URLS.GAME_INFO_BASE + "/gameinfo/alter/addgame",
+    UPDATE_GAME: URLS.GAME_INFO_BASE + "/gameinfo/game/update",
     SERVER_LIST: URLS.GAME_INFO_BASE + "/gameinfo/allserverlist",
     ADD_SERVER: URLS.GAME_INFO_BASE + "/gameinfo/alter/addserver",
     DELETE_SERVER: URLS.GAME_INFO_BASE + "/gameinfo/alter/deleteserver",

@@ -15,7 +15,7 @@ Ext.QuickTips.init();
 
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
-    fields: ['gname', 'gid', 'gurl', 'gtag', 'opentime', 'addtime','picture','catids','sequence','state','recharge_plat','serverurl'],
+    fields: ['gname', 'gid', 'gurl', 'gtag', 'picture', 'catids', 'sequence', 'state', 'recharge_plat', 'serverurl','cuser','opentime','addtime'],
     pageSize: 20,
     proxy: {
         type: "jsonp",
@@ -41,13 +41,14 @@ Ext.data.JsonP.request({
     callbackKey: 'function',
     success: function (res) {
         if (res && res.status == 1) {
-            var data=res.data;
-            if(!data || data.constructor != Array){
+            var data = res.data;
+            if (!data || data.constructor != Array) {
                 return;
             }
-            for(var i=0;i<data.length;i++){
-                gameCatItems.push({boxLabel: data[i].name, name:'catids',inputValue:data[i].id});
+            for (var i = 0; i < data.length; i++) {
+                gameCatItems.push({boxLabel: data[i].name, name: 'catids', inputValue: data[i].id});
             }
+            Ext.getCmp("catCheckBoxGroup").add(gameCatItems);
             return;
         }
         Ext.MessageBox.alert("提示", "读取游戏分类失败");
@@ -96,42 +97,73 @@ Ext.onReady(function () {
                 Ext.create("Ext.grid.RowNumberer"),
                 {
                     text: "游戏图片",
-                    width: 200,
+                    width: 100,
                     dataIndex: "picture",
-                    renderer:function(v){
-                        return "<img src='"+v+" style='height:100px;'/>";
+                    renderer: function (v) {
+                        return "<img src='" + v + "' style='height:100px;'/>";
                     }
                 },
                 {
                     text: "游戏ID",
-                    width: 200,
+                    width: 80,
                     dataIndex: "gid"
                 },
                 {
                     text: "游戏名称",
-                    width: 150,
+                    width: 100,
                     dataIndex: "gname"
+                }, {
+                    text: "是否显示",
+                    width: 100,
+                    dataIndex: "state",
+                    renderer: function (v) {
+                        var val = 1;
+                        return (v & val) == val ? '显示' : '不显示';
+                    }
+                }, {
+                    text: "最新开服设置",
+                    width: 100,
+                    dataIndex: "state",
+                    renderer: function (v) {
+                        var val = 2;
+                        return (v & val) == val ? '显示' : '不显示';
+                    }
+                }, {
+                    text: "开服预告设置",
+                    width: 100,
+                    dataIndex: "state",
+                    renderer: function (v) {
+                        var val = 4;
+                        return (v & val) == val ? '显示' : '不显示';
+                    }
                 },
                 {
-                    text: "登陆地址",
-                    width: 150,
-                    dataIndex: "gurl"
+                    text: "开服时间",
+                    width: 100,
+                    dataIndex: "opentime"
                 },
                 {
-                    text: "游戏标识",
-                    width: 150,
-                    dataIndex: "gtag"
+                    text: "排行设置",
+                    width: 100,
+                    dataIndex: "sequence"
                 }
-                //,
-                //{
-                //    header: "操作",
-                //    width: 150,
-                //    align: 'center',
-                //    xtype: 'templatecolumn',
-                //    tpl: '<tpl>'
-                //    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteGame(\'{gid}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
-                //    + '</tpl>'
-                //}
+                ,
+                {
+                    header: "操作",
+                    width: 50,
+                    dataIndex: "sequence",
+                    renderer:function(val,metaData,record,rowIndex,store,view){
+                        //return  '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateGame({#},{gid:\'{gid}\',gname:\'{gname}\',gurl:\'{gurl}\',login_token:\'{login_token}\',serverurl:\'{serverurl}\',opentime:{opentime},state:\'{state}\',sequence:\'{sequence}\',picture:\'{picture}\',catids:\'{catids}\',recharge_ratio:\'{recharge_ratio}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+
+
+                        var value = record.raw;
+                        //value.opentime =  Ext.Date.parse(value.opentime, "Y-m-d H:i:s.0");
+                        value.opentime = value.opentime.replace(/\..*$/,"");
+                        var records = JSON.stringify(value).replace(/"/g,'\"');
+                        return  '<a style="text-decoration:none;margin-right:5px;" href=\'javascript:updateGame('+records+');\'><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>';
+
+                    }
+                }
 
             ],
             tbar: [
@@ -150,7 +182,7 @@ Ext.onReady(function () {
                 store: gameStore,   // same store GridPanel is using
                 dock: 'bottom',
                 displayInfo: true
-            },{
+            }, {
                 xtype: "toolbar",
                 items: [{
                     xtype: 'form',
@@ -163,19 +195,19 @@ Ext.onReady(function () {
                     border: false,
                     bodyStyle: 'padding:10 10 10 10 ',
                     layout: 'hbox',
-                    items:[{
+                    items: [{
                         xtype: 'combobox',
                         fieldLabel: '游戏分类',
                         displayField: 'name',
                         valueField: 'id',
                         store: gameCatStore,
-                        editable:false,
-                        name:'catid',
-                        value:''
+                        editable: false,
+                        name: 'catid',
+                        value: ''
                     }, {
                         xtype: 'textfield',
                         fieldLabel: '游戏名称',
-                        name:'gname'
+                        name: 'gname'
                     }],
                     dockedItems: [{
                         xtype: 'toolbar',
@@ -188,7 +220,7 @@ Ext.onReady(function () {
                             formBind: true,
                             handler: function (v) {
                                 v.up("form").submit({
-                                    submitEmptyText:false
+                                    submitEmptyText: false
                                 });
                             }
                         }, {
@@ -244,7 +276,7 @@ var addDataWindow = new Ext.Window({
                     anchor: '150%'
                 },
                 frame: false,
-                width:'100%',
+                width: '100%',
                 bodyStyle: 'padding:10 10',
                 items: [
                     {
@@ -253,20 +285,17 @@ var addDataWindow = new Ext.Window({
                         fieldLabel: "游戏分类",
                         name: "gid",
                         allowBlank: false
-                    },{
+                    }, {
+                        id:'catCheckBoxGroup',
                         xtype: 'checkboxgroup',
                         fieldLabel: '游戏分类',
-                        height:150,
-                        autoScroll : true,
-                        items:[],
+                        name:'catids',
+                        height: 150,
+                        autoScroll: true,
+                        items: [],
                         layout: {
                             type: 'vbox',
                             align: 'left'
-                        },
-                        listeners:{
-                            afterrender:function(_this){
-                                _this.add(gameCatItems);
-                            }
                         }
                     }, {
                         id: "gidField",
@@ -325,15 +354,37 @@ var addDataWindow = new Ext.Window({
                         format: 'Y-m-d H:i:s',
                         allowBlank: false
                     }), {
-                        id: "stateField",
                         xtype: 'radiogroup',
-                        items: [{boxLabel: "关服",name:'state', inputValue: 0}, {boxLabel: "开服",name:'state', inputValue: 1,checked:true}],
-                        fieldLabel: "状态",
-                        name: "state"
+                        items: [{boxLabel: "显示", name: 'display', inputValue: 1, checked: true}, {
+                            boxLabel: "不显示",
+                            name: 'display',
+                            inputValue: 0
+                        }],
+                        fieldLabel: "是否显示",
+                        name: "display"
+                    }, {
+                        xtype: 'radiogroup',
+                        items: [{boxLabel: "显示", name: 'newServer', inputValue: 2}, {
+                            boxLabel: "不显示",
+                            name: 'newServer',
+                            inputValue: 0,
+                            checked: true
+                        }],
+                        fieldLabel: "最新开服设置",
+                        name: "newServer"
+                    }, {
+                        xtype: 'radiogroup',
+                        items: [{boxLabel: "显示", name: 'noticeSetting', inputValue: 4, checked: true}, {
+                            boxLabel: "不显示",
+                            name: 'noticeSetting',
+                            inputValue: 0
+                        }],
+                        fieldLabel: "开服预告设置",
+                        name: "noticeSetting"
                     },
-                    Ext.create("Ext.ux.form.MoUploader",{
-                        fieldLabel:'游戏图片',
-                        name:"picture"
+                    Ext.create("Ext.ux.form.MoUploader", {
+                        fieldLabel: '游戏图片',
+                        name: "picture"
                     }), {
                         id: "recharge_platField",
                         xtype: "hiddenfield",
@@ -342,8 +393,12 @@ var addDataWindow = new Ext.Window({
                     }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
+
+                        var params = _this.getValues();
+                        params.state = params.display | params.newServer | params.noticeSetting;
+
                         Ext.data.JsonP.request({
-                            params: _this.getValues(), // values from form fields..
+                            params: params, // values from form fields..
                             url: Ext.getCmp("dataForm").url,
                             callbackKey: 'function',
                             scope: 'this',
@@ -388,20 +443,20 @@ function addGame() {
     Ext.getCmp("dataForm").getForm().reset();
     Ext.getCmp("dataForm").url = URLS.GAME_INFO.ADD_GAME;
     Ext.getCmp("dataForm").operate = "添加";
+    Ext.getCmp("gidField").setReadOnly(false);
     addDataWindow.show();
 }
-function updateGame(gid, gname, gurl, recharge_ratio, login_token) {
+function updateGame(data) {
+    data.display={display:(data.state & 1)};
+    data.newServer={newServer:(data.state & 2)};
+    data.noticeSetting={noticeSetting:(data.state & 4)};
+    data.catids = {catids:data.catids.split(",")};
+    Ext.getCmp("gidField").setReadOnly(true);
     addDataWindow.setTitle("修改游戏");
     Ext.getCmp("dataForm").operate = "修改";
     Ext.getCmp("dataForm").getForm().reset();
     Ext.getCmp("dataForm").url = URLS.GAME_INFO.UPDATE_GAME;
-    Ext.getCmp("dataForm").getForm().setValues({
-        gid: gid,
-        gname: gname,
-        gurl: gurl,
-        recharge_ratio: recharge_ratio,
-        login_token: login_token
-    });
+    Ext.getCmp("dataForm").getForm().setValues(data);
     addDataWindow.show();
 }
 

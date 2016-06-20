@@ -11,6 +11,7 @@ Ext.QuickTips.init();
 // ##########################################################
 // 数据源存储块 开始
 // ##########################################################
+var API_TYPE = "GAME_INFO_INTERNAL_ENDPOINT",API_NAME = "gameinfo/game/allgamelistlimitfields", API_VALUE = "",API_KEY = "gid";
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,

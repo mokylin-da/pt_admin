@@ -152,6 +152,10 @@ var addDataWindow = new Ext.Window({
                 bodyStyle: 'padding:10 10',
                 items: [
                     {
+                        xtype: "hiddenfield",
+                        fieldLabel: "名称",
+                        name: "id"
+                    }, {
                         id: "nameField",
                         xtype: "textfield",
                         fieldLabel: "名称",
@@ -168,6 +172,7 @@ var addDataWindow = new Ext.Window({
                         xtype:"checkboxfield",
                         uncheckedValue:1,
                         inputValue:0,
+                        value:0,
                         name:"state"
                     }, {
                         id: "gidField",

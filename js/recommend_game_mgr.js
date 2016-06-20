@@ -201,6 +201,7 @@ var addDataWindow = new Ext.Window({
                         queryMode: 'local',
                         emptyText: "输入游戏名称",
                         typeAhead: false,
+                        allowBlank: false,
                         store: gameStore
                     }, {
                         xtype: "numberfield",
@@ -249,8 +250,11 @@ var addDataWindow = new Ext.Window({
                     text: '确定',
                     id: "addSubmitBtn",
                     handler: function (v) {
-                        v.disable();
-                        v.up("form").submit();
+                        var form = v.up("form").getForm();
+                        if(form.isValid()){
+                            v.disable();
+                            form.submit();
+                        }
                     }
                 }, {
                     text: '取消',
