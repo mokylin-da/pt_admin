@@ -11,7 +11,6 @@ Ext.QuickTips.init();
 // ##########################################################
 // 数据源存储块 开始
 // ##########################################################
-var API_TYPE = "GAME_INFO_INTERNAL_ENDPOINT",API_NAME = "gameinfo/game/allgamelistlimitfields", API_VALUE = "",API_KEY = "gid";
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
@@ -95,7 +94,7 @@ Ext.onReady(function () {
                     dataIndex: "sequence"
                 },
                 {
-                    text: "是否隐藏",
+                    text: "是否显示",
                     width: 80,
                     dataIndex: "state",
                     renderer:function(v){
@@ -108,7 +107,7 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:\'{state}\',title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:{state},title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
@@ -193,16 +192,17 @@ var addDataWindow = new Ext.Window({
                         name: "sequence",
                         allowBlank: false
                     }, {
-                        fieldLabel: "是否隐藏",
+                        fieldLabel: "是否显示",
                         xtype:"checkboxfield",
-                        uncheckedValue:1,
-                        inputValue:0,
+                        uncheckedValue:0,
+                        inputValue:1,
+                            value:1,
                         name:"state"
                     }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
                         var params =  _this.getValues();
-                        convertParams(params,["title","link","img"])
+                        convertParams(params,["title","link","img"]);
                         Ext.data.JsonP.request({
                             params: params, // values from form fields..
                             url: Ext.getCmp("dataForm").url,

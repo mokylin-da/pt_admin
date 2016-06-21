@@ -142,7 +142,7 @@ Ext.onReady(function () {
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateArticle(\'{aid}\',\'{gid}\');"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                        //+ '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePermission(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteArticle(\'{aid}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -173,9 +173,9 @@ Ext.onReady(function () {
     var articleTreePanel = new Ext.grid.Panel({
         //title:"分类",
         tbar: [{
-            id:'articleCatAddBtn',
+            id: 'articleCatAddBtn',
             text: "添加分类",
-            disabled:true,
+            disabled: true,
             icon: "js/extjs/resources/icons/add.png",
             handler: function () {
                 addArticleCat();
@@ -198,17 +198,17 @@ Ext.onReady(function () {
                 text: "操作",
                 width: 50,
                 xtype: 'templatecolumn',
-                tpl:'<tpl>'
-            + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateArticleCat({id:\'{id}\',cname:\'{cname}\',ename:\'{ename}\',gid:\'{gid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-            + '</tpl>'
+                tpl: '<tpl>'
+                + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateArticleCat({id:\'{id}\',cname:\'{cname}\',ename:\'{ename}\',gid:\'{gid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                + '</tpl>'
             }],
         listeners: {
-            itemclick: function ( _this,record, item, index,  e, eOpts ) {
-                var gid=Ext.getCmp("gameCombo").getValue();
+            itemclick: function (_this, record, item, index, e, eOpts) {
+                var gid = Ext.getCmp("gameCombo").getValue();
                 var ename = record.get("ename");
-                articleStore.getProxy().extraParams = {"gid": gid,catename: ename};//游戏改变的时候重新加载权限数据
+                articleStore.getProxy().extraParams = {"gid": gid, catename: ename};//游戏改变的时候重新加载权限数据
                 articleStore.load();
-               addDataWindow.ename=ename;//添加文章窗口
+                addDataWindow.ename = ename;//添加文章窗口
                 Ext.getCmp("addArticleId").enable();//发布文章按钮可用
             }
         }
@@ -236,9 +236,9 @@ Ext.onReady(function () {
                         name: 'gid',
                         displayField: 'gname',
                         valueField: 'gid',
-                        queryMode : 'local',
+                        queryMode: 'local',
                         emptyText: "输入游戏名称",
-                        typeAhead : false,
+                        typeAhead: false,
                         store: gameStore,
                         listeners: {
                             select: function (_this, records, eOpts) {
@@ -390,7 +390,7 @@ function addArticleCat() {
     Ext.getCmp("articleCatForm").operate = "添加";
     addCatDataWindow.show();
 }
-function updateArticleCat(data){
+function updateArticleCat(data) {
     addCatDataWindow.setTitle("修改文章");
     Ext.getCmp("articleCatForm").getForm().reset();
     Ext.getCmp("articleCatForm").url = URLS.MISC.ARTICLE_CAT_UPDATE;
@@ -449,15 +449,15 @@ var addDataWindow = new Ext.Window({
                         id: "contentField",
                         fieldLabel: "内容",
                         name: "content",
-                        url:URLS.MISC.FILE_UPLOAD,
-                        maxLength:65535,
+                        url: URLS.MISC.FILE_UPLOAD,
+                        maxLength: 65535,
                         //width:,
                         height: 300,
                         allowBlank: false,
-                        listeners:{
-                            change: function(editor, newValue, oldValue) {
+                        listeners: {
+                            change: function (editor, newValue, oldValue) {
                                 if (newValue && newValue.length > editor.maxLength) {
-                                    Ext.MessageBox.alert("提示","内容长度超过65535",function(){
+                                    Ext.MessageBox.alert("提示", "内容长度超过65535", function () {
                                         Ext.getCmp("addSubmitBtn").enable();
                                     });
                                     editor.setValue("");
@@ -484,14 +484,14 @@ var addDataWindow = new Ext.Window({
                         Ext.getCmp("gidField").setValue(Ext.getCmp("gameCombo").getValue());
                         Ext.getCmp("catenameField").setValue(addDataWindow.ename);
                         var values = _this.getValues();
-                        if(values.content.length>65535){
-                            Ext.MessageBox.alert("提示","内容长度超过65535",function(){
+                        if (values.content.length > 65535) {
+                            Ext.MessageBox.alert("提示", "内容长度超过65535", function () {
                                 Ext.getCmp("addSubmitBtn").enable();
                             });
                             return;
                         }
                         var crossDomain = new CrossDomain();
-                        crossDomain.init(Ext.getCmp("articleForm").url,values,function(v){
+                        crossDomain.init(Ext.getCmp("articleForm").url, values, function (v) {
                             if (v == 1) {
                                 Ext.MessageBox.alert("提示", Ext.getCmp("articleForm").operate + "成功");
                                 articleStore.reload();
@@ -554,11 +554,36 @@ function updateArticle(aid, gid) {
     });
 }
 
-function deletePermission(id) {
+function deleteArticle(aid) {
     Ext.MessageBox.confirm("删除确认", "是否要删除文章：", function (res) {
         if (res == "yes") {
-            alert(res);
+            Ext.data.JsonP.request({
+                url: URLS.MISC.ARTICLE_DELETE,
+                params: {
+                    aid: aid,
+                    gid:PLATFORM_IDENTIFIER
+                },
+                callbackKey: 'function',
+                // scope: 'this',
+                success: function (res) {
+                    if (res && res.status == 1) {
+                        Ext.MessageBox.alert("提示", "删除成功");
+                        articleStore.reload();
+                        return;
+                    }
+                    if (!res) {
+                        Ext.MessageBox.alert("提示", "删除失败");
+                    }
+                    GlobalUtil.status(parseInt(res.status), function () {
+                    });
+                },
+                failure: function (response) {
+                    Ext.MessageBox.alert("提示", "删除失败");
+                }
+            });
         }
     });
+
+
 }
 

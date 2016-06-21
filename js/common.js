@@ -37,6 +37,7 @@ URLS.MISC = {
     ARTICLE_DETAIL: URLS.MISC_BASE + "/misc/article/findbyid",//文章详情
     ARTICLE_ADD: URLS.MISC_BASE + "/misc/article/addnew",//文章发布
     ARTICLE_UPDATE: URLS.MISC_BASE + "/misc/article/updatenew",//文章修改
+    ARTICLE_DELETE: URLS.MISC_BASE + "/misc/article/delete",//文章修改
     ARTICLE_CAT_ADD: URLS.MISC_BASE + "/misc/articlecat/add",//文章分类添加
     ARTICLE_CAT_UPDATE: URLS.MISC_BASE + "/misc/articlecat/update",//文章分类添加
     ARTICLE_CAT_LIST: URLS.MISC_BASE + "/misc/articlecat/list",//文章分类列表

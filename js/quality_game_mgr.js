@@ -28,7 +28,7 @@ var gameStore = Ext.create('Ext.data.Store', {
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
-    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','gname'],
+    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','gname','apivalue'],
     listeners: {
         beforeload: function (_this) {
             Ext.data.JsonP.request({
@@ -44,14 +44,14 @@ var picTurnStore = Ext.create('Ext.data.Store', {
                             return;
                         }
                         for (var i = 0; i < baseData.length; i++) {
-                            var tmp = baseData[i];
+                            var tmp = baseData[i] || {};
                             var tmpData = GlobalUtil.stringToJson(tmp.data);
-                            var apiData = tmp.apidata;
+                            var apiData = tmp.apidata || {};
                             delete tmp.data;
                             delete tmp.apidata;
-                            Ext.override(tmpData, tmp);
-                            Ext.override(tmpData, apiData);
-                            finalData.push(tmpData);
+                            Ext.override( tmp,tmpData);
+                            Ext.override(apiData,tmp);
+                            finalData.push(apiData);
                         }
                         window.datas = finalData;
                         _this.add(finalData);
@@ -108,7 +108,7 @@ Ext.onReady(function () {
                     dataIndex: "sequence"
                 },
                 {
-                    text: "是否隐藏",
+                    text: "是否显示",
                     width: 80,
                     dataIndex: "state",
                     renderer: function (v) {
@@ -121,7 +121,7 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:\'{state}\',img:\'{img}\',type:\'{type}\',apivalue:{gid}});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:\'{state}\',img:\'{img}\',type:\'{type}\',apivalue:parseInt(\'{apivalue}\')});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
@@ -208,10 +208,11 @@ var addDataWindow = new Ext.Window({
                         name: "sequence",
                         allowBlank: false
                     }, {
-                        fieldLabel: "是否隐藏",
+                        fieldLabel: "是否显示",
                         xtype: "checkboxfield",
-                        uncheckedValue: 1,
-                        inputValue: 0,
+                        uncheckedValue:0,
+                        inputValue: 1,
+                        value:1,
                         name: "state"
                     }],
                 listeners: {
