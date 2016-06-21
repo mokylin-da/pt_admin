@@ -561,7 +561,7 @@ function deleteArticle(aid) {
                 url: URLS.MISC.ARTICLE_DELETE,
                 params: {
                     aid: aid,
-                    gid:PLATFORM_IDENTIFIER
+                    gid:Ext.getCmp("gameCombo").getValue()
                 },
                 callbackKey: 'function',
                 // scope: 'this',

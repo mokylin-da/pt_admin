@@ -87,14 +87,27 @@ Ext.onReady(function () {
                     width: 150,
                     dataIndex: "addtime"
                 },
+                //{
+                //    header: "操作",
+                //    width: 150,
+                //    align: 'center',
+                //    xtype: 'templatecolumn',
+                //    tpl: '<tpl>'
+                //    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateServer(\'{gid}\',\'{sid}\');"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                //    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteServer(\'{gid}\',\'{sid}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                //    + '</tpl>'
+                //},
                 {
                     header: "操作",
                     width: 150,
-                    align: 'center',
-                    xtype: 'templatecolumn',
-                    tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteServer(\'{gid}\',\'{sid}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
-                    + '</tpl>'
+                    dataIndex: "sequence",
+                    renderer:function(val,metaData,record,rowIndex,store,view){
+                        var value = record.raw;
+                        value.opentime = value.opentime.replace(/\..*$/,"");
+                        var records = JSON.stringify(value).replace(/"/g,'\"');
+                        return    '<a style="text-decoration:none;margin-right:5px;" href=\'javascript:updateServer('+records+');\'><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                            + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteServer(\''+value.gid+'\',\''+value.sid+'\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>';
+                    }
                 }
 
             ],
@@ -106,39 +119,44 @@ Ext.onReady(function () {
                         xtype: 'combo',
                         triggerAction: 'all',
                         forceSelection: true,
-                        editable: false,
+                        editable: true,
                         fieldLabel: '游戏名称',
                         name: 'gid',
                         displayField: 'gname',
                         valueField: 'gid',
-                        emptyText: "--请选择--",
+                        queryMode: 'local',
+                        emptyText: "输入游戏名称",
+                        typeAhead: false,
                         store: gameStore,
                         listeners: {
-                            change: function (_this, newValue, oldValue, eOpts) {
-                                serverStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
+                            select: function (_this, records, eOpts) {
+                                serverStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
                                 serverStore.load();
+                                Ext.getCmp("addServerBtn").enable();
                             },
                             afterrender: function (_this, eOpts) {
-                                var data = gameStore.getAt(0);
-                                //防止组件加载完后store还未接收到数据的情况，100ms获取一次
-                                (function sleepFn() {
-                                    setTimeout(function () {
-                                        data = gameStore.getAt(0);
-                                        if (!data) {
-                                            sleepFn();
-                                        } else {
-                                            var gid = data.get("gid");
-                                            //默认加载第一个游戏的权限列表
-                                            _this.setValue(gid);
-                                        }
-                                    }, 100);
-                                })();
+                                //var data = gameStore.getAt(0);
+                                ////防止组件加载完后store还未接收到数据的情况，100ms获取一次
+                                //(function sleepFn() {
+                                //    setTimeout(function () {
+                                //        data = gameStore.getAt(0);
+                                //        if (!data) {
+                                //            sleepFn();
+                                //        } else {
+                                //            var gid = data.get("gid");
+                                //            //默认加载第一个游戏的权限列表
+                                //            _this.setValue(gid);
+                                //        }
+                                //    }, 100);
+                                //})();
                             }
                         }
                     },
                     "-",
                     {
                         text: "添加区服",
+                        id:'addServerBtn',
+                        disabled:true,
                         icon: "js/extjs/resources/icons/add.png",
                         handler: function () {
                             addServer();
@@ -272,20 +290,20 @@ var addDataWindow = new Ext.Window({
         )]
 });
 function addServer() {
-    addDataWindow.setTitle("添加权限");
+    addDataWindow.setTitle("添加区服");
     Ext.getCmp("serverForm").getForm().reset();
     Ext.getCmp("serverForm").url = URLS.GAME_INFO.ADD_SERVER;
     Ext.getCmp("serverForm").operate = "添加";
+    Ext.getCmp("sidField").setReadOnly(false);
     addDataWindow.show();
 }
-function updatePermission(sid, name, cname) {
-    addDataWindow.setTitle("修改权限");
+function updateServer(data) {
+    addDataWindow.setTitle("修改区服");
     Ext.getCmp("serverForm").operate = "修改";
     Ext.getCmp("serverForm").getForm().reset();
-    Ext.getCmp("serverForm").url = URLS.USER.UPDATE_PERMISSION;
-    Ext.getCmp("idField").setValue(id);
-    Ext.getCmp("nameField").setValue(name);
-    Ext.getCmp("cnameField").setValue(cname);
+    Ext.getCmp("serverForm").url = URLS.GAME_INFO.UPDATE_SERVER;
+    Ext.getCmp("serverForm").getForm().setValues(data);
+    Ext.getCmp("sidField").setReadOnly(true);
     addDataWindow.show();
 }
 

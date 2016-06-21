@@ -213,27 +213,28 @@ var userAuthWindow = new Ext.Window({
                         xtype: 'combo',
                         triggerAction: 'all',
                         forceSelection: true,
-                        editable: false,
+                        editable: true,
                         fieldLabel: '游戏名称',
                         name: 'gid',
                         displayField: 'gname',
                         valueField: 'gid',
-                        emptyText: "--请选择--",
+                        queryMode: 'local',
+                        emptyText: "输入游戏名称",
+                        typeAhead: false,
                         store: gameStore,
-                        value:PLATFORM_IDENTIFIER,
                         listeners: {
-                            change: function (_this, newValue, oldValue, eOpts) {
-                                permissionListStore.getProxy().extraParams = {"gid": newValue};//游戏改变的时候重新加载权限数据
+                            select: function (_this, records, eOpts) {
+                                permissionListStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
                                 permissionListStore.load(function(){
-                                    loadUserPermission(newValue);
+                                    loadUserPermission(records[0].get('gid'));
                                 });
                             },
                             afterrender: function (_this, eOpts) {
-                                Ext.getCmp("gameCombo").setValue(PLATFORM_IDENTIFIER);
-                                permissionListStore.getProxy().extraParams = {"gid": PLATFORM_IDENTIFIER};//游戏改变的时候重新加载权限数据
-                                permissionListStore.load(function(){
-                                    loadUserPermission(PLATFORM_IDENTIFIER);
-                                });
+                                //Ext.getCmp("gameCombo").setValue(PLATFORM_IDENTIFIER);
+                                //permissionListStore.getProxy().extraParams = {"gid": PLATFORM_IDENTIFIER};//游戏改变的时候重新加载权限数据
+                                //permissionListStore.load(function(){
+                                //    loadUserPermission(PLATFORM_IDENTIFIER);
+                                //});
                             }
                         }
                     }]

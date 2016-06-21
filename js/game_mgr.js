@@ -58,25 +58,25 @@ Ext.data.JsonP.request({
     }
 });
 
-var gameCatStore = Ext.create('Ext.data.Store', {
-    autoLoad: true,
-    fields: ['id', 'name', 'sequence', 'state', 'cuser', 'uuser', 'cdate', 'udate'],
-    proxy: {
-        type: "jsonp",
-        url: URLS.GAME_INFO.GAME_CAT_LIST,
-        callbackKey: "function",
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    },
-    listeners: {
-        load: function (_this, records, successful, eOpts) {
-            gameCatStore.add({id: '', name: '全部', sequence: '-1'});
-        }
-    }
-});
-gameCatStore.sort('sequence', 'ASC');
+//var gameCatStore = Ext.create('Ext.data.Store', {
+//    autoLoad: true,
+//    fields: ['id', 'name', 'sequence', 'state', 'cuser', 'uuser', 'cdate', 'udate'],
+//    proxy: {
+//        type: "jsonp",
+//        url: URLS.GAME_INFO.GAME_CAT_LIST,
+//        callbackKey: "function",
+//        reader: {
+//            type: 'json',
+//            root: 'data'
+//        }
+//    },
+//    listeners: {
+//        load: function (_this, records, successful, eOpts) {
+//            gameCatStore.add({id: '', name: '全部', sequence: '-1'});
+//        }
+//    }
+//});
+//gameCatStore.sort('sequence', 'ASC');
 
 Ext.onReady(function () {
 
@@ -151,7 +151,7 @@ Ext.onReady(function () {
                 {
                     header: "操作",
                     width: 50,
-                    dataIndex: "sequence",
+                    //dataIndex: "sequence",
                     renderer:function(val,metaData,record,rowIndex,store,view){
                         //return  '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateGame({#},{gid:\'{gid}\',gname:\'{gname}\',gurl:\'{gurl}\',login_token:\'{login_token}\',serverurl:\'{serverurl}\',opentime:{opentime},state:\'{state}\',sequence:\'{sequence}\',picture:\'{picture}\',catids:\'{catids}\',recharge_ratio:\'{recharge_ratio}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
 
@@ -195,16 +195,18 @@ Ext.onReady(function () {
                     border: false,
                     bodyStyle: 'padding:10 10 10 10 ',
                     layout: 'hbox',
-                    items: [{
-                        xtype: 'combobox',
-                        fieldLabel: '游戏分类',
-                        displayField: 'name',
-                        valueField: 'id',
-                        store: gameCatStore,
-                        editable: false,
-                        name: 'catid',
-                        value: ''
-                    }, {
+                    items: [
+                    //    {
+                    //    xtype: 'combobox',
+                    //    fieldLabel: '游戏分类',
+                    //    displayField: 'name',
+                    //    valueField: 'id',
+                    //    store: gameCatStore,
+                    //    editable: false,
+                    //    name: 'catid',
+                    //    value: ''
+                    //},
+                        {
                         xtype: 'textfield',
                         fieldLabel: '游戏名称',
                         name: 'gname'
@@ -278,14 +280,7 @@ var addDataWindow = new Ext.Window({
                 frame: false,
                 width: '100%',
                 bodyStyle: 'padding:10 10',
-                items: [
-                    {
-                        id: "gidField",
-                        xtype: "textfield",
-                        fieldLabel: "游戏分类",
-                        name: "gid",
-                        allowBlank: false
-                    }, {
+                items: [{
                         id:'catCheckBoxGroup',
                         xtype: 'checkboxgroup',
                         fieldLabel: '游戏分类',

@@ -51,8 +51,8 @@ Ext.onReady(function () {
                     dataIndex: "name"
                 },
                 {
-                    text: "是否隐藏",
-                    width: 50,
+                    text: "是否显示",
+                    width: 70,
                     dataIndex: "state",
                     renderer:function(v){
                         return v==0?'否':'是';
@@ -168,11 +168,11 @@ var addDataWindow = new Ext.Window({
                         name: "sequence",
                         allowBlank: false
                     }, {
-                        fieldLabel: "是否隐藏",
+                        fieldLabel: "是否显示",
                         xtype:"checkboxfield",
-                        uncheckedValue:1,
-                        inputValue:0,
-                        value:0,
+                        uncheckedValue:0,
+                        inputValue:1,
+                        value:1,
                         name:"state"
                     }, {
                         id: "gidField",
