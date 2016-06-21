@@ -168,7 +168,7 @@ var gameStore = Ext.create('Ext.data.Store', {
     },
     listeners:{
         load:function(_this, records, successful,eOpts){
-            gameStore.add({gid:0,gname:"官网管理平台"});
+            gameStore.add({gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"});
         }
     }
 });
