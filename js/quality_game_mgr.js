@@ -6,7 +6,7 @@ Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.ux.
 /**
  *权限管理
  */
-var API_TYPE = "GAME_INFO_INTERNAL_ENDPOINT",API_NAME = "gameinfo/game/allgamelistlimitfields", API_VALUE = "",API_KEY = "gid";
+var API_TYPE = "GAME_INFO_INTERNAL_ENDPOINT", API_NAME = "gameinfo/game/allgamelistlimitfields", API_VALUE = "", API_KEY = "gid";
 
 Ext.QuickTips.init();
 // ##########################################################
@@ -28,7 +28,7 @@ var gameStore = Ext.create('Ext.data.Store', {
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
-    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','gname','apivalue'],
+    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img', 'gname', 'apivalue'],
     listeners: {
         beforeload: function (_this) {
             Ext.data.JsonP.request({
@@ -49,8 +49,8 @@ var picTurnStore = Ext.create('Ext.data.Store', {
                             var apiData = tmp.apidata || {};
                             delete tmp.data;
                             delete tmp.apidata;
-                            Ext.override( tmp,tmpData);
-                            Ext.override(apiData,tmp);
+                            Ext.override(tmp, tmpData);
+                            Ext.override(apiData, tmp);
                             finalData.push(apiData);
                         }
                         window.datas = finalData;
@@ -201,7 +201,8 @@ var addDataWindow = new Ext.Window({
                         queryMode: 'local',
                         emptyText: "输入游戏名称",
                         typeAhead: false,
-                        store: gameStore
+                        store: gameStore,
+                        allowBlank: false
                     }, {
                         xtype: "numberfield",
                         fieldLabel: "序号",
@@ -210,17 +211,17 @@ var addDataWindow = new Ext.Window({
                     }, {
                         fieldLabel: "是否显示",
                         xtype: "checkboxfield",
-                        uncheckedValue:0,
+                        uncheckedValue: 0,
                         inputValue: 1,
-                        value:1,
+                        value: 1,
                         name: "state"
                     }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
                         var params = _this.getValues();
-                        params.apiname=API_NAME;
-                        params.apitype=API_TYPE;
-                        params.apikey='gid';
+                        params.apiname = API_NAME;
+                        params.apitype = API_TYPE;
+                        params.apikey = 'gid';
                         convertParams(params, ["img"]);
                         Ext.data.JsonP.request({
                             params: params, // values from form fields..
@@ -250,8 +251,11 @@ var addDataWindow = new Ext.Window({
                     text: '确定',
                     id: "addSubmitBtn",
                     handler: function (v) {
-                        v.disable();
-                        v.up("form").submit();
+                        var form = v.up("form").getForm();
+                        if (v.up("form").isValid()) {
+                            v.disable();
+                            form.submit();
+                        }
                     }
                 }, {
                     text: '取消',

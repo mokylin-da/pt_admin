@@ -26,9 +26,9 @@ var gameStore = Ext.create('Ext.data.Store', {
             root: 'data'
         }
     },
-    listeners:{
-        load:function(_this, records, successful,eOpts){
-            gameStore.add({gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"});
+    listeners: {
+        load: function (_this, records, successful, eOpts) {
+            gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
         }
     }
 });
@@ -60,9 +60,9 @@ Ext.onReady(function () {
             selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
             id: "authGridId",
             store: permissionListStore,
-            viewConfig:{
-                stripeRows:true,//在表格中显示斑马线
-                enableTextSelection:true //可以复制单元格文字
+            viewConfig: {
+                stripeRows: true,//在表格中显示斑马线
+                enableTextSelection: true //可以复制单元格文字
             },
             loadMask: {
                 msg: "正在加载数据,请稍等..."
@@ -87,7 +87,7 @@ Ext.onReady(function () {
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePermission(\'{id}\',\'{name}\',\'{cname}\');"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                    //+ '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePermission(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                        //+ '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePermission(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -145,12 +145,12 @@ Ext.onReady(function () {
         });
 
     /**
-      * 布局
-      */
+     * 布局
+     */
     new Ext.Viewport({
-         layout: "fit",
-         items: [permissionGrid],
-         renderTo: Ext.getBody()
+        layout: "fit",
+        items: [permissionGrid],
+        renderTo: Ext.getBody()
     });
 
 
@@ -181,13 +181,13 @@ var addDataWindow = new Ext.Window({
                 bodyStyle: 'padding:10 10',
                 items: [
                     {
-                        id:"nameField",
+                        id: "nameField",
                         xtype: "textfield",
                         fieldLabel: "权限名称（key）",
                         name: "name",
                         allowBlank: false
                     }, {
-                        id:"cnameField",
+                        id: "cnameField",
                         xtype: "textfield",
                         fieldLabel: "权限中文名",
                         name: "cname",
@@ -211,16 +211,16 @@ var addDataWindow = new Ext.Window({
                             scope: 'this',
                             success: function (res) {
                                 console.log(res);
-                                if (res && res.status==1) {
-                                    Ext.MessageBox.alert("提示", Ext.getCmp("permissionForm").operate+"成功");
+                                if (res && res.status == 1) {
+                                    Ext.MessageBox.alert("提示", Ext.getCmp("permissionForm").operate + "成功");
                                     permissionListStore.reload();
                                     addDataWindow.hide();
                                     return;
                                 }
-                                Ext.MessageBox.alert("提示",Ext.getCmp("permissionForm").operate+"失败");
+                                Ext.MessageBox.alert("提示", Ext.getCmp("permissionForm").operate + "失败");
                             },
                             failure: function (response) {
-                                Ext.MessageBox.alert("提示",Ext.getCmp("permissionForm").operate+"失败");
+                                Ext.MessageBox.alert("提示", Ext.getCmp("permissionForm").operate + "失败");
                             }
                         });
                         return false;
@@ -230,8 +230,11 @@ var addDataWindow = new Ext.Window({
                     text: '确定',
                     id: "addSubmitBtn",
                     handler: function (v) {
-                        v.disable();
-                        v.up("form").submit();
+                        var form = v.up("form").getForm();
+                        if (v.up("form").isValid()) {
+                            v.disable();
+                            form.submit();
+                        }
                     }
                 }, {
                     text: '取消',
@@ -245,16 +248,16 @@ var addDataWindow = new Ext.Window({
 function addPermission() {
     addDataWindow.setTitle("添加权限");
     Ext.getCmp("permissionForm").getForm().reset();
-    Ext.getCmp("permissionForm").url=URLS.USER.ADD_PERMISSION;
-    Ext.getCmp("permissionForm").operate="添加";
+    Ext.getCmp("permissionForm").url = URLS.USER.ADD_PERMISSION;
+    Ext.getCmp("permissionForm").operate = "添加";
     addDataWindow.show();
 }
-function updatePermission(id,name,cname) {
+function updatePermission(id, name, cname) {
     addDataWindow.setTitle("修改权限");
-    Ext.getCmp("permissionForm").operate="修改";
+    Ext.getCmp("permissionForm").operate = "修改";
     Ext.getCmp("permissionForm").getForm().reset();
     Ext.getCmp("permissionForm").url = URLS.USER.UPDATE_PERMISSION;
-    Ext.getCmp("permissionForm").getForm().setValues({id:id,name:name,cname:cname});
+    Ext.getCmp("permissionForm").getForm().setValues({id: id, name: name, cname: cname});
     addDataWindow.show();
 }
 

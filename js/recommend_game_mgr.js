@@ -202,7 +202,8 @@ var addDataWindow = new Ext.Window({
                         emptyText: "输入游戏名称",
                         typeAhead: false,
                         allowBlank: false,
-                        store: gameStore
+                        store: gameStore,
+                        allowBlank: false
                     }, {
                         xtype: "numberfield",
                         fieldLabel: "序号",

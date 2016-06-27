@@ -214,8 +214,11 @@ var addDataWindow = new Ext.Window({
                         formBind: true,
                         id: "addSubmitBtn",
                         handler: function (v) {
-                            v.disable();
-                            v.up("form").submit();
+                            var form = v.up("form").getForm();
+                            if (v.up("form").isValid()) {
+                                v.disable();
+                                form.submit();
+                            }
                         }
                     }, {
                         text: '取消',

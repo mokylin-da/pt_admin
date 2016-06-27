@@ -371,8 +371,11 @@ var addCatDataWindow = new Ext.Window({
                     text: '确定',
                     id: "addCatSubmitBtn",
                     handler: function (v) {
-                        v.disable();
-                        v.up("form").submit();
+                        var form = v.up("form").getForm();
+                        if (v.up("form").isValid()) {
+                            v.disable();
+                            form.submit();
+                        }
                     }
                 }, {
                     text: '取消',
@@ -402,7 +405,7 @@ var addDataWindow = new Ext.Window({
     title: "发布文章",
     width: 700,
     //height: 500,
-    //resizable: false,
+    resizable: false,
     modal: true,
     autoShow: false,
     closable: false,
@@ -445,7 +448,41 @@ var addDataWindow = new Ext.Window({
                             //{boxLabel: '等待发布', name: 'state', inputValue: 1},
                             {boxLabel: '发布', name: 'state', inputValue: 2}
                         ]
-                    }, Ext.create("Ext.ux.form.MoHtmlEditor", {
+                    }, {
+                        id: "typeField",
+                        fieldLabel: "内/外部新闻",
+                        name: "type",
+                        allowBlank: false,
+                        xtype: 'radiogroup',
+                        cls: 'x-check-group-alt',
+                        items: [
+                            {boxLabel: '内部新闻', name: 'type', inputValue: 0, checked: true},
+                            {boxLabel: '外部新闻', name: 'type', inputValue: 1}
+                        ],listeners:{
+                            change:function(_this, newValue, oldValue, eOpts ){
+                                    if(newValue.type==0){
+                                        Ext.getCmp("linkField").disable();
+                                        Ext.getCmp("linkField").hide();
+                                        Ext.getCmp("contentField").enable();
+                                        Ext.getCmp("contentField").show();
+                                    }else{
+                                        Ext.getCmp("contentField").disable();
+                                        Ext.getCmp("contentField").hide();
+                                        Ext.getCmp("linkField").enable();
+                                        Ext.getCmp("linkField").show();
+                                    }
+                            }
+                        }
+                    }, {
+                        id: "linkField",
+                        xtype: "textfield",
+                        fieldLabel: "外部链接",
+                        hidden:true,
+                        disabled:true,
+                        name: "link",
+                        width: 400,
+                        allowBlank: false
+                    },  Ext.create("Ext.ux.form.MoHtmlEditor", {
                         id: "contentField",
                         fieldLabel: "内容",
                         name: "content",
@@ -456,7 +493,7 @@ var addDataWindow = new Ext.Window({
                         allowBlank: false,
                         listeners: {
                             change: function (editor, newValue, oldValue) {
-                                if (newValue && newValue.length > editor.maxLength) {
+                                if (newValue && (newValue.length > editor.maxLength)) {
                                     Ext.MessageBox.alert("提示", "内容长度超过65535", function () {
                                         Ext.getCmp("addSubmitBtn").enable();
                                     });
@@ -484,7 +521,7 @@ var addDataWindow = new Ext.Window({
                         Ext.getCmp("gidField").setValue(Ext.getCmp("gameCombo").getValue());
                         Ext.getCmp("catenameField").setValue(addDataWindow.ename);
                         var values = _this.getValues();
-                        if (values.content.length > 65535) {
+                        if (values.content && (values.content.length > 65535)) {
                             Ext.MessageBox.alert("提示", "内容长度超过65535", function () {
                                 Ext.getCmp("addSubmitBtn").enable();
                             });
@@ -510,8 +547,17 @@ var addDataWindow = new Ext.Window({
                     text: '确定',
                     id: "addSubmitBtn",
                     handler: function (v) {
-                        v.disable();
-                        v.up("form").submit();
+                        var form = v.up("form").getForm();
+                        if (v.up("form").isValid()) {
+                            var values = form.getValues();
+                            if(values.type==0){
+                                Ext.getCmp("linkField").setValue('');
+                            }else{
+                                Ext.getCmp("contentField").setValue();
+                            }
+                            v.disable();
+                            form.submit();
+                        }
                     }
                 }, {
                     text: '取消',
@@ -543,6 +589,7 @@ function updateArticle(aid, gid) {
                 Ext.getCmp("articleForm").url = URLS.MISC.ARTICLE_UPDATE;
                 Ext.getCmp("articleForm").getForm().setValues(data);
                 Ext.getCmp("stateField").setValue({"state": data.state});
+                Ext.getCmp("stateField").setValue({"type": data.type});
                 addDataWindow.show();
                 return;
             }

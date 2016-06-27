@@ -15,7 +15,7 @@ Ext.QuickTips.init();
 
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
-    fields: ['gname', 'gid', 'gurl', 'gtag', 'picture', 'catids', 'sequence', 'state', 'recharge_plat', 'serverurl','cuser','opentime','addtime'],
+    fields: ['gname', 'gid', 'gurl', 'gtag', 'picture', 'catids', 'sequence', 'state', 'recharge_plat', 'serverurl', 'cuser', 'opentime', 'addtime'],
     pageSize: 20,
     proxy: {
         type: "jsonp",
@@ -152,15 +152,15 @@ Ext.onReady(function () {
                     header: "操作",
                     width: 50,
                     //dataIndex: "sequence",
-                    renderer:function(val,metaData,record,rowIndex,store,view){
+                    renderer: function (val, metaData, record, rowIndex, store, view) {
                         //return  '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateGame({#},{gid:\'{gid}\',gname:\'{gname}\',gurl:\'{gurl}\',login_token:\'{login_token}\',serverurl:\'{serverurl}\',opentime:{opentime},state:\'{state}\',sequence:\'{sequence}\',picture:\'{picture}\',catids:\'{catids}\',recharge_ratio:\'{recharge_ratio}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
 
 
                         var value = record.raw;
                         //value.opentime =  Ext.Date.parse(value.opentime, "Y-m-d H:i:s.0");
-                        value.opentime = value.opentime.replace(/\..*$/,"");
-                        var records = JSON.stringify(value).replace(/"/g,'\"');
-                        return  '<a style="text-decoration:none;margin-right:5px;" href=\'javascript:updateGame('+records+');\'><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>';
+                        value.opentime = value.opentime.replace(/\..*$/, "");
+                        var records = JSON.stringify(value).replace(/"/g, '\"');
+                        return '<a style="text-decoration:none;margin-right:5px;" href=\'javascript:updateGame(' + records + ');\'><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>';
 
                     }
                 }
@@ -196,21 +196,21 @@ Ext.onReady(function () {
                     bodyStyle: 'padding:10 10 10 10 ',
                     layout: 'hbox',
                     items: [
-                    //    {
-                    //    xtype: 'combobox',
-                    //    fieldLabel: '游戏分类',
-                    //    displayField: 'name',
-                    //    valueField: 'id',
-                    //    store: gameCatStore,
-                    //    editable: false,
-                    //    name: 'catid',
-                    //    value: ''
-                    //},
+                        //    {
+                        //    xtype: 'combobox',
+                        //    fieldLabel: '游戏分类',
+                        //    displayField: 'name',
+                        //    valueField: 'id',
+                        //    store: gameCatStore,
+                        //    editable: false,
+                        //    name: 'catid',
+                        //    value: ''
+                        //},
                         {
-                        xtype: 'textfield',
-                        fieldLabel: '游戏名称',
-                        name: 'gname'
-                    }],
+                            xtype: 'textfield',
+                            fieldLabel: '游戏名称',
+                            name: 'gname'
+                        }],
                     dockedItems: [{
                         xtype: 'toolbar',
                         dock: 'right',
@@ -281,105 +281,121 @@ var addDataWindow = new Ext.Window({
                 width: '100%',
                 bodyStyle: 'padding:10 10',
                 items: [{
-                        id:'catCheckBoxGroup',
-                        xtype: 'checkboxgroup',
-                        fieldLabel: '游戏分类',
-                        name:'catids',
-                        height: 150,
-                        autoScroll: true,
-                        items: [],
-                        layout: {
-                            type: 'vbox',
-                            align: 'left'
-                        }
-                    }, {
-                        id: "gidField",
-                        xtype: "textfield",
-                        fieldLabel: "游戏ID",
-                        name: "gid",
-                        allowBlank: false
-                    }, {
-                        id: "gtagField",
-                        xtype: "textfield",
-                        fieldLabel: "游戏标识",
-                        name: "gtag",
-                        allowBlank: false
-                    }, {
-                        id: "gnameField",
-                        xtype: "textfield",
-                        fieldLabel: "游戏名称",
-                        name: "gname",
-                        allowBlank: false
-                    }, {
-                        id: "gurlField",
-                        xtype: "textfield",
-                        fieldLabel: "游戏链接地址",
-                        name: "gurl",
-                        allowBlank: false
-                    }, {
-                        id: "serverurlField",
-                        xtype: "textfield",
-                        fieldLabel: "游戏区服地址",
-                        name: "serverurl",
-                        allowBlank: false
-                    }, {
-                        id: "recharge_ratioField",
-                        xtype: "numberfield",
-                        fieldLabel: "游戏充值比率",
-                        name: "recharge_ratio",
-                        allowBlank: false
-                    }, {
-                        id: "recharge_tokenField",
-                        xtype: "textfield",
-                        fieldLabel: "充值token",
-                        name: "recharge_token",
-                        allowBlank: false
-                    }, {
-                        id: "login_tokenField",
-                        xtype: "textfield",
-                        fieldLabel: "游戏登录token",
-                        name: "login_token",
-                        allowBlank: false
-                    }, Ext.create('Ext.ux.form.DateTimeField', {
-                        id: "opentimeField",
-                        // xtype: "datetimefield",
-                        fieldLabel: "游戏开始时间",
-                        name: "opentime",
-                        value: new Date(),
-                        format: 'Y-m-d H:i:s',
-                        allowBlank: false
-                    }), {
-                        xtype: 'radiogroup',
-                        items: [{boxLabel: "显示", name: 'display', inputValue: 1, checked: true}, {
-                            boxLabel: "不显示",
-                            name: 'display',
-                            inputValue: 0
-                        }],
-                        fieldLabel: "是否显示",
-                        name: "display"
-                    }, {
-                        xtype: 'radiogroup',
-                        items: [{boxLabel: "显示", name: 'newServer', inputValue: 2}, {
-                            boxLabel: "不显示",
-                            name: 'newServer',
-                            inputValue: 0,
-                            checked: true
-                        }],
-                        fieldLabel: "最新开服设置",
-                        name: "newServer"
-                    }, {
-                        xtype: 'radiogroup',
-                        items: [{boxLabel: "显示", name: 'noticeSetting', inputValue: 4, checked: true}, {
-                            boxLabel: "不显示",
-                            name: 'noticeSetting',
-                            inputValue: 0
-                        }],
-                        fieldLabel: "开服预告设置",
-                        name: "noticeSetting"
+                    id: 'catCheckBoxGroup',
+                    xtype: 'checkboxgroup',
+                    fieldLabel: '游戏分类',
+                    name: 'catids',
+                    height: 150,
+                    autoScroll: true,
+                    items: [],
+                    allowBlank: false,
+                    blankText: '必须选择一个分类',
+                    layout: {
+                        type: 'vbox',
+                        align: 'left'
                     },
+                    listeners: {
+                        validitychange: function (_this, valid, eOpts) {
+                            if (!valid) {
+                                Ext.MessageBox.alert("提示", "必须选择一个分类");
+                            }
+                        }
+                    }
+                }, {
+                    id: "gidField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏ID",
+                    name: "gid",
+                    allowBlank: false
+                }, {
+                    id: "gtagField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏标识",
+                    name: "gtag",
+                    allowBlank: false
+                }, {
+                    id: "gnameField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏名称",
+                    name: "gname",
+                    allowBlank: false
+                }, {
+                    id: "sequenceField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏排行",
+                    name: "sequence",
+                    allowBlank: false
+                }, {
+                    id: "gurlField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏链接地址",
+                    name: "gurl",
+                    allowBlank: false
+                }, {
+                    id: "serverurlField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏区服地址",
+                    name: "serverurl",
+                    allowBlank: false
+                }, {
+                    id: "recharge_ratioField",
+                    xtype: "numberfield",
+                    fieldLabel: "游戏充值比率",
+                    name: "recharge_ratio",
+                    allowBlank: false
+                }, {
+                    id: "recharge_tokenField",
+                    xtype: "textfield",
+                    fieldLabel: "充值token",
+                    name: "recharge_token",
+                    allowBlank: false
+                }, {
+                    id: "login_tokenField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏登录token",
+                    name: "login_token",
+                    allowBlank: false
+                }, Ext.create('Ext.ux.form.DateTimeField', {
+                    id: "opentimeField",
+                    // xtype: "datetimefield",
+                    fieldLabel: "游戏开始时间",
+                    name: "opentime",
+                    value: new Date(),
+                    format: 'Y-m-d H:i:s',
+                    allowBlank: false
+                }), {
+                    xtype: 'radiogroup',
+                    items: [{boxLabel: "显示", name: 'display', inputValue: 1, checked: true}, {
+                        boxLabel: "不显示",
+                        name: 'display',
+                        inputValue: 0
+                    }],
+                    fieldLabel: "是否显示",
+                    name: "display"
+                }, {
+                    xtype: 'radiogroup',
+                    items: [{boxLabel: "显示", name: 'newServer', inputValue: 2}, {
+                        boxLabel: "不显示",
+                        name: 'newServer',
+                        inputValue: 0,
+                        checked: true
+                    }],
+                    fieldLabel: "最新开服设置",
+                    name: "newServer"
+                }, {
+                    xtype: 'radiogroup',
+                    items: [{boxLabel: "显示", name: 'noticeSetting', inputValue: 4, checked: true}, {
+                        boxLabel: "不显示",
+                        name: 'noticeSetting',
+                        inputValue: 0
+                    }],
+                    fieldLabel: "开服预告设置",
+                    name: "noticeSetting"
+                },
                     Ext.create("Ext.ux.form.MoUploader", {
                         fieldLabel: '游戏图片',
-                        name: "picture"
+                        name: "picture",
+                        allowBlank: false
                     }), {
                         id: "recharge_platField",
                         xtype: "hiddenfield",
@@ -420,8 +436,11 @@ var addDataWindow = new Ext.Window({
                     text: '确定',
                     id: "addSubmitBtn",
                     handler: function (v) {
-                        v.disable();
-                        v.up("form").submit();
+                        var form = v.up("form").getForm();
+                        if (form.isValid()) {
+                            v.disable();
+                            form.submit();
+                        }
                     }
                 }, {
                     text: '取消',
@@ -442,10 +461,10 @@ function addGame() {
     addDataWindow.show();
 }
 function updateGame(data) {
-    data.display={display:(data.state & 1)};
-    data.newServer={newServer:(data.state & 2)};
-    data.noticeSetting={noticeSetting:(data.state & 4)};
-    data.catids = {catids:data.catids.split(",")};
+    data.display = {display: (data.state & 1)};
+    data.newServer = {newServer: (data.state & 2)};
+    data.noticeSetting = {noticeSetting: (data.state & 4)};
+    data.catids = {catids: data.catids.split(",")};
     Ext.getCmp("gidField").setReadOnly(true);
     addDataWindow.setTitle("修改游戏");
     Ext.getCmp("dataForm").operate = "修改";
