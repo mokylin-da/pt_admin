@@ -3,7 +3,7 @@ var URLS = {
     GAME_INFO_BASE: "https://gameinfo-dev.36b.me",
     MISC_BASE: "https://misc-dev.36b.me",
     FILE_BASE: "http://o850rkfpc.bkt.clouddn.com",
-    SELF: location.protocol + '//' + location.href
+    SELF: location.href
 };
 
 URLS.USER = {
