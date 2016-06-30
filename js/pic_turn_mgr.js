@@ -11,6 +11,24 @@ Ext.QuickTips.init();
 // ##########################################################
 // 数据源存储块 开始
 // ##########################################################
+var gameStore = Ext.create('Ext.data.Store', {
+    autoLoad: true,
+    fields: ['gname', 'gid'],
+    proxy: {
+        type: "jsonp",
+        url: URLS.GAME_INFO.GAME_LIST,
+        callbackKey: "function",
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    },
+    listeners: {
+        load: function (_this, records, successful, eOpts) {
+            _this.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
+        }
+    }
+});
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
@@ -50,9 +68,8 @@ var picTurnStore = Ext.create('Ext.data.Store', {
         }
     }
 });
-picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE, gid: PLATFORM_IDENTIFIER};
 picTurnStore.sort('sequence', 'ASC');
-picTurnStore.load();
+
 Ext.onReady(function () {
 
     var picTurnGrid = new Ext.grid.Panel(
@@ -115,15 +132,45 @@ Ext.onReady(function () {
             ],
             dockedItems: [{
                 xtype: "toolbar",
-                items: [{
-                    text: "添加",
-                    icon: "js/extjs/resources/icons/add.png",
-                    handler: function () {
-                        addPicTurn();
-                    }
-                }]
+                items: [
+                    {
+                        id: "gameCombo",
+                        xtype: 'combo',
+                        triggerAction: 'all',
+                        forceSelection: true,
+                        editable: true,
+                        fieldLabel: '游戏名称',
+                        name: 'gid',
+                        displayField: 'gname',
+                        valueField: 'gid',
+                        queryMode: 'local',
+                        emptyText: "输入游戏名称",
+                        typeAhead: false,
+                        store: gameStore,
+                        listeners: {
+                            select: function (_this, records, eOpts) {
+                                picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: records[0].get('gid')};//游戏改变的时候重新加载权限数据
+                                picTurnStore.load();
+                            },
+                            afterrender: function (_this, eOpts) {
+                                //var data = gameStore.getAt(0);
+                                ////防止组件加载完后store还未接收到数据的情况，100ms获取一次
+                                //(function sleepFn() {
+                                //    setTimeout(function () {
+                                //        data = gameStore.getAt(0);
+                                //        if (!data) {
+                                //            sleepFn();
+                                //        } else {
+                                //            var gid = data.get("gid");
+                                //            //默认加载第一个游戏的权限列表
+                                //            _this.setValue(gid);
+                                //        }
+                                //    }, 100);
+                                //})();
+                            }
+                        }
+                    }]
             }]
-
         });
 
     /**

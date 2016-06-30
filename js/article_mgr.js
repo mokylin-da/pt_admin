@@ -24,6 +24,9 @@ var gameStore = Ext.create('Ext.data.Store', {
             type: 'json',
             root: 'data'
         }
+    },
+    load: function (_this, records, successful, eOpts) {
+        _this.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
     }
 });
 //文章分类
