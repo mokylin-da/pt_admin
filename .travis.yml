@@ -17,5 +17,8 @@ before_install:
 
 install:
   - jekyll build
+ 
+script:
+  - ls
   - cd _site
   - ls
