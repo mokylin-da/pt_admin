@@ -15,7 +15,9 @@ env:
   global:
 
 before_install:
-  gem install jekyll
+  - gem install jekyll
 
 install:
-  jekyll -v
+  - jekyll -v
+  - ls
+  - pwd
