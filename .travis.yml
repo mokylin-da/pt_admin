@@ -16,6 +16,6 @@ before_install:
   - gem install jekyll
 
 install:
-  - jekyll -v
+  - jekyll build
+  - cd _site
   - ls
-  - pwd
