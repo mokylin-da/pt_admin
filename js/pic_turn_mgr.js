@@ -57,11 +57,14 @@ var picTurnStore = Ext.create('Ext.data.Store', {
                         window.datas = finalData;
                         console.dir(finalData);
                         _this.add(finalData);
+                        Ext.getCmp("addPicTurnBtn").enable();
                     } else {
+                        Ext.getCmp("addPicTurnBtn").disable();
                         GlobalUtil.status(res.status)
                     }
                 },
                 failure: function (response) {
+                    Ext.getCmp("addPicTurnBtn").disable();
                     top.Ext.MessageBox.alert("提示", "获取数据失败2");
                 }
             });
@@ -151,7 +154,6 @@ Ext.onReady(function () {
                             select: function (_this, records, eOpts) {
                                 picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: records[0].get('gid')};//游戏改变的时候重新加载权限数据
                                 picTurnStore.load();
-                                Ext.getCmp("addPicTurnBtn").enable();
                             },
                             afterrender: function (_this, eOpts) {
                                 //var data = gameStore.getAt(0);
