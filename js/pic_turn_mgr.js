@@ -151,6 +151,7 @@ Ext.onReady(function () {
                             select: function (_this, records, eOpts) {
                                 picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: records[0].get('gid')};//游戏改变的时候重新加载权限数据
                                 picTurnStore.load();
+                                Ext.getCmp("addPicTurnBtn").enable();
                             },
                             afterrender: function (_this, eOpts) {
                                 //var data = gameStore.getAt(0);
@@ -168,6 +169,14 @@ Ext.onReady(function () {
                                 //    }, 100);
                                 //})();
                             }
+                        }
+                    },{
+                        id:"addPicTurnBtn",
+                        disabled:true,
+                        text: "添加",
+                        icon: "js/extjs/resources/icons/add.png",
+                        handler: function () {
+                            addPicTurn();
                         }
                     }]
             }]
@@ -217,8 +226,7 @@ var addDataWindow = new Ext.Window({
                         value: COMMON_CONFIG.PIC_TURN_TYPE
                     }, {
                         xtype: "hiddenfield",
-                        name: "gid",
-                        value: PLATFORM_IDENTIFIER
+                        name: "gid"
                     },
                         Ext.create("Ext.ux.form.MoUploader", {
                             name: "img"
@@ -250,6 +258,7 @@ var addDataWindow = new Ext.Window({
                         beforeaction: function (_this, action, eOpts) {
                             var params = _this.getValues();
                             convertParams(params, ["title", "link", "img"]);
+                            params.gid=Ext.getCmp("gameCombo").getValue();
                             Ext.data.JsonP.request({
                                 params: params, // values from form fields..
                                 url: Ext.getCmp("dataForm").url,
