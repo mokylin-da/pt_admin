@@ -20,7 +20,7 @@ install:
 - if [ ! -e $HOME/.download ];then mkdir $HOME/.download;fi;
 - wget -O $HOME/.download/qshell https://raw.githubusercontent.com/289048093/mvn/master/qiniu/qshell_linux_amd64
 - jekyll build
-- chmod +x ./qshell
+- chmod +x $HOME/.download/qshell
 - $HOME/.download/qshell account $QINIU_KEY $QINIU_SECRET
 - echo '{"src_dir":"$HOME/_site","access_key":"$QINIU_KEY","secret_key":"$QINIU_SECRET","bucket":"$BUCKET","overwrite":true,"check_exists":true,"check_hash":true}' >  config
 script:
