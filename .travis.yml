@@ -21,7 +21,7 @@ install:
 - wget -O $HOME/.download/qshell https://raw.githubusercontent.com/289048093/mvn/master/qiniu/qshell_linux_amd64
 - jekyll build
 - chmod +x ./qshell
-- ./qshell account $QINIU_KEY $QINIU_SECRET
+- $HOME/.download/qshell account $QINIU_KEY $QINIU_SECRET
 - echo '{
            "src_dir"            :   "$HOME/_site",
            "access_key"         :   "$QINIU_KEY",
@@ -33,4 +33,4 @@ install:
         }'> config
 script:
 -  ls  $HOME/_site
--  qshell_windows_amd64.exe qupload 3 $HOME/config
+-  $HOME/.download/qshell.exe qupload 3 $HOME/config
