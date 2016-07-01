@@ -24,7 +24,6 @@ install:
 - $HOME/.download/qshell account $QINIU_KEY $QINIU_SECRET
 - echo '{"src_dir":"~/_site","access_key":"$QINIU_KEY","secret_key":"$QINIU_SECRET","bucket":"$BUCKET","overwrite":true,"check_exists":true,"check_hash":true}' >  config
 script:
-- ls  $HOME
 - cd  $HOME;
 - pwd
 -  ls  ~/_site
