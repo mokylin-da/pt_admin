@@ -24,9 +24,9 @@ Ext.onReady(function () {
             // selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
             id: "authGridId",
             store: userStore,
-            viewConfig: {
-                stripeRows: true,//在表格中显示斑马线
-                enableTextSelection: true //可以复制单元格文字
+            viewConfig:{
+                stripeRows:true,//在表格中显示斑马线
+                enableTextSelection:true //可以复制单元格文字
             },
             loadMask: {
                 msg: "正在加载数据,请稍等..."
@@ -105,7 +105,7 @@ Ext.onReady(function () {
                                 formBind: true,
                                 handler: function (v) {
                                     v.up("form").submit({
-                                        submitEmptyText: false
+                                        submitEmptyText:false
                                     });
                                 }
                             }, {
@@ -141,21 +141,21 @@ Ext.onReady(function () {
 // 权限列表存储块
 var permissionListStore = Ext
     .create(
-        "Ext.data.Store",
-        {
-            fields: ["id", "name", "cname"],
-            proxy: {
-                type: "jsonp",
-                url: URLS.USER.PERMISSION_LIST,
-                callbackKey: "function",
-                reader: {
-                    type: 'json',
-                    root: 'data'
-                }
+    "Ext.data.Store",
+    {
+        fields: ["id", "name", "cname"],
+        proxy: {
+            type: "jsonp",
+            url: URLS.USER.PERMISSION_LIST,
+            callbackKey: "function",
+            reader: {
+                type: 'json',
+                root: 'data'
             }
-        });
+        }
+    });
 var gameStore = Ext.create('Ext.data.Store', {
-    autoLoad: false,
+    autoLoad: true,
     fields: ['gname', 'gid'],
     proxy: {
         type: "jsonp",
@@ -167,12 +167,12 @@ var gameStore = Ext.create('Ext.data.Store', {
             successProperty: "status"
         }
     },
-    listeners: {
-        load: function (_this, records, successful, eOpts) {
+    listeners:{
+        load:function(_this, records, successful,eOpts){
+            _this.add({gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"});
         }
     }
 });
-gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
 var userAuthWindow = new Ext.Window({
     id: "authWindowId",
     title: "用户授权",
@@ -226,7 +226,7 @@ var userAuthWindow = new Ext.Window({
                         listeners: {
                             select: function (_this, records, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
-                                permissionListStore.load(function () {
+                                permissionListStore.load(function(){
                                     loadUserPermission(records[0].get('gid'));
                                 });
                             },
