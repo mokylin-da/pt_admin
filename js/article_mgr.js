@@ -56,7 +56,7 @@ var articleStore = Ext.create(
             url: URLS.MISC.ARTICLE_LIST,
             callbackKey: "function",
             pageParam: "pagenum",
-            limitParam: "pageize",
+            limitParam: "pagesize",
             reader: {
                 type: 'json',
                 root: 'data.data',

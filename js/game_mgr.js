@@ -22,7 +22,7 @@ var gameStore = Ext.create('Ext.data.Store', {
         url: URLS.GAME_INFO.GAME_PAGE_LIST,
         callbackKey: "function",
         pageParam: "pagenum",
-        limitParam: "pageize",
+        limitParam: "pagesize",
         reader: {
             type: 'json',
             root: 'data.data',
