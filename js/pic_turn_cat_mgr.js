@@ -121,7 +121,7 @@ var addDataWindow = new Ext.Window({
                 frame: false,
                 bodyStyle: 'padding:10 10',
                 items: [{
-                    xtype: hiddenfield,
+                    xtype: 'hiddenfield',
                     name: 'id'
                 }, {
                     id: "nameField",
