@@ -5,8 +5,8 @@ os:
 - linux
 sudo: required
 cache:
-  bundler: true
-  apt: true
+  - bundler
+  - apt
   directories:
   - "$HOME/.download"
 env:
@@ -19,6 +19,7 @@ before_install:
 install:
 - if [ ! -e $HOME/.download ];then mkdir $HOME/.download;fi;
 - wget -O $HOME/.download/qshell https://raw.githubusercontent.com/289048093/mvn/master/qiniu/qshell_linux_amd64
+- sed -i "s/mokylin_ptadmin_version/$TRAVIS_BUILD_NUMBER/g" $TRAVIS_BUILD_DIR/_config.yml
 - jekyll build
 - chmod +x $HOME/.download/qshell
 - $HOME/.download/qshell account $QINIU_KEY $QINIU_SECRET

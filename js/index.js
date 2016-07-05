@@ -314,7 +314,7 @@ function init(){
                 html: "<iframe id='"
                 + iframeId(tabId)
                 + "' scrolling='auto' frameborder='0' width='100%' height='100%' src="
-                + url + "></iframe>"
+                + url + "?_v={{site.version}}></iframe>"
             }).show();
         }
         tabpanel.setActiveTab(tab);

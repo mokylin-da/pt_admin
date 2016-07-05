@@ -10,5 +10,7 @@ title: 基础管理平台
 baseurl: "" # the subpath of your site, e.g. /blog
 #url: "" # the base hostname & protocol for your site
 # Build settings
+exclude:"js/extjs"
 encoding: utf-8
 markdown: kramdown
+version: "mokylin_ptadmin_version"
