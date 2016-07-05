@@ -1,3 +1,6 @@
+---
+layout: original
+---
 var allMenuTree = {
     index:[{
         text: "轮播图分类",
