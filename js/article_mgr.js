@@ -26,9 +26,9 @@ var gameStore = Ext.create('Ext.data.Store', {
         }
     },
     load: function (_this, records, successful, eOpts) {
-        gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
     }
 });
+gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
 //文章分类
 var articleTreeStore = new Ext.data.Store({
     //defaultRootProperty:"data",
@@ -461,31 +461,31 @@ var addDataWindow = new Ext.Window({
                         items: [
                             {boxLabel: '内部新闻', name: 'type', inputValue: 0, checked: true},
                             {boxLabel: '外部新闻', name: 'type', inputValue: 1}
-                        ],listeners:{
-                            change:function(_this, newValue, oldValue, eOpts ){
-                                    if(newValue.type==0){
-                                        Ext.getCmp("linkField").disable();
-                                        Ext.getCmp("linkField").hide();
-                                        Ext.getCmp("contentField").enable();
-                                        Ext.getCmp("contentField").show();
-                                    }else{
-                                        Ext.getCmp("contentField").disable();
-                                        Ext.getCmp("contentField").hide();
-                                        Ext.getCmp("linkField").enable();
-                                        Ext.getCmp("linkField").show();
-                                    }
+                        ], listeners: {
+                            change: function (_this, newValue, oldValue, eOpts) {
+                                if (newValue.type == 0) {
+                                    Ext.getCmp("linkField").disable();
+                                    Ext.getCmp("linkField").hide();
+                                    Ext.getCmp("contentField").enable();
+                                    Ext.getCmp("contentField").show();
+                                } else {
+                                    Ext.getCmp("contentField").disable();
+                                    Ext.getCmp("contentField").hide();
+                                    Ext.getCmp("linkField").enable();
+                                    Ext.getCmp("linkField").show();
+                                }
                             }
                         }
                     }, {
                         id: "linkField",
                         xtype: "textfield",
                         fieldLabel: "外部链接",
-                        hidden:true,
-                        disabled:true,
+                        hidden: true,
+                        disabled: true,
                         name: "link",
                         width: 400,
                         allowBlank: false
-                    },  Ext.create("Ext.ux.form.MoHtmlEditor", {
+                    }, Ext.create("Ext.ux.form.MoHtmlEditor", {
                         id: "contentField",
                         fieldLabel: "内容",
                         name: "content",
@@ -553,9 +553,9 @@ var addDataWindow = new Ext.Window({
                         var form = v.up("form").getForm();
                         if (v.up("form").isValid()) {
                             var values = form.getValues();
-                            if(values.type==0){
+                            if (values.type == 0) {
                                 Ext.getCmp("linkField").setValue('');
-                            }else{
+                            } else {
                                 Ext.getCmp("contentField").setValue();
                             }
                             v.disable();
@@ -611,7 +611,7 @@ function deleteArticle(aid) {
                 url: URLS.MISC.ARTICLE_DELETE,
                 params: {
                     aid: aid,
-                    gid:Ext.getCmp("gameCombo").getValue()
+                    gid: Ext.getCmp("gameCombo").getValue()
                 },
                 callbackKey: 'function',
                 // scope: 'this',
