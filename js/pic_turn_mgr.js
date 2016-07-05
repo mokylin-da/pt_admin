@@ -29,6 +29,19 @@ var gameStore = Ext.create('Ext.data.Store', {
         }
     }
 });
+var picTurnCatStore =  Ext.create('Ext.data.Store', {
+    autoLoad: true,
+    fields: ['id', 'gid', 'name', 'cname', 'configtype'],
+    proxy: {
+        type: "jsonp",
+        url: URLS.MISC.COMMON_CONFIG_CAT_LIST,
+        callbackKey: "function",
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    }
+});
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
@@ -229,6 +242,14 @@ var addDataWindow = new Ext.Window({
                     }, {
                         xtype: "hiddenfield",
                         name: "gid"
+                    }, {
+                        xtype: "combobox",
+                        fieldLabel: "分类",
+                        name: "catid",
+                        store:picTurnCatStore,
+                        displayField:"cname",
+                        valueField:"id",
+                        editable: false
                     },
                         Ext.create("Ext.ux.form.MoUploader", {
                             name: "img"
