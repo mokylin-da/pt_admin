@@ -49,7 +49,12 @@ URLS.MISC = {
     COMMON_CONFIG_ADD: URLS.MISC_BASE + "/misc/commonconfig/add", //通用配置添加（轮播图等）
     COMMON_CONFIG_UPDATE: URLS.MISC_BASE + "/misc/commonconfig/update", //通用配置修改（轮播图等）
     COMMON_CONFIG_DELETE: URLS.MISC_BASE + "/misc/commonconfig/delete", //通用配置删除（轮播图等）
-    COMMON_CONFIG_LIST: URLS.MISC_BASE + "/misc/commonconfig/list"//通用配置列表（轮播图等）
+    COMMON_CONFIG_LIST: URLS.MISC_BASE + "/misc/commonconfig/list",//通用配置列表（轮播图等）
+
+    COMMON_CONFIG_CAT_LIST: URLS.MISC_BASE + "/misc/commonconfigcat/list",//通用配置列表（轮播图等）
+    COMMON_CONFIG_CAT_DELETE: URLS.MISC_BASE + "/misc/commonconfigcat/delete",//通用配置列表（轮播图等）
+    COMMON_CONFIG_CAT_UPDATE: URLS.MISC_BASE + "/misc/commonconfigcat/update",//通用配置列表（轮播图等）
+    COMMON_CONFIG_CAT_ADD: URLS.MISC_BASE + "/misc/commonconfigcat/add"//通用配置列表（轮播图等）
 };
 
 SUPER_ADMIN_UID = "ef8af187-d37b-4ad2-96d0-6a88a9c8fa46";
@@ -61,6 +66,7 @@ var COMMON_CONFIG = {
 };
 
 var PLATFORM_IDENTIFIER = 0;
+var COMMON_PERMISSION_IDENTIFIER = -1;
 
 Ext.Loader.setConfig({
     enabled: true,

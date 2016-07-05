@@ -22,6 +22,6 @@ install:
 - jekyll build
 - chmod +x $HOME/.download/qshell
 - $HOME/.download/qshell account $QINIU_KEY $QINIU_SECRET
-- echo  '{"src_dir":"'$TRAVIS_BUILD_DIR'/_site","access_key":"'$QINIU_KEY'","secret_key":"'$QINIU_SECRET'","bucket":"'$BUCKET'","overwrite":true,"check_exists":true,"check_hash":true,"up_host":"http://up.qiniug.com"}' >  $HOME/qiniu_config
+- echo  '{"src_dir":"'$TRAVIS_BUILD_DIR'/_site","skip_path_prefixes":"js/extjs","access_key":"'$QINIU_KEY'","secret_key":"'$QINIU_SECRET'","bucket":"'$BUCKET'","overwrite":true,"check_exists":true,"check_hash":true,"up_host":"http://up.qiniug.com"}' >  $HOME/qiniu_config
 script:
 -  $HOME/.download/qshell qupload 3 $HOME/qiniu_config

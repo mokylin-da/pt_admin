@@ -1,5 +1,11 @@
 var allMenuTree = {
     index:[{
+        text: "轮播图分类",
+        leaf: true,
+        url: "pic_turn_cat_mgr.html",
+        tabId: "30",
+        permission: "menu_pic_turn_cat"
+    },{
         text: "轮播图",
         leaf: true,
         url: "pic_turn_mgr.html",
@@ -47,13 +53,13 @@ var allMenuTree = {
         text: "权限管理",
         leaf: true,
         url: "permission_mgr.html",
-        tabId: "30",
+        tabId: "31",
         permission: "menu_permission"
     }, {
         text: "授权中心",
         leaf: true,
         url: "user_auth.html",
-        tabId: "31",
+        tabId: "32",
         permission: "menu_auth"
     }]
 };
