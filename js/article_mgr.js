@@ -22,13 +22,17 @@ var gameStore = Ext.create('Ext.data.Store', {
         callbackKey: "function",
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            successProperty: "status"
         }
     },
-    load: function (_this, records, successful, eOpts) {
-gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
+    listeners: {
+        load: function (_this, records, successful, eOpts) {
+            _this.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
+        }
     }
 });
+gameStore.load();
 //文章分类
 var articleTreeStore = new Ext.data.Store({
     //defaultRootProperty:"data",
