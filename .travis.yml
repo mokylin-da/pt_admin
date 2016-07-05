@@ -5,8 +5,8 @@ os:
 - linux
 sudo: required
 cache:
-  - bundler
-  - apt
+  bundler: true
+  apt: true
   directories:
   - "$HOME/.download"
 env:
