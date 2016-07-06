@@ -170,7 +170,11 @@ var addDataWindow = new Ext.Window({
                     name: "name",
                     allowBlank: false,
                     validator: function (v) {
-                        return !!dataStore.findRecord("name",v,0,false,true,true)?"存在名称为【"+v+"】的分类":true;
+                        var record = dataStore.findRecord("name",v,0,false,true,true);
+                        if(record.get("id")==this.previousNode('hiddenfield[name=id]').getValue()){
+                            return true;
+                        }
+                        return !!record?"存在名称为【"+v+"】的分类":true;
                     }
                 }, {
                     id: "cnameField",
