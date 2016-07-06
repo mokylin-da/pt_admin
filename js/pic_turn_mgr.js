@@ -46,7 +46,7 @@ var picTurnCatStore =  Ext.create('Ext.data.Store', {
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
-    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','catid'],
+    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','catid','desc'],
     listeners: {
         beforeload: function (_this) {
             Ext.data.JsonP.request({
@@ -130,6 +130,10 @@ Ext.onReady(function () {
                     text: "链接",
                     width: 150,
                     dataIndex: "link"
+                },{
+                    text: "描述",
+                    width: 150,
+                    dataIndex: "desc"
                 },
                 {
                     text: "序号",
@@ -150,7 +154,7 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:{state},title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\',catid:\'{catid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:{state},title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\',catid:\'{catid}\',desc:\'{desc}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
@@ -267,6 +271,10 @@ var addDataWindow = new Ext.Window({
                             name: "link",
                             allowBlank: false
                         }, {
+                            xtype: "textareafield",
+                            fieldLabel: "描述信息",
+                            name: "desc"
+                        }, {
                             xtype: "numberfield",
                             fieldLabel: "序号",
                             name: "sequence",
@@ -282,7 +290,7 @@ var addDataWindow = new Ext.Window({
                     listeners: {
                         beforeaction: function (_this, action, eOpts) {
                             var params = _this.getValues();
-                            convertParams(params, ["title", "link", "img"]);
+                            convertParams(params, ["title", "link", "img","desc"]);
                             params.gid=Ext.getCmp("gameCombo").getValue();
                             Ext.data.JsonP.request({
                                 params: params, // values from form fields..
