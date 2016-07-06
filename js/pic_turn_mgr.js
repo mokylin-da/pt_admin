@@ -364,7 +364,7 @@ function deletePicTurn(id) {
                 url: URLS.MISC.COMMON_CONFIG_DELETE,
                 params: {
                     id: id,
-                    gid: PLATFORM_IDENTIFIER,
+                    gid: Ext.getCmp("gameCombo").getValue(),
                     type: COMMON_CONFIG.PIC_TURN_TYPE
                 },
                 callbackKey: 'function',
