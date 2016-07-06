@@ -171,7 +171,7 @@ var addDataWindow = new Ext.Window({
                     allowBlank: false,
                     validator: function (v) {
                         var record = dataStore.findRecord("name",v,0,false,true,true);
-                        if(record.get("id")==this.previousNode('hiddenfield[name=id]').getValue()){
+                        if(!record || record.get("id")==this.previousNode('hiddenfield[name=id]').getValue()){
                             return true;
                         }
                         return !!record?"存在名称为【"+v+"】的分类":true;
