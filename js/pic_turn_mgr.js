@@ -268,8 +268,7 @@ var addDataWindow = new Ext.Window({
                             xtype: "textfield",
                             vtype: 'url',
                             fieldLabel: "链接地址",
-                            name: "link",
-                            allowBlank: false
+                            name: "link"
                         }, {
                             xtype: "textareafield",
                             fieldLabel: "描述信息",
