@@ -26,7 +26,7 @@ var gameCatStore = Ext.create('Ext.data.Store', {
         }
     }
 });
-gameCatStore.sort('sequence','ASC');
+gameCatStore.sort('sequence', 'ASC');
 
 Ext.onReady(function () {
 
@@ -54,8 +54,8 @@ Ext.onReady(function () {
                     text: "是否显示",
                     width: 70,
                     dataIndex: "state",
-                    renderer:function(v){
-                        return v==0?'否':'是';
+                    renderer: function (v) {
+                        return v == 0 ? '否' : '是';
                     }
                 },
                 {
@@ -72,7 +72,7 @@ Ext.onReady(function () {
                     text: "创建时间",
                     width: 150,
                     dataIndex: "cdate",
-                    renderer:function(v){
+                    renderer: function (v) {
                         return new Date(v).toLocaleString()
                     }
                 },
@@ -80,7 +80,7 @@ Ext.onReady(function () {
                     text: "更新时间",
                     width: 150,
                     dataIndex: "udate",
-                    renderer:function(v){
+                    renderer: function (v) {
                         return new Date(v).toLocaleString()
                     }
                 },
@@ -153,7 +153,6 @@ var addDataWindow = new Ext.Window({
                 items: [
                     {
                         xtype: "hiddenfield",
-                        fieldLabel: "名称",
                         name: "id"
                     }, {
                         id: "nameField",
@@ -169,11 +168,11 @@ var addDataWindow = new Ext.Window({
                         allowBlank: false
                     }, {
                         fieldLabel: "是否显示",
-                        xtype:"checkboxfield",
-                        uncheckedValue:0,
-                        inputValue:1,
-                        value:1,
-                        name:"state"
+                        xtype: "checkboxfield",
+                        uncheckedValue: 0,
+                        inputValue: 1,
+                        value: 1,
+                        name: "state"
                     }, {
                         id: "gidField",
                         xtype: "hiddenfield",
@@ -253,7 +252,7 @@ function deleteGameCat(id) {
                 url: URLS.GAME_INFO.GAME_CAT_DELETE,
                 params: {
                     id: id,
-                    gid:PLATFORM_IDENTIFIER
+                    gid: PLATFORM_IDENTIFIER
                 },
                 callbackKey: 'function',
                 // scope: 'this',

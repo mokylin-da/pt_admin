@@ -42,9 +42,13 @@ var dataStore = Ext.create('Ext.data.Store', {
             type: 'json',
             root: 'data'
         }
+    },
+    listeners:{
+        load:function(){
+            Ext.getCmp("addCatBtn").enable();
+        }
     }
 });
-//dataStore.proxy.extraParams={type:COMMON_CONFIG.PIC_TURN_TYPE,gid:PLATFORM_IDENTIFIER};
 //dataStore.load();
 Ext.onReady(function () {
 
@@ -106,7 +110,6 @@ Ext.onReady(function () {
                             dataStore.proxy.extraParams = dataStore.proxy.extraParams||{};
                             dataStore.getProxy().extraParams.gid = records[0].get('gid');//游戏改变的时候重新加载权限数据
                             dataStore.load();
-                            Ext.getCmp("addCatBtn").enable();
                         }
                     }
                 },{
@@ -165,7 +168,10 @@ var addDataWindow = new Ext.Window({
                     xtype: "textfield",
                     fieldLabel: "名称",
                     name: "name",
-                    allowBlank: false
+                    allowBlank: false,
+                    validator: function (v) {
+                        return !!dataStore.findRecord("name",v,0,false,true,true)?"存在名称为【"+v+"】的分类":true;
+                    }
                 }, {
                     id: "cnameField",
                     xtype: "textfield",
@@ -180,8 +186,7 @@ var addDataWindow = new Ext.Window({
                 }, {
                     id: "gidField",
                     xtype: "hiddenfield",
-                    name: "gid",
-                    //value: PLATFORM_IDENTIFIER
+                    name: "gid"
                 }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {

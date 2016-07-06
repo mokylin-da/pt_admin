@@ -190,6 +190,13 @@ GlobalUtil = {
                 });
                 break;
             }
+            case 20007:
+            {
+                Ext.MessageBox.alert("提示", "重复添加", function () {
+                    callback && callback();
+                });
+                break;
+            }
             default:
             {
                 Ext.MessageBox.alert("提示", "未知错误", function () {
