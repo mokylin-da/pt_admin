@@ -252,6 +252,7 @@ Ext.onReady(function () {
                                 articleTreeStore.getProxy().extraParams = {"gid": records[0].get('gid')};
                                 articleTreeStore.load();
                                 articleStore.removeAll();
+                                Ext.getCmp("addArticleId").disable();
                             },
                             afterrender: function (_this, eOpts) {//数据加载后自动选择第一个游戏加载数据
                                 var data = gameStore.getAt(0);
