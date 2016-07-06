@@ -118,6 +118,15 @@ Ext.onReady(function () {
                     dataIndex: "title"
                 },
                 {
+                    text: "分类",
+                    width: 200,
+                    dataIndex: "catid",
+                    renderer:function(v){
+                        var record = picTurnCatStore.findRecord("id",v);
+                        return !record?"":record.get("cname");
+                    }
+                },
+                {
                     text: "链接",
                     width: 150,
                     dataIndex: "link"
