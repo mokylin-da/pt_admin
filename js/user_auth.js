@@ -245,6 +245,7 @@ var userAuthWindow = new Ext.Window({
             buttons: [{
                 text: '确定',
                 id: "addSubmitBtn",
+                disabled:true,
                 handler: function (v) {
                     v.disable();
                     var selModel = v.up("grid").getSelectionModel();
@@ -317,13 +318,15 @@ function loadUserPermission(gid) {
                 }
                 var selModel = Ext.getCmp("permissionGridId").getSelectionModel();
                 selModel.select(indexArr);
-
+                Ext.getCmp("addSubmitBtn").enable();
             } else {
                 Ext.MessageBox.alert("提示", "获取权限数据失败");
+                Ext.getCmp("addSubmitBtn").disable();
             }
         },
         failure: function (response) {
             Ext.MessageBox.alert("提示", "获取权限数据失败");
+            Ext.getCmp("addSubmitBtn").disable();
         }
     });
 }

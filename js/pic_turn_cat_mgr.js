@@ -181,12 +181,14 @@ var addDataWindow = new Ext.Window({
                     id: "gidField",
                     xtype: "hiddenfield",
                     name: "gid",
-                    value: PLATFORM_IDENTIFIER
+                    //value: PLATFORM_IDENTIFIER
                 }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
+                        var params = _this.getValues();
+                        params.gid=Ext.getCmp("gameCombo").getValue();
                         Ext.data.JsonP.request({
-                            params: _this.getValues(), // values from form fields..
+                            params: params, // values from form fields..
                             url: Ext.getCmp("dataForm").url,
                             callbackKey: 'function',
                             scope: 'this',
@@ -198,7 +200,9 @@ var addDataWindow = new Ext.Window({
                                     addDataWindow.hide();
                                     return;
                                 }
-                                GlobalUtil.status(res.status);
+                                GlobalUtil.status(res.status,function(){
+                                    Ext.getCmp("addSubmitBtn").enable();
+                                });
                             },
                             failure: function (response) {
                                 top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "失败");
@@ -256,7 +260,7 @@ function deleteData(id) {
                 url: URLS.MISC.COMMON_CONFIG_CAT_DELETE,
                 params: {
                     id: id,
-                    gid: PLATFORM_IDENTIFIER,
+                    gid: Ext.getCmp("gameCombo").getValue(),
                     type: COMMON_CONFIG.PIC_TURN_TYPE
                 },
                 callbackKey: 'function',
