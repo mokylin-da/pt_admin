@@ -34,6 +34,7 @@ var picTurnCatStore =  Ext.create('Ext.data.Store', {
     fields: ['id', 'gid', 'name', 'cname', 'configtype'],
     proxy: {
         type: "jsonp",
+        extraParams: {type: COMMON_CONFIG.PIC_TURN_TYPE, gid: PLATFORM_IDENTIFIER},
         url: URLS.MISC.COMMON_CONFIG_CAT_LIST,
         callbackKey: "function",
         reader: {
@@ -45,7 +46,7 @@ var picTurnCatStore =  Ext.create('Ext.data.Store', {
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
-    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img'],
+    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','catid'],
     listeners: {
         beforeload: function (_this) {
             Ext.data.JsonP.request({
@@ -140,7 +141,7 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:{state},title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:{state},title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\',catid:\'{catid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
@@ -165,24 +166,13 @@ Ext.onReady(function () {
                         store: gameStore,
                         listeners: {
                             select: function (_this, records, eOpts) {
-                                picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: records[0].get('gid')};//游戏改变的时候重新加载权限数据
+                                var gid = records[0].get('gid');
+                                picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: gid};//游戏改变的时候重新加载权限数据
                                 picTurnStore.load();
-                            },
-                            afterrender: function (_this, eOpts) {
-                                //var data = gameStore.getAt(0);
-                                ////防止组件加载完后store还未接收到数据的情况，100ms获取一次
-                                //(function sleepFn() {
-                                //    setTimeout(function () {
-                                //        data = gameStore.getAt(0);
-                                //        if (!data) {
-                                //            sleepFn();
-                                //        } else {
-                                //            var gid = data.get("gid");
-                                //            //默认加载第一个游戏的权限列表
-                                //            _this.setValue(gid);
-                                //        }
-                                //    }, 100);
-                                //})();
+                                var proxy = picTurnCatStore.proxy;
+                                proxy.extraParams = proxy.extraParams||{};
+                                proxy.extraParams.gid=gid;
+                                picTurnCatStore.load();
                             }
                         }
                     },{
@@ -247,9 +237,12 @@ var addDataWindow = new Ext.Window({
                         fieldLabel: "分类",
                         name: "catid",
                         store:picTurnCatStore,
+                        queryMode: 'local',
                         displayField:"cname",
                         valueField:"id",
-                        editable: false
+                        allowBlank:false,
+                        editable: false,
+                        emptyText:"--请选择--"
                     },
                         Ext.create("Ext.ux.form.MoUploader", {
                             name: "img"

@@ -11,13 +11,31 @@ Ext.QuickTips.init();
 // ##########################################################
 // 数据源存储块 开始
 // ##########################################################
-
-
-var dataStore = Ext.create('Ext.data.Store', {
+var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
+    fields: ['gname', 'gid'],
+    proxy: {
+        type: "jsonp",
+        url: URLS.GAME_INFO.GAME_LIST,
+        callbackKey: "function",
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    },
+    listeners: {
+        load: function (_this, records, successful, eOpts) {
+            _this.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
+        }
+    }
+});
+//picTurnCatCatStore
+var dataStore = Ext.create('Ext.data.Store', {
+    autoLoad: false,
     fields: ['id', 'gid', 'name', 'cname', 'configtype'],
     proxy: {
         type: "jsonp",
+        extraParams: {type: COMMON_CONFIG.PIC_TURN_TYPE, gid: PLATFORM_IDENTIFIER},
         url: URLS.MISC.COMMON_CONFIG_CAT_LIST,
         callbackKey: "function",
         reader: {
@@ -26,8 +44,8 @@ var dataStore = Ext.create('Ext.data.Store', {
         }
     }
 });
-dataStore.sort('sequence', 'ASC');
-
+//dataStore.proxy.extraParams={type:COMMON_CONFIG.PIC_TURN_TYPE,gid:PLATFORM_IDENTIFIER};
+//dataStore.load();
 Ext.onReady(function () {
 
     var dataGrid = new Ext.grid.Panel(
@@ -53,11 +71,6 @@ Ext.onReady(function () {
                     text: "中文名",
                     width: 100,
                     dataIndex: "cname"
-                },
-                {
-                    text: "配置类型",
-                    width: 100,
-                    dataIndex: "configtype"
                 }
                 ,
                 {
@@ -75,7 +88,31 @@ Ext.onReady(function () {
             dockedItems: [{
                 xtype: "toolbar",
                 items: [{
+                    id: "gameCombo",
+                    xtype: 'combo',
+                    triggerAction: 'all',
+                    forceSelection: true,
+                    editable: true,
+                    fieldLabel: '游戏名称',
+                    name: 'gid',
+                    displayField: 'gname',
+                    valueField: 'gid',
+                    queryMode: 'local',
+                    emptyText: "输入游戏名称",
+                    typeAhead: false,
+                    store: gameStore,
+                    listeners:{
+                        select: function (_this, records, eOpts) {
+                            dataStore.proxy.extraParams = dataStore.proxy.extraParams||{};
+                            dataStore.getProxy().extraParams.gid = records[0].get('gid');//游戏改变的时候重新加载权限数据
+                            dataStore.load();
+                            Ext.getCmp("addCatBtn").enable();
+                        }
+                    }
+                },{
+                    id:"addCatBtn",
                     text: "添加分类",
+                    disabled:true,
                     icon: "js/extjs/resources/icons/add.png",
                     handler: function () {
                         addData();
@@ -137,10 +174,9 @@ var addDataWindow = new Ext.Window({
                     allowBlank: false
                 }, {
                     id: "configtypeField",
-                    xtype: "textfield",
-                    fieldLabel: "序号",
+                    xtype: "hiddenfield",
                     name: "configtype",
-                    allowBlank: false
+                    value: COMMON_CONFIG.PIC_TURN_TYPE
                 }, {
                     id: "gidField",
                     xtype: "hiddenfield",
@@ -162,7 +198,7 @@ var addDataWindow = new Ext.Window({
                                     addDataWindow.hide();
                                     return;
                                 }
-                                top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "失败");
+                                GlobalUtil.status(res.status);
                             },
                             failure: function (response) {
                                 top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "失败");
@@ -220,7 +256,8 @@ function deleteData(id) {
                 url: URLS.MISC.COMMON_CONFIG_CAT_DELETE,
                 params: {
                     id: id,
-                    gid: PLATFORM_IDENTIFIER
+                    gid: PLATFORM_IDENTIFIER,
+                    type: COMMON_CONFIG.PIC_TURN_TYPE
                 },
                 callbackKey: 'function',
                 // scope: 'this',
@@ -230,7 +267,7 @@ function deleteData(id) {
                         dataStore.reload();
                         return;
                     }
-                    Ext.MessageBox.alert("提示", "删除失败");
+                    GlobalUtil.status(res.status);
                 },
                 failure: function (response) {
                     Ext.MessageBox.alert("提示", "删除失败");

@@ -163,13 +163,12 @@ var gameStore = Ext.create('Ext.data.Store', {
         callbackKey: "function",
         reader: {
             type: 'json',
-            root: 'data',
-            successProperty: "status"
+            root: 'data'
         }
     },
     listeners:{
         load:function(_this, records, successful,eOpts){
-            _this.add({gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"});
+            gameStore.add({gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"});
         }
     }
 });
@@ -188,6 +187,9 @@ var userAuthWindow = new Ext.Window({
             layout: "fit",
             renderTo: Ext.getBody(),
             multiSelect: true,// 支持多选
+            selModel : Ext.create('Ext.selection.CheckboxModel', {
+                checkOnly: true
+            }),
             selType: 'checkboxmodel',// 设置为单元格选择模式Ext.selection.RowModel
             id: "permissionGridId",
             store: permissionListStore,
