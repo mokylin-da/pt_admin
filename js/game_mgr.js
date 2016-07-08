@@ -329,12 +329,14 @@ var addDataWindow = new Ext.Window({
                     id: "gurlField",
                     xtype: "textfield",
                     fieldLabel: "游戏链接地址",
+                    vtype: 'url',
                     name: "gurl",
                     allowBlank: false
                 }, {
                     id: "serverurlField",
                     xtype: "textfield",
                     fieldLabel: "游戏区服地址",
+                    vtype: 'url',
                     name: "serverurl",
                     allowBlank: false
                 }, {
