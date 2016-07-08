@@ -13,8 +13,8 @@ URLS.USER = {
     QUERY_USER: URLS.USER_BASE + "/user/pms/searchuserbynickname"//用户查询
 };
 URLS.GAME_INFO = {
-    GAME_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/allgamelist",
-    GAME_PAGE_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/pagegamelist",
+    GAME_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/listgamelist",
+    GAME_PAGE_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/pagegamelist4admin",
     ADD_GAME: URLS.GAME_INFO_BASE + "/gameinfo/game/add",
     UPDATE_GAME: URLS.GAME_INFO_BASE + "/gameinfo/game/update",
 
