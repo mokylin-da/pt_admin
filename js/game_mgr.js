@@ -297,7 +297,7 @@ var addDataWindow = new Ext.Window({
                     listeners: {
                         validitychange: function (_this, valid, eOpts) {
                             if (!valid) {
-                                Ext.MessageBox.alert("提示", "必须选择一个分类");
+                                GlobalUtil.tipMsg("警告","必须选择一个分类");
                             }
                         }
                     }
@@ -437,6 +437,7 @@ var addDataWindow = new Ext.Window({
                 buttons: [{
                     text: '确定',
                     id: "addSubmitBtn",
+                    formBind:true,
                     handler: function (v) {
                         var form = v.up("form").getForm();
                         if (form.isValid()) {
@@ -488,7 +489,7 @@ function deleteGame(gid) {
                 // scope: 'this',
                 success: function (res) {
                     if (res && res.status == 1) {
-                        Ext.MessageBox.alert("提示", "删除成功");
+                        GlobalUtil.tipMsg("提示", "删除成功");
                         serverStore.reload();
                         return;
                     }

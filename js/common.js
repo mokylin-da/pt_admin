@@ -101,6 +101,25 @@ Ext.data.JsonP.request({
  * 工具类
  */
 GlobalUtil = {
+    /**
+     * 操作提示信息 tip message
+     * @param title {String}
+     * @param format
+     */
+    tipMsg: function (title, format) {
+        if (parent != window) {
+            top.GlobalUtil.tipMsg(title,format);
+            return;
+        }
+        var msgCt;
+        if (!msgCt) {
+            msgCt = Ext.DomHelper.insertFirst(document.body, {id: 'msg-div'}, true);
+        }
+        var s = Ext.String.format.apply(String, Array.prototype.slice.call(arguments, 1));
+        var m = Ext.DomHelper.append(msgCt, '<div class="msg"><h3>' + title + '</h3><p>' + s + '</p></div>', true);
+        m.hide();
+        m.slideIn('t').ghost("t", { delay: 3000, remove: true});
+    },
     status: function (e, callback) {
         switch (e) {
             case 1:

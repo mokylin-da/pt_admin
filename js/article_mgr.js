@@ -359,7 +359,7 @@ var addCatDataWindow = new Ext.Window({
                             callbackKey: 'function',
                             success: function (res) {
                                 if (res && res.status == "1") {
-                                    Ext.MessageBox.alert("提示", Ext.getCmp("articleCatForm").operate + "成功");
+                                    GlobalUtil.tipMsg("提示", Ext.getCmp("articleCatForm").operate + "成功");
                                     articleTreeStore.reload();
                                     addCatDataWindow.hide();
                                     return;
@@ -538,7 +538,7 @@ var addDataWindow = new Ext.Window({
                         var crossDomain = new CrossDomain();
                         crossDomain.init(Ext.getCmp("articleForm").url, values, function (v) {
                             if (v == 1) {
-                                Ext.MessageBox.alert("提示", Ext.getCmp("articleForm").operate + "成功");
+                                GlobalUtil.tipMsg("提示", Ext.getCmp("articleForm").operate + "成功");
                                 articleStore.reload();
                                 addDataWindow.hide();
                                 return;
@@ -622,7 +622,7 @@ function deleteArticle(aid) {
                 // scope: 'this',
                 success: function (res) {
                     if (res && res.status == 1) {
-                        Ext.MessageBox.alert("提示", "删除成功");
+                        GlobalUtil.tipMsg("提示", "删除成功");
                         articleStore.reload();
                         return;
                     }

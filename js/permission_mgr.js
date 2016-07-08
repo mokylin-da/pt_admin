@@ -213,7 +213,7 @@ var addDataWindow = new Ext.Window({
                             success: function (res) {
                                 console.log(res);
                                 if (res && res.status == 1) {
-                                    Ext.MessageBox.alert("提示", Ext.getCmp("permissionForm").operate + "成功");
+                                    GlobalUtil.tipMsg("提示", Ext.getCmp("permissionForm").operate + "成功");
                                     permissionListStore.reload();
                                     addDataWindow.hide();
                                     return;

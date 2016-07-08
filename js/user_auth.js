@@ -266,7 +266,7 @@ var userAuthWindow = new Ext.Window({
                         callbackKey: 'function',
                         success: function (res) {
                             if (res && res.status == 1) {
-                                Ext.MessageBox.alert("提示", "操作成功");
+                                GlobalUtil.tipMsg("提示", "操作成功");
                                 permissionListStore.reload();
                                 Ext.getCmp("authWindowId").hide();
                             } else {

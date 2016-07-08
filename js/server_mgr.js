@@ -256,7 +256,7 @@ var addDataWindow = new Ext.Window({
                             success: function (res) {
                                 console.log(res);
                                 if (res && res.status==1) {
-                                    top.Ext.MessageBox.alert("提示", Ext.getCmp("serverForm").operate + "成功");
+                                    GlobalUtil.tipMsg("提示", Ext.getCmp("serverForm").operate + "成功");
                                     serverStore.reload();
                                     addDataWindow.hide();
                                     return;
@@ -320,7 +320,7 @@ function deleteServer(gid, sid) {
                 // scope: 'this',
                 success: function (res) {
                     if (res && res.status==1) {
-                        Ext.MessageBox.alert("提示", "删除成功");
+                        GlobalUtil.tipMsg("提示", "删除成功");
                         serverStore.reload();
                         return;
                     }

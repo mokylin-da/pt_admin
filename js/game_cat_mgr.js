@@ -189,7 +189,7 @@ var addDataWindow = new Ext.Window({
                             success: function (res) {
                                 console.log(res);
                                 if (res && res.status == 1) {
-                                    top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "成功");
+                                    GlobalUtil.tipMsg("提示", Ext.getCmp("dataForm").operate + "成功");
                                     gameCatStore.reload();
                                     addDataWindow.hide();
                                     return;
@@ -258,7 +258,7 @@ function deleteGameCat(id) {
                 // scope: 'this',
                 success: function (res) {
                     if (res && res.status == 1) {
-                        Ext.MessageBox.alert("提示", "删除成功");
+                        GlobalUtil.tipMsg("提示", "删除成功");
                         gameCatStore.reload();
                         return;
                     }
