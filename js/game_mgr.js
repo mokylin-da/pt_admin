@@ -158,7 +158,7 @@ Ext.onReady(function () {
 
                         var value = record.raw;
                         //value.opentime =  Ext.Date.parse(value.opentime, "Y-m-d H:i:s.0");
-                        value.opentime = value.opentime.replace(/\..*$/, "");
+                        value.opentime = value.opentime && value.opentime.replace(/\..*$/, "");
                         var records = JSON.stringify(value).replace(/"/g, '\"');
                         return '<a style="text-decoration:none;margin-right:5px;" href=\'javascript:updateGame(' + records + ');\'><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>';
 
