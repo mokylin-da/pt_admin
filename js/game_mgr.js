@@ -20,6 +20,7 @@ var gameStore = Ext.create('Ext.data.Store', {
     proxy: {
         type: "jsonp",
         url: URLS.GAME_INFO.GAME_PAGE_LIST,
+        extraParams:{gid:PLATFORM_IDENTIFIER},
         callbackKey: "function",
         pageParam: "pagenum",
         limitParam: "pagesize",
