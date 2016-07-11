@@ -6,7 +6,7 @@ Ext.onReady(function () {
         layout: "fit",
         items: [
             Ext.create("Ext.moux.CommonConfigCat",{
-                configType:COMMON_CONFIG.PIC_TURN_TYPE
+                configType:COMMON_CONFIG.RECOMMEND_GAME_TYPE
             })
         ],
         renderTo: Ext.getBody()

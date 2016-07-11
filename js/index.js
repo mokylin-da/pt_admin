@@ -15,22 +15,28 @@ var allMenuTree = {
         tabId: "11",
         permission: "menu_pic_turn"
     },{
+        text: "推荐游戏分类",
+        leaf: true,
+        url: "recommend_game_cat_mgr.html",
+        tabId: "12",
+        permission: "menu_recommend_game_cat"
+    },{
         text: "推荐游戏",
         leaf: true,
         url: "recommend_game_mgr.html",
-        tabId: "12",
+        tabId: "13",
         permission: "menu_recommend_game"
     },{
         text: "精品游戏",
         leaf: true,
         url: "quality_game_mgr.html",
-        tabId: "13",
+        tabId: "14",
         permission: "menu_quality_game"
     },{
         text: "文章管理",
         leaf: true,
         url: "article_mgr.html",
-        tabId: "14",
+        tabId: "15",
         permission: "menu_article"
     }],
     game:[ {

@@ -13,26 +13,6 @@ Ext.QuickTips.init();
 // ##########################################################
 
 
-var gameStore = Ext.create('Ext.data.Store', {
-    autoLoad: true,
-    fields: ['gname', 'gid'],
-    proxy: {
-        type: "jsonp",
-        url: URLS.GAME_INFO.GAME_LIST,
-        callbackKey: "function",
-        reader: {
-            type: 'json',
-            root: 'data',
-            successProperty: "status"
-        }
-    },
-    listeners: {
-        load: function (_this, records, successful, eOpts) {
-            _this.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
-        }
-    }
-});
-gameStore.load();
 //文章分类
 var articleTreeStore = new Ext.data.Store({
     //defaultRootProperty:"data",
@@ -221,6 +201,7 @@ Ext.onReady(function () {
         }
     });
 
+    //Ext.require("Ext.moux.GameCombo");
     /**
      * 布局
      */
@@ -233,20 +214,9 @@ Ext.onReady(function () {
                 //height:
                 layout: "hbox",
                 items: [
-                    {
+                    Ext.create("Ext.moux.GameCombo",{
                         id: "gameCombo",
-                        xtype: 'combo',
-                        triggerAction: 'all',
-                        forceSelection: true,
-                        editable: true,
-                        fieldLabel: '游戏名称',
-                        name: 'gid',
-                        displayField: 'gname',
-                        valueField: 'gid',
-                        queryMode: 'local',
-                        emptyText: "输入游戏名称",
-                        typeAhead: false,
-                        store: gameStore,
+                        extraItems:{gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"},
                         listeners: {
                             select: function (_this, records, eOpts) {
                                 articleTreeStore.getProxy().extraParams = {"gid": records[0].get('gid')};
@@ -255,6 +225,7 @@ Ext.onReady(function () {
                                 Ext.getCmp("addArticleId").disable();
                             },
                             afterrender: function (_this, eOpts) {//数据加载后自动选择第一个游戏加载数据
+                                var gameStore =  _this.store;
                                 var data = gameStore.getAt(0);
                                 //防止组件加载完后store还未接收到数据的情况，100ms获取一次
                                 (function sleepFn() {
@@ -275,7 +246,7 @@ Ext.onReady(function () {
                                 })();
                             }
                         }
-                    }]
+                    })]
             }, {
                 collapsible: true,
                 region: "west",
@@ -490,7 +461,7 @@ var addDataWindow = new Ext.Window({
                         name: "link",
                         width: 400,
                         allowBlank: false
-                    }, Ext.create("Ext.ux.form.MoHtmlEditor", {
+                    }, Ext.create("Ext.moux.MoHtmlEditor", {
                         id: "contentField",
                         fieldLabel: "内容",
                         name: "content",

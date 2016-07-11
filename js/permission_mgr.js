@@ -96,43 +96,16 @@ Ext.onReady(function () {
             dockedItems: [{
                 xtype: "toolbar",
                 items: [
-                    {
+                    Ext.create("Ext.moux.GameCombo", {
                         id: "gameCombo",
-                        xtype: 'combo',
-                        triggerAction: 'all',
-                        forceSelection: true,
-                        editable: true,
-                        fieldLabel: '游戏名称',
-                        name: 'gid',
-                        displayField: 'gname',
-                        valueField: 'gid',
-                        queryMode: 'local',
-                        emptyText: "输入游戏名称",
-                        typeAhead: false,
-                        store: gameStore,
+                        extraItems: [{gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"}, {gid: COMMON_PERMISSION_IDENTIFIER,gname: "公共权限项"}],
                         listeners: {
                             select: function (_this, records, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
                                 permissionListStore.load();
-                            },
-                            afterrender: function (_this, eOpts) {
-                                //var data = gameStore.getAt(0);
-                                ////防止组件加载完后store还未接收到数据的情况，100ms获取一次
-                                //(function sleepFn() {
-                                //    setTimeout(function () {
-                                //        data = gameStore.getAt(0);
-                                //        if (!data) {
-                                //            sleepFn();
-                                //        } else {
-                                //            var gid = data.get("gid");
-                                //            //默认加载第一个游戏的权限列表
-                                //            _this.setValue(gid);
-                                //        }
-                                //    }, 100);
-                                //})();
                             }
                         }
-                    },
+                    }),
                     "-",
                     {
                         text: "添加权限",

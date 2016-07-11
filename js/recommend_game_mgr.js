@@ -1,7 +1,7 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/6/15.
  */
-Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.ux.form.MoUploader']);
+Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.moux.MoUploader']);
 
 /**
  *权限管理
@@ -12,19 +12,6 @@ Ext.QuickTips.init();
 // ##########################################################
 // 数据源存储块 开始
 // ##########################################################
-var gameStore = Ext.create('Ext.data.Store', {
-    autoLoad: true,
-    fields: ['gname', 'gid'],
-    proxy: {
-        type: "jsonp",
-        url: URLS.GAME_INFO.GAME_LIST,
-        callbackKey: "function",
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    }
-});
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
@@ -72,6 +59,21 @@ picTurnStore.getProxy().extraParams = {
 };
 picTurnStore.sort('sequence', 'ASC');
 picTurnStore.load();
+
+var recommendCatStore =  Ext.create('Ext.data.Store', {
+    autoLoad: true,
+    fields: ['id', 'gid', 'name', 'cname', 'configtype'],
+    proxy: {
+        type: "jsonp",
+        extraParams: {type: COMMON_CONFIG.RECOMMEND_GAME_TYPE, gid: PLATFORM_IDENTIFIER},
+        url: URLS.MISC.COMMON_CONFIG_CAT_LIST,
+        callbackKey: "function",
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    }
+});
 Ext.onReady(function () {
 
     var picTurnGrid = new Ext.grid.Panel(
@@ -186,25 +188,24 @@ var addDataWindow = new Ext.Window({
                     xtype: "hiddenfield",
                     name: "gid",
                     value: PLATFORM_IDENTIFIER
+                }, {
+                    xtype: "combobox",
+                    fieldLabel: "分类",
+                    name: "catid",
+                    store:recommendCatStore,
+                    queryMode: 'local',
+                    displayField:"cname",
+                    valueField:"id",
+                    allowBlank:false,
+                    editable: false,
+                    emptyText:"--请选择--"
                 },
-                    Ext.create("Ext.ux.form.MoUploader", {
+                    Ext.create("Ext.moux.MoUploader", {
                         name: "img",
                         fieldLabel:"图片(320*180)"
+                    }), Ext.create("Ext.moux.GameCombo", {
+                        id: "gameCombo"
                     }), {
-                        xtype: 'combo',
-                        triggerAction: 'all',
-                        forceSelection: true,
-                        editable: true,
-                        fieldLabel: '游戏名称',
-                        name: 'apivalue',
-                        displayField: 'gname',
-                        valueField: 'gid',
-                        queryMode: 'local',
-                        emptyText: "输入游戏名称",
-                        typeAhead: false,
-                        allowBlank: false,
-                        store: gameStore
-                    }, {
                         xtype: "numberfield",
                         fieldLabel: "序号",
                         name: "sequence",

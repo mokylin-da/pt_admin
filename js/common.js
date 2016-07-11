@@ -65,7 +65,8 @@ var COMMON_PERMISSION_IDENTIFIER = -1;
 Ext.Loader.setConfig({
     enabled: true,
     paths: {
-        'Ext.ux': 'js/extjs/ux'
+        'Ext.ux': 'js/extjs/ux',
+        'Ext.moux': 'js/moux'
     }
 });
 var isLogin = false;
@@ -203,7 +204,7 @@ GlobalUtil = {
                 });
                 break;
             }
-            case 20007:
+            case 107:
             {
                 Ext.MessageBox.alert("提示", "重复添加", function () {
                     callback && callback();

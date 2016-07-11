@@ -1,7 +1,7 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/4/15.
  */
-Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.ux.form.MoUploader']);
+Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.moux.MoUploader']);
 
 /**
  *权限管理
@@ -163,32 +163,21 @@ Ext.onReady(function () {
             dockedItems: [{
                 xtype: "toolbar",
                 items: [
-                    {
-                        id: "gameCombo",
-                        xtype: 'combo',
-                        triggerAction: 'all',
-                        forceSelection: true,
-                        editable: true,
-                        fieldLabel: '游戏名称',
-                        name: 'gid',
-                        displayField: 'gname',
-                        valueField: 'gid',
-                        queryMode: 'local',
-                        emptyText: "输入游戏名称",
-                        typeAhead: false,
-                        store: gameStore,
-                        listeners: {
-                            select: function (_this, records, eOpts) {
-                                var gid = records[0].get('gid');
-                                picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: gid};//游戏改变的时候重新加载权限数据
-                                picTurnStore.load();
-                                var proxy = picTurnCatStore.proxy;
-                                proxy.extraParams = proxy.extraParams||{};
-                                proxy.extraParams.gid=gid;
-                                picTurnCatStore.load();
-                            }
+                    Ext.create("Ext.moux.GameCombo", {
+                    id: "gameCombo",
+                    extraItems: {gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"},
+                    listeners: {
+                        select: function (_this, records, eOpts) {
+                            var gid = records[0].get('gid');
+                            picTurnStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: gid};//游戏改变的时候重新加载权限数据
+                            picTurnStore.load();
+                            var proxy = picTurnCatStore.proxy;
+                            proxy.extraParams = proxy.extraParams||{};
+                            proxy.extraParams.gid=gid;
+                            picTurnCatStore.load();
                         }
-                    },{
+                    }
+                }),{
                         id:"addPicTurnBtn",
                         disabled:true,
                         text: "添加",
@@ -257,7 +246,7 @@ var addDataWindow = new Ext.Window({
                         editable: false,
                         emptyText:"--请选择--"
                     },
-                        Ext.create("Ext.ux.form.MoUploader", {
+                        Ext.create("Ext.moux.MoUploader", {
                             name: "img"
                         }), {
                             xtype: "textfield",

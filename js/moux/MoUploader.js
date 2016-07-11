@@ -2,7 +2,7 @@
  * @author Li Zhao
  * @since 2016/6/14.
  */
-Ext.define("Ext.ux.form.MoUploader",{
+Ext.define("Ext.moux.MoUploader",{
     extend:'Ext.form.field.Trigger',
     alias:'widget.mouploader',
     fieldLabel: "图片",

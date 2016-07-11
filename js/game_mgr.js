@@ -395,7 +395,7 @@ var addDataWindow = new Ext.Window({
                     fieldLabel: "开服预告设置",
                     name: "noticeSetting"
                 },
-                    Ext.create("Ext.ux.form.MoUploader", {
+                    Ext.create("Ext.moux.MoUploader", {
                         fieldLabel: '游戏图片',
                         name: "picture",
                         allowBlank: false

@@ -154,24 +154,7 @@ var permissionListStore = Ext
             }
         }
     });
-var gameStore = Ext.create('Ext.data.Store', {
-    autoLoad: true,
-    fields: ['gname', 'gid'],
-    proxy: {
-        type: "jsonp",
-        url: URLS.GAME_INFO.GAME_LIST,
-        callbackKey: "function",
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    },
-    listeners:{
-        load:function(_this, records, successful,eOpts){
-            gameStore.add({gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"});
-        }
-    }
-});
+
 var userAuthWindow = new Ext.Window({
     id: "authWindowId",
     title: "用户授权",
@@ -211,36 +194,18 @@ var userAuthWindow = new Ext.Window({
             dockedItems: [{
                 xtype: "toolbar",
                 items: [
-                    {
-                        id: "gameCombo",
-                        xtype: 'combo',
-                        triggerAction: 'all',
-                        forceSelection: true,
-                        editable: true,
-                        fieldLabel: '游戏名称',
-                        name: 'gid',
-                        displayField: 'gname',
-                        valueField: 'gid',
-                        queryMode: 'local',
-                        emptyText: "输入游戏名称",
-                        typeAhead: false,
-                        store: gameStore,
-                        listeners: {
-                            select: function (_this, records, eOpts) {
-                                permissionListStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
-                                permissionListStore.load(function(){
-                                    loadUserPermission(records[0].get('gid'));
-                                });
-                            },
-                            afterrender: function (_this, eOpts) {
-                                //Ext.getCmp("gameCombo").setValue(PLATFORM_IDENTIFIER);
-                                //permissionListStore.getProxy().extraParams = {"gid": PLATFORM_IDENTIFIER};//游戏改变的时候重新加载权限数据
-                                //permissionListStore.load(function(){
-                                //    loadUserPermission(PLATFORM_IDENTIFIER);
-                                //});
-                            }
+                    Ext.create("Ext.moux.GameCombo",{
+                    id: "gameCombo",
+                    extraItems:{gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"},
+                    listeners: {
+                        select: function (_this, records, eOpts) {
+                            permissionListStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
+                            permissionListStore.load(function(){
+                                loadUserPermission(records[0].get('gid'));
+                            });
                         }
-                    }]
+                    }
+                })]
             }],
             buttons: [{
                 text: '确定',

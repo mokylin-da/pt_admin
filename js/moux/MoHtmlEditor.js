@@ -1,4 +1,4 @@
-Ext.define('Ext.ux.form.MoHtmlEditor', {
+Ext.define('Ext.moux.MoHtmlEditor', {
 
     alias: 'widget.mohtmleditor',
 

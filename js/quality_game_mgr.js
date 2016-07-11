@@ -1,7 +1,7 @@
 /**
  * Created by 李朝(Li.Zhao) on 2016/6/15.
  */
-Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.ux.form.MoUploader']);
+Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.moux.MoUploader']);
 
 /**
  *权限管理
@@ -187,7 +187,7 @@ var addDataWindow = new Ext.Window({
                     name: "gid",
                     value: PLATFORM_IDENTIFIER
                 },
-                    Ext.create("Ext.ux.form.MoUploader", {
+                    Ext.create("Ext.moux.MoUploader", {
                         name: "img",
                         fieldLabel:"图片(320*180)"
                     }), {
