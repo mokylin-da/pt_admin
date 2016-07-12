@@ -76,11 +76,11 @@ var dataCatStore = Ext.create('Ext.data.Store', {
         load:function(){
             Ext.onReady(function () {
 
-                var picTurnGrid = new Ext.grid.Panel(
+                var RecommendGameGrid = new Ext.grid.Panel(
                     {
                         multiSelect: true,// 支持多选
                         selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
-                        id: "picTurnGridId",
+                        id: "RecommendGameGridId",
                         store: dataStore,
                         viewConfig: {
                             stripeRows: true,//在表格中显示斑马线
@@ -127,8 +127,8 @@ var dataCatStore = Ext.create('Ext.data.Store', {
                                 align: 'center',
                                 xtype: 'templatecolumn',
                                 tpl: '<tpl>'
-                                + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:\'{state}\',img:\'{img}\',type:\'{type}\',apivalue:parseInt(\'{apivalue}\')});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                                + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                                + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateRecommendGame({id:\'{id}\',sequence:\'{sequence}\',state:\'{state}\',img:\'{img}\',type:\'{type}\',apivalue:parseInt(\'{apivalue}\'),catid:\'{catid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                                + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteRecommendGame(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                                 + '</tpl>'
                             }
 
@@ -139,7 +139,7 @@ var dataCatStore = Ext.create('Ext.data.Store', {
                                 text: "添加",
                                 icon: "js/extjs/resources/icons/add.png",
                                 handler: function () {
-                                    addPicTurn();
+                                    addRecommendGame();
                                 }
                             }]
                         }]
@@ -151,7 +151,7 @@ var dataCatStore = Ext.create('Ext.data.Store', {
                  */
                 new Ext.Viewport({
                     layout: "fit",
-                    items: [picTurnGrid],
+                    items: [RecommendGameGrid],
                     renderTo: Ext.getBody()
                 });
             });
@@ -296,14 +296,14 @@ function convertParams(data, keys) {
     data.data = GlobalUtil.jsonToString(tmpData);
     return data;
 }
-function addPicTurn() {
+function addRecommendGame() {
     addDataWindow.setTitle("添加推荐游戏");
     Ext.getCmp("dataForm").getForm().reset();
     Ext.getCmp("dataForm").url = URLS.MISC.COMMON_CONFIG_ADD;
     Ext.getCmp("dataForm").operate = "添加";
     addDataWindow.show();
 }
-function updatePicTurn(data) {
+function updateRecommendGame(data) {
     addDataWindow.setTitle("修改推荐游戏");
     Ext.getCmp("dataForm").operate = "修改";
     Ext.getCmp("dataForm").getForm().reset();
@@ -313,7 +313,7 @@ function updatePicTurn(data) {
     addDataWindow.show();
 }
 
-function deletePicTurn(id) {
+function deleteRecommendGame(id) {
     Ext.MessageBox.confirm("删除确认", "是否要删除", function (res) {
         if (res == "yes") {
             Ext.data.JsonP.request({
