@@ -13,7 +13,7 @@ Ext.QuickTips.init();
 // 数据源存储块 开始
 // ##########################################################
 
-var picTurnStore = Ext.create('Ext.data.Store', {
+var dataStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
     fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','gname','apivalue'],
     listeners: {
@@ -53,14 +53,13 @@ var picTurnStore = Ext.create('Ext.data.Store', {
         }
     }
 });
-picTurnStore.getProxy().extraParams = {
+dataStore.getProxy().extraParams = {
     type: COMMON_CONFIG.RECOMMEND_GAME_TYPE,
     gid: PLATFORM_IDENTIFIER
 };
-picTurnStore.sort('sequence', 'ASC');
-picTurnStore.load();
+dataStore.sort('sequence', 'ASC');
 
-var recommendCatStore =  Ext.create('Ext.data.Store', {
+var dataCatStore =  Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['id', 'gid', 'name', 'cname', 'configtype'],
     proxy: {
@@ -81,7 +80,7 @@ Ext.onReady(function () {
             multiSelect: true,// 支持多选
             selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
             id: "picTurnGridId",
-            store: picTurnStore,
+            store: dataStore,
             viewConfig: {
                 stripeRows: true,//在表格中显示斑马线
                 enableTextSelection: true //可以复制单元格文字
@@ -131,8 +130,24 @@ Ext.onReady(function () {
             ],
             dockedItems: [{
                 xtype: "toolbar",
-                items: [{
+                items: [ Ext.create("Ext.moux.GameCombo", {
+                    id: "gameCombo",
+                    extraItems: {gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"},
+                    listeners: {
+                        select: function (_this, records, eOpts) {
+                            var gid = records[0].get('gid');
+                            dataStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: gid};//游戏改变的时候重新加载权限数据
+                            dataStore.load();
+                            var proxy = dataCatStore.proxy;
+                            proxy.extraParams = proxy.extraParams||{};
+                            proxy.extraParams.gid=gid;
+                            dataCatStore.load();
+                            _this.up("toolbar").items.get(1).enable();
+                        }
+                    }
+                }),{
                     text: "添加",
+                    disabled:true,
                     icon: "js/extjs/resources/icons/add.png",
                     handler: function () {
                         addPicTurn();
@@ -189,10 +204,13 @@ var addDataWindow = new Ext.Window({
                     name: "gid",
                     value: PLATFORM_IDENTIFIER
                 }, {
+                    xtype: "hiddenfield",
+                    name: "apivalue"
+                }, {
                     xtype: "combobox",
                     fieldLabel: "分类",
                     name: "catid",
-                    store:recommendCatStore,
+                    store:dataCatStore,
                     queryMode: 'local',
                     displayField:"cname",
                     valueField:"id",
@@ -203,8 +221,6 @@ var addDataWindow = new Ext.Window({
                     Ext.create("Ext.moux.MoUploader", {
                         name: "img",
                         fieldLabel:"图片(320*180)"
-                    }), Ext.create("Ext.moux.GameCombo", {
-                        id: "gameCombo"
                     }), {
                         xtype: "numberfield",
                         fieldLabel: "序号",
@@ -224,6 +240,7 @@ var addDataWindow = new Ext.Window({
                         params.apiname=API_NAME;
                         params.apitype=API_TYPE;
                         params.apikey='gid';
+                        params.apivalue=Ext.getCmp("gameCombo").getValue();
                         convertParams(params, ["img"]);
                         Ext.data.JsonP.request({
                             params: params, // values from form fields..
@@ -234,7 +251,7 @@ var addDataWindow = new Ext.Window({
                                 console.log(res);
                                 if (res && res.status == 1) {
                                     GlobalUtil.tipMsg("提示", Ext.getCmp("dataForm").operate + "成功");
-                                    picTurnStore.reload();
+                                    dataStore.reload();
                                     addDataWindow.hide();
                                     return;
                                 }
@@ -320,7 +337,7 @@ function deletePicTurn(id) {
                 success: function (res) {
                     if (res && res.status == 1) {
                         GlobalUtil.tipMsg("提示", "删除成功");
-                        picTurnStore.reload();
+                        dataStore.reload();
                         return;
                     }
                     Ext.MessageBox.alert("提示", "删除失败");

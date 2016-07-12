@@ -27,12 +27,6 @@ var allMenuTree = {
         tabId: "13",
         permission: "menu_recommend_game"
     },{
-        text: "精品游戏",
-        leaf: true,
-        url: "quality_game_mgr.html",
-        tabId: "14",
-        permission: "menu_quality_game"
-    },{
         text: "文章管理",
         leaf: true,
         url: "article_mgr.html",
