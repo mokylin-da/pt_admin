@@ -6,6 +6,7 @@ Ext.onReady(function () {
         layout: "fit",
         items: [
             Ext.create("Ext.moux.CommonConfigCat",{
+                selectGid:PLATFORM_IDENTIFIER,
                 configType:COMMON_CONFIG.RECOMMEND_GAME_TYPE
             })
         ],

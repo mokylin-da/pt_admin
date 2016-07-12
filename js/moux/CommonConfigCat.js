@@ -5,18 +5,25 @@
 Ext.define("Ext.moux.CommonConfigCat", {
     extend: 'Ext.grid.Panel',
     alias: 'widget.commonconfigcat',
-    gameComboExtraItem:{},
+    gameComboExtraItem: {},
     multiSelect: true,// 支持多选
     selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
     viewConfig: {
         stripeRows: true,//在表格中显示斑马线
         enableTextSelection: true //可以复制单元格文字
     },
+    /**
+     * 设置指定gid,指定后无选择游戏下拉框
+     */
+    selectGid: undefined,
+    getGid: function () {
+        return this.selectGid==undefined ? Ext.getCmp("gameCombo").getValue():this.selectGid;
+    },
     loadMask: {
         msg: "正在加载数据,请稍等..."
     },
-    configType:"",
-    addOrUpdateWindow:null,
+    configType: "",
+    addOrUpdateWindow: null,
     columns: [
         Ext.create("Ext.grid.RowNumberer"),
         {
@@ -42,35 +49,38 @@ Ext.define("Ext.moux.CommonConfigCat", {
         }
 
     ],
-    dockedItems: [{
-        xtype: "toolbar",
-        items: [
-            Ext.create("Ext.moux.GameCombo", {
-            id: "gameCombo",
-            extraItems: [{gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"}],
-            listeners: {
-                select: function (_this, records, eOpts) {
-                    var dataStore = _this.up("grid").store;
-                    dataStore.proxy.extraParams = dataStore.proxy.extraParams||{};
-                    dataStore.getProxy().extraParams.gid = records[0].get('gid');//游戏改变的时候重新加载权限数据
-                    dataStore.load();
-                }
-            }
-        }),{
-            id:"addCatBtn",
+    initComponent: function () {
+        var _this = this;
+        var dockedItems = [];
+        if (_this.selectGid==undefined) {
+            dockedItems.push(
+                Ext.create("Ext.moux.GameCombo", {
+                    id: "gameCombo",
+                    extraItems: [{gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"}],
+                    listeners: {
+                        select: function (_this, records, eOpts) {
+                            var dataStore = _this.up("grid").store;
+                            dataStore.proxy.extraParams = dataStore.proxy.extraParams || {};
+                            dataStore.getProxy().extraParams.gid = records[0].get('gid');//游戏改变的时候重新加载权限数据
+                            dataStore.load();
+                        }
+                    }
+                })
+            );
+        }
+        dockedItems.push({
+            id: "addCatBtn",
             text: "添加分类",
-            disabled:true,
+            disabled: this.selectGid==undefined,
             icon: "js/extjs/resources/icons/add.png",
             handler: function () {
                 window.commonConfigCatAddData();
             }
-        }]
-    }],
+        });
+        _this.tbar = dockedItems;
 
-    initComponent: function () {
-        var _this = this;
         var dataStore = _this.store = Ext.create('Ext.data.Store', {
-            autoLoad: false,
+            autoLoad: _this.selectGid!=undefined,
             fields: ['id', 'gid', 'name', 'cname', 'configtype'],
             proxy: {
                 type: "jsonp",
@@ -80,11 +90,11 @@ Ext.define("Ext.moux.CommonConfigCat", {
                 reader: {
                     type: 'json',
                     root: 'data',
-                    successProperty:"status"
+                    successProperty: "status"
                 }
             },
-            listeners:{
-                load:function(){
+            listeners: {
+                load: function () {
                     Ext.getCmp("addCatBtn").enable();
                 }
             }
@@ -124,11 +134,11 @@ Ext.define("Ext.moux.CommonConfigCat", {
                             name: "name",
                             allowBlank: false,
                             validator: function (v) {
-                                var record = dataStore.findRecord("name",v,0,false,true,true);
-                                if(!record || record.get("id")==this.previousNode('hiddenfield[name=id]').getValue()){
+                                var record = dataStore.findRecord("name", v, 0, false, true, true);
+                                if (!record || record.get("id") == this.previousNode('hiddenfield[name=id]').getValue()) {
                                     return true;
                                 }
-                                return !!record?"存在名称为【"+v+"】的分类":true;
+                                return !!record ? "存在名称为【" + v + "】的分类" : true;
                             }
                         }, {
                             id: "cnameField",
@@ -147,9 +157,9 @@ Ext.define("Ext.moux.CommonConfigCat", {
                             name: "gid"
                         }],
                         listeners: {
-                            beforeaction: function (_this, action, eOpts) {
-                                var params = _this.getValues();
-                                params.gid=Ext.getCmp("gameCombo").getValue();
+                            beforeaction: function (_t, action, eOpts) {
+                                var params = _t.getValues();
+                                params.gid = _this.getGid();
                                 Ext.data.JsonP.request({
                                     params: params, // values from form fields..
                                     url: Ext.getCmp("dataForm").url,
@@ -163,7 +173,7 @@ Ext.define("Ext.moux.CommonConfigCat", {
                                             window.commonconfigCatAddDataWindow.hide();
                                             return;
                                         }
-                                        GlobalUtil.status(res.status,function(){
+                                        GlobalUtil.status(res.status, function () {
                                             Ext.getCmp("addSubmitBtn").enable();
                                         });
                                     },
@@ -217,7 +227,6 @@ Ext.define("Ext.moux.CommonConfigCat", {
         };
 
 
-
         window.commonConfigCatDeleteData = function (id) {
             Ext.MessageBox.confirm("删除确认", "是否要删除该分类：", function (res) {
                 if (res == "yes") {
@@ -225,8 +234,8 @@ Ext.define("Ext.moux.CommonConfigCat", {
                         url: URLS.MISC.COMMON_CONFIG_CAT_DELETE,
                         params: {
                             id: id,
-                            gid: Ext.getCmp("gameCombo").getValue(),
-                            type:_this.configType
+                            gid: _this.getGid(),
+                            type: _this.configType
                         },
                         callbackKey: 'function',
                         // scope: 'this',

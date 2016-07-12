@@ -43,7 +43,7 @@ var dataStore = Ext.create('Ext.data.Store', {
                         window.datas = finalData;
                         _this.add(finalData);
                     } else {
-                        GlobalUtil.status(res.status)
+                        _this.GlobalUtil.status(res.status)
                     }
                 },
                 failure: function (response) {
@@ -55,10 +55,10 @@ var dataStore = Ext.create('Ext.data.Store', {
 });
 dataStore.getProxy().extraParams = {
     type: COMMON_CONFIG.RECOMMEND_GAME_TYPE,
-    gid: PLATFORM_IDENTIFIER
+    gid:PLATFORM_IDENTIFIER
 };
 dataStore.sort('sequence', 'ASC');
-
+dataStore.load();
 var dataCatStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['id', 'gid', 'name', 'cname', 'configtype'],
@@ -71,106 +71,95 @@ var dataCatStore = Ext.create('Ext.data.Store', {
             type: 'json',
             root: 'data'
         }
+    },
+    listeners:{
+        load:function(){
+            Ext.onReady(function () {
+
+                var picTurnGrid = new Ext.grid.Panel(
+                    {
+                        multiSelect: true,// 支持多选
+                        selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
+                        id: "picTurnGridId",
+                        store: dataStore,
+                        viewConfig: {
+                            stripeRows: true,//在表格中显示斑马线
+                            enableTextSelection: true //可以复制单元格文字
+                        },
+                        loadMask: {
+                            msg: "正在加载数据,请稍等..."
+                        },
+                        columns: [
+                            Ext.create("Ext.grid.RowNumberer"),
+                            {
+                                text: "图片",
+                                width: 200,
+                                dataIndex: "img",
+                                renderer: function (v) {
+                                    return "<image src='" + v + "' style='height:50px;'/>";
+                                }
+                            },
+                            {
+                                text: "分类",
+                                width: 200,
+                                dataIndex: "catid",
+                                renderer: function (v) {
+                                    var record = dataCatStore.findRecord("id", v);
+                                    return !record ? "" : record.get("cname");
+                                }
+                            },
+                            {
+                                text: "序号",
+                                width: 60,
+                                dataIndex: "sequence"
+                            },
+                            {
+                                text: "是否显示",
+                                width: 80,
+                                dataIndex: "state",
+                                renderer: function (v) {
+                                    return v == 0 ? '否' : '是';
+                                }
+                            },
+                            {
+                                header: "操作",
+                                width: 150,
+                                align: 'center',
+                                xtype: 'templatecolumn',
+                                tpl: '<tpl>'
+                                + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:\'{state}\',img:\'{img}\',type:\'{type}\',apivalue:parseInt(\'{apivalue}\')});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                                + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                                + '</tpl>'
+                            }
+
+                        ],
+                        dockedItems: [{
+                            xtype: "toolbar",
+                            items: [{
+                                text: "添加",
+                                icon: "js/extjs/resources/icons/add.png",
+                                handler: function () {
+                                    addPicTurn();
+                                }
+                            }]
+                        }]
+
+                    });
+
+                /**
+                 * 布局
+                 */
+                new Ext.Viewport({
+                    layout: "fit",
+                    items: [picTurnGrid],
+                    renderTo: Ext.getBody()
+                });
+            });
+        }
     }
 });
-Ext.onReady(function () {
-
-    var picTurnGrid = new Ext.grid.Panel(
-        {
-            multiSelect: true,// 支持多选
-            selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
-            id: "picTurnGridId",
-            store: dataStore,
-            viewConfig: {
-                stripeRows: true,//在表格中显示斑马线
-                enableTextSelection: true //可以复制单元格文字
-            },
-            loadMask: {
-                msg: "正在加载数据,请稍等..."
-            },
-            columns: [
-                Ext.create("Ext.grid.RowNumberer"),
-                {
-                    text: "图片",
-                    width: 200,
-                    dataIndex: "img",
-                    renderer: function (v) {
-                        return "<image src='" + v + "' style='height:50px;'/>";
-                    }
-                },
-                {
-                    text: "分类",
-                    width: 200,
-                    dataIndex: "catid",
-                    renderer: function (v) {
-                        var record = dataCatStore.findRecord("id", v);
-                        return !record ? "" : record.get("cname");
-                    }
-                },
-                {
-                    text: "序号",
-                    width: 60,
-                    dataIndex: "sequence"
-                },
-                {
-                    text: "是否显示",
-                    width: 80,
-                    dataIndex: "state",
-                    renderer: function (v) {
-                        return v == 0 ? '否' : '是';
-                    }
-                },
-                {
-                    header: "操作",
-                    width: 150,
-                    align: 'center',
-                    xtype: 'templatecolumn',
-                    tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:\'{state}\',img:\'{img}\',type:\'{type}\',apivalue:parseInt(\'{apivalue}\')});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
-                    + '</tpl>'
-                }
-
-            ],
-            dockedItems: [{
-                xtype: "toolbar",
-                items: [Ext.create("Ext.moux.GameCombo", {
-                    id: "gameCombo",
-                    extraItems: {gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"},
-                    listeners: {
-                        select: function (_this, records, eOpts) {
-                            var gid = records[0].get('gid');
-                            var proxy = dataCatStore.proxy;
-                            proxy.extraParams = proxy.extraParams || {};
-                            proxy.extraParams.gid = gid;
-                            dataCatStore.load();
-                            dataStore.getProxy().extraParams = {type: COMMON_CONFIG.RECOMMEND_GAME_TYPE, gid: gid};//游戏改变的时候重新加载权限数据
-                            dataStore.load();
-                        }
-                    }
-                }), {
-                    text: "添加",
-                    disabled: true,
-                    icon: "js/extjs/resources/icons/add.png",
-                    handler: function () {
-                        addPicTurn();
-                    }
-                }]
-            }]
-
-        });
-
-    /**
-     * 布局
-     */
-    new Ext.Viewport({
-        layout: "fit",
-        items: [picTurnGrid],
-        renderTo: Ext.getBody()
-    });
 
 
-});
 var addDataWindow = new Ext.Window({
     title: "添加推荐游戏",
     width: 300,
@@ -206,10 +195,10 @@ var addDataWindow = new Ext.Window({
                     xtype: "hiddenfield",
                     name: "gid",
                     value: PLATFORM_IDENTIFIER
-                }, {
-                    xtype: "hiddenfield",
-                    name: "apivalue"
-                }, {
+                }, Ext.create("Ext.moux.GameCombo",{
+                    name: "apivalue",
+                    allowBlank:false,
+                }), {
                     xtype: "combobox",
                     fieldLabel: "分类",
                     name: "catid",
@@ -243,7 +232,6 @@ var addDataWindow = new Ext.Window({
                         params.apiname = API_NAME;
                         params.apitype = API_TYPE;
                         params.apikey = 'gid';
-                        params.apivalue = Ext.getCmp("gameCombo").getValue();
                         convertParams(params, ["img"]);
                         Ext.data.JsonP.request({
                             params: params, // values from form fields..
