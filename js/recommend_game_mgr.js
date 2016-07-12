@@ -6,7 +6,7 @@ Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.mou
 /**
  *权限管理
  */
-var API_TYPE = "GAME_INFO_INTERNAL_ENDPOINT",API_NAME = "gameinfo/game/allgamelistlimitfields", API_VALUE = "",API_KEY = "gid";
+var API_TYPE = "GAME_INFO_INTERNAL_ENDPOINT", API_NAME = "gameinfo/game/allgamelistlimitfields", API_VALUE = "", API_KEY = "gid";
 
 Ext.QuickTips.init();
 // ##########################################################
@@ -15,7 +15,7 @@ Ext.QuickTips.init();
 
 var dataStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
-    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','gname','apivalue'],
+    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img', 'gname', 'apivalue', 'catid'],
     listeners: {
         beforeload: function (_this) {
             Ext.data.JsonP.request({
@@ -59,7 +59,7 @@ dataStore.getProxy().extraParams = {
 };
 dataStore.sort('sequence', 'ASC');
 
-var dataCatStore =  Ext.create('Ext.data.Store', {
+var dataCatStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['id', 'gid', 'name', 'cname', 'configtype'],
     proxy: {
@@ -99,9 +99,13 @@ Ext.onReady(function () {
                     }
                 },
                 {
-                    text: "游戏名称",
+                    text: "分类",
                     width: 200,
-                    dataIndex: "gname"
+                    dataIndex: "catid",
+                    renderer: function (v) {
+                        var record = dataCatStore.findRecord("id", v);
+                        return !record ? "" : record.get("cname");
+                    }
                 },
                 {
                     text: "序号",
@@ -130,24 +134,23 @@ Ext.onReady(function () {
             ],
             dockedItems: [{
                 xtype: "toolbar",
-                items: [ Ext.create("Ext.moux.GameCombo", {
+                items: [Ext.create("Ext.moux.GameCombo", {
                     id: "gameCombo",
                     extraItems: {gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"},
                     listeners: {
                         select: function (_this, records, eOpts) {
                             var gid = records[0].get('gid');
-                            dataStore.getProxy().extraParams = {type: COMMON_CONFIG.PIC_TURN_TYPE,gid: gid};//游戏改变的时候重新加载权限数据
-                            dataStore.load();
                             var proxy = dataCatStore.proxy;
-                            proxy.extraParams = proxy.extraParams||{};
-                            proxy.extraParams.gid=gid;
+                            proxy.extraParams = proxy.extraParams || {};
+                            proxy.extraParams.gid = gid;
                             dataCatStore.load();
-                            _this.up("toolbar").items.get(1).enable();
+                            dataStore.getProxy().extraParams = {type: COMMON_CONFIG.RECOMMEND_GAME_TYPE, gid: gid};//游戏改变的时候重新加载权限数据
+                            dataStore.load();
                         }
                     }
-                }),{
+                }), {
                     text: "添加",
-                    disabled:true,
+                    disabled: true,
                     icon: "js/extjs/resources/icons/add.png",
                     handler: function () {
                         addPicTurn();
@@ -210,17 +213,17 @@ var addDataWindow = new Ext.Window({
                     xtype: "combobox",
                     fieldLabel: "分类",
                     name: "catid",
-                    store:dataCatStore,
+                    store: dataCatStore,
                     queryMode: 'local',
-                    displayField:"cname",
-                    valueField:"id",
-                    allowBlank:false,
+                    displayField: "cname",
+                    valueField: "id",
+                    allowBlank: false,
                     editable: false,
-                    emptyText:"--请选择--"
+                    emptyText: "--请选择--"
                 },
                     Ext.create("Ext.moux.MoUploader", {
                         name: "img",
-                        fieldLabel:"图片(320*180)"
+                        fieldLabel: "图片(320*180)"
                     }), {
                         xtype: "numberfield",
                         fieldLabel: "序号",
@@ -231,16 +234,16 @@ var addDataWindow = new Ext.Window({
                         xtype: "checkboxfield",
                         uncheckedValue: 0,
                         inputValue: 1,
-                        value:1,
+                        value: 1,
                         name: "state"
                     }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
                         var params = _this.getValues();
-                        params.apiname=API_NAME;
-                        params.apitype=API_TYPE;
-                        params.apikey='gid';
-                        params.apivalue=Ext.getCmp("gameCombo").getValue();
+                        params.apiname = API_NAME;
+                        params.apitype = API_TYPE;
+                        params.apikey = 'gid';
+                        params.apivalue = Ext.getCmp("gameCombo").getValue();
                         convertParams(params, ["img"]);
                         Ext.data.JsonP.request({
                             params: params, // values from form fields..
@@ -271,7 +274,7 @@ var addDataWindow = new Ext.Window({
                     id: "addSubmitBtn",
                     handler: function (v) {
                         var form = v.up("form").getForm();
-                        if(form.isValid()){
+                        if (form.isValid()) {
                             v.disable();
                             form.submit();
                         }
