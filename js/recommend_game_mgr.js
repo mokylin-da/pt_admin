@@ -101,7 +101,7 @@ var dataCatStore = Ext.create('Ext.data.Store', {
                             },
                             {
                                 text: "分类",
-                                width: 200,
+                                width: 100,
                                 dataIndex: "catid",
                                 renderer: function (v) {
                                     var record = dataCatStore.findRecord("id", v);
@@ -109,6 +109,10 @@ var dataCatStore = Ext.create('Ext.data.Store', {
                                 }
                             },
                             {
+                                text: "游戏名称",
+                                width: 100,
+                                dataIndex: "gname"
+                            },{
                                 text: "序号",
                                 width: 60,
                                 dataIndex: "sequence"
