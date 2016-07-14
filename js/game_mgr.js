@@ -294,13 +294,6 @@ var addDataWindow = new Ext.Window({
                     layout: {
                         type: 'vbox',
                         align: 'left'
-                    },
-                    listeners: {
-                        validitychange: function (_this, valid, eOpts) {
-                            if (!valid) {
-                                GlobalUtil.tipMsg("警告","必须选择一个分类");
-                            }
-                        }
                     }
                 }, {
                     id: "gidField",
@@ -410,7 +403,10 @@ var addDataWindow = new Ext.Window({
 
                         var params = _this.getValues();
                         params.state = params.display | params.newServer | params.noticeSetting;
-
+                        if(!Ext.getCmp("catCheckBoxGroup").validate()){
+                            GlobalUtil.tipMsg("警告","必须选择一个分类");
+                            return false;
+                        }
                         Ext.data.JsonP.request({
                             params: params, // values from form fields..
                             url: Ext.getCmp("dataForm").url,
