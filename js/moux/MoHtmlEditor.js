@@ -12,7 +12,7 @@ Ext.define('Ext.moux.MoHtmlEditor', {
         me.toolbar.insert(17, {
             xtype: 'button',
             icon: '/js/extjs/resources/icons/picture.png',
-            text: 'image',
+            text: '图片',
             handler: this.showImgUploader,
             scope: this
         });
