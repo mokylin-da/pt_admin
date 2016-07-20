@@ -387,10 +387,19 @@ var addDataWindow = new Ext.Window({
                     }],
                     fieldLabel: "开服预告设置",
                     name: "noticeSetting"
+                }, Ext.create("Ext.moux.MoUploader", {
+                    fieldLabel: '游戏LOGO(320x180)',
+                    name: "picture",
+                    allowBlank: false
+                }), {
+                    id: "recharge_platField",
+                    xtype: "hiddenfield",
+                    name: "recharge_plat",//无效值，兼容？
+                    value: "0"
                 },
                     Ext.create("Ext.moux.MoUploader", {
-                        fieldLabel: '游戏图片',
-                        name: "picture",
+                        fieldLabel: '游戏图标(80x80)',
+                        name: "pictureicon",
                         allowBlank: false
                     }), {
                         id: "recharge_platField",
