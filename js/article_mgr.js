@@ -33,7 +33,7 @@ var articleStore = Ext.create(
     "Ext.data.Store",
     {
         autoLoad: false,
-        fields: ["aid", "title", "author", "state", "cDate", "uDate", "gid"],
+        fields: ["aid", "title", "author", "state", "cDate", "uDate", "gid","sequence"],
         pageSize: 20,
         proxy: {
             type: "jsonp",
@@ -84,6 +84,11 @@ Ext.onReady(function () {
                     text: "标题",
                     width: 200,
                     dataIndex: "title"
+                },
+                {
+                    text: "序号",
+                    width: 50,
+                    dataIndex: "sequence"
                 },
                 {
                     text: "作者",
@@ -427,6 +432,12 @@ var addDataWindow = new Ext.Window({
                             //{boxLabel: '等待发布', name: 'state', inputValue: 1},
                             {boxLabel: '发布', name: 'state', inputValue: 2}
                         ]
+                    }, {
+                        id: "sequenceField",
+                        xtype: "textfield",
+                        fieldLabel: "序号",
+                        name: "sequence",
+                        allowBlank: false
                     }, {
                         id: "typeField",
                         fieldLabel: "内/外部新闻",
