@@ -86,7 +86,7 @@ Ext.onReady(function () {
                     dataIndex: "title"
                 },
                 {
-                    text: "序号",
+                    text: "权重",
                     width: 50,
                     dataIndex: "sequence"
                 },
@@ -435,7 +435,7 @@ var addDataWindow = new Ext.Window({
                     }, {
                         id: "sequenceField",
                         xtype: "textfield",
-                        fieldLabel: "序号",
+                        fieldLabel: "权重",
                         name: "sequence",
                         allowBlank: false
                     }, {
