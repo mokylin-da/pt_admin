@@ -67,7 +67,7 @@ var allMenuTree = {
     },{
         text:"订单管理",
         leaf:true,
-        url:"order_auth.html",
+        url:"order_mgr.html",
         permission:"menu_order"
     }]
 };
