@@ -17,7 +17,7 @@ var orderStore = Ext
         "Ext.data.Store",
         {
             autoLoad: true,
-            fields: ["vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vPlatformAccount','vPlatformOrderNo','istatus'],
+            fields: ["vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vplatformAccount','vplatformOrderNo','istatus'],
             proxy: {
                 type: "jsonp",
                 url: URLS.PAY.PAGE_ORDER,
@@ -35,7 +35,7 @@ Ext.onReady(function () {
         {
             multiSelect: true,// 支持多选
             selType: 'rowmodel',// 设置为单元格选择模式Ext.selection.RowModel
-            id: "authGridId",
+            id: "orderGridId",
             store: orderStore,
             viewConfig:{
                 stripeRows:true,//在表格中显示斑马线
@@ -46,6 +46,11 @@ Ext.onReady(function () {
             },
             columns: [
                 Ext.create("Ext.grid.RowNumberer"),
+                {
+                    text: "ID",
+                    width: 200,
+                    dataIndex: "id"
+                },
                 {
                     text: "订单号",
                     width: 200,
