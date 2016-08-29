@@ -49,31 +49,47 @@ Ext.onReady(function () {
                 {
                     text: "订单号",
                     width: 200,
-                    dataIndex: "vOrderNo"
+                    dataIndex: "vorderNo"
                 },
                 {
                     text: "用户id",
                     width: 150,
-                    dataIndex: "vUserId"
+                    dataIndex: "vuserId"
                 },
                 {
                     text: "角色id",
                     width: 150,
-                    dataIndex: "iPlayerId"
+                    dataIndex: "iplayerId"
                 },
                 {
-                    text: "iRmb",
+                    text: "人民币",
                     width: 150,
-                    dataIndex: "人民币"
+                    dataIndex: "irmb"
                 },
                 {
                     text: "游戏id",
                     width: 150,
-                    dataIndex: "iGameId"
+                    dataIndex: "igameId"
                 },{
                     text: "区服id",
                     width: 150,
-                    dataIndex: "iWorldId"
+                    dataIndex: "iworldId"
+                },
+                ,{
+                    text: "状态",
+                    width: 150,
+                    dataIndex: "istatus",
+                    renderer:function(v){
+                        switch (v) {
+                            case 0:
+                                return "用户未支付";
+                            case 1:
+                                return "平台已收款";
+                            case 3:
+                                return "游戏已到账";
+                        }
+                        return "未知"
+                    }
                 },
                 {
                     header: "操作",
