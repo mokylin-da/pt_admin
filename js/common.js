@@ -50,7 +50,9 @@ URLS.MISC = {
     COMMON_CONFIG_CAT_UPDATE: URLS.MISC_BASE + "/misc/commonconfigcat/update",//通用配置列表（轮播图等）
     COMMON_CONFIG_CAT_ADD: URLS.MISC_BASE + "/misc/commonconfigcat/add"//通用配置列表（轮播图等）
 };
-
+URLS.PAY={
+    PAGE_ORDER:URLS.PAY_BASE+"/recharge/pageorder"//订单列表
+};
 SUPER_ADMIN_UID = "ef8af187-d37b-4ad2-96d0-6a88a9c8fa46";
 
 var COMMON_CONFIG = {

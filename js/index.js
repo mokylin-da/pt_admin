@@ -64,6 +64,11 @@ var allMenuTree = {
         url: "user_auth.html",
         tabId: "32",
         permission: "menu_auth"
+    },{
+        text:"订单管理",
+        leaf:true,
+        url:"order_auth.html",
+        permission:"menu_order"
     }]
 };
 
