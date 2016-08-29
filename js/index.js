@@ -67,6 +67,7 @@ var allMenuTree = {
     },{
         text:"订单管理",
         leaf:true,
+        tabId: "33",
         url:"order_mgr.html",
         permission:"menu_order"
     }]
