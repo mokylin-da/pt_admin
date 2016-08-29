@@ -75,7 +75,7 @@ Ext.onReady(function () {
                     width: 150,
                     dataIndex: "iworldId"
                 },
-                ,{
+                {
                     text: "状态",
                     width: 150,
                     dataIndex: "istatus",
