@@ -16,6 +16,7 @@ var orderStore = Ext
     .create(
         "Ext.data.Store",
         {
+            autoLoad: true,
             fields: ["vOrderNo", "vUserId", "iPlayerId", 'iRmb','iGameId','iWorldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iPlatformType','vPlatformAccount','vPlatformOrderNo'],
             proxy: {
                 type: "jsonp",
