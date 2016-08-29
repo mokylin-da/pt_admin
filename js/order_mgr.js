@@ -24,7 +24,7 @@ var orderStore = Ext
                 callbackKey: "function",
                 reader: {
                     type: 'json',
-                    root: 'data'
+                    root: 'data.data'
                 }
             }
         });
