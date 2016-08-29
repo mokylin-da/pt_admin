@@ -17,7 +17,7 @@ var orderStore = Ext
         "Ext.data.Store",
         {
             autoLoad: true,
-            fields: ["vOrderNo", "vUserId", "iPlayerId", 'iRmb','iGameId','iWorldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iPlatformType','vPlatformAccount','vPlatformOrderNo'],
+            fields: ["vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vPlatformAccount','vPlatformOrderNo','istatus'],
             proxy: {
                 type: "jsonp",
                 url: URLS.PAY.PAGE_ORDER,
@@ -74,6 +74,10 @@ Ext.onReady(function () {
                     text: "区服id",
                     width: 150,
                     dataIndex: "iworldId"
+                },{
+                    text: "支付平台",
+                    width: 150,
+                    dataIndex: "iplatformType"
                 },
                 {
                     text: "状态",
