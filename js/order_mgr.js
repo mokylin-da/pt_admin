@@ -18,13 +18,19 @@ var orderStore = Ext
         {
             autoLoad: true,
             fields: ["id","vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vplatformAccount','vplatformOrderNo','istatus'],
+            pageSize:20,
+
             proxy: {
                 type: "jsonp",
                 url: URLS.PAY.PAGE_ORDER,
                 callbackKey: "function",
+                pageParam: "pagenum",
+                limitParam: "pagesize",
                 reader: {
                     type: 'json',
-                    root: 'data.data'
+                    root: 'data.data',
+                    totalProperty: "data.total",
+                    successProperty: "status"
                 }
             }
         });
