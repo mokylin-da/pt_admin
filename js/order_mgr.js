@@ -135,7 +135,64 @@ Ext.onReady(function () {
                 store: orderStore,   // same store GridPanel is using
                 dock: 'bottom',
                 displayInfo: true
-            }]
+            },
+                {
+                    xtype: "toolbar",
+                    items: [
+                        {
+                            xtype: 'form',
+                            id: "dataForm",
+                            fieldDefaults: {
+                                labelAlign: 'left',
+                                labelWidth: 100,
+                                anchor: '150%'
+                            },
+                            frame: false,
+                            border: false,
+                            bodyStyle: 'padding:10 10',
+                            layout: 'hbox',
+                            items: [
+                                {
+                                    id: "istatusField",
+                                    xtype: 'textfield',
+                                    fieldLabel: 'istatus',
+                                    name: 'istatus',
+                                    inputAttrTpl: [
+                                        "autocomplete=\"on\""
+                                    ],
+                                    emptyText: "请选择状态"
+                                }
+                            ],
+                            dockedItems: [{
+                                xtype: 'toolbar',
+                                dock: 'right',
+                                layout: 'hbox',
+                                border: false,
+                                items: [{
+                                    text: "搜索",
+                                    icon: "js/extjs/resources/icons/search.png",
+                                    formBind: true,
+                                    handler: function (v) {
+                                        v.up("form").submit({
+                                            submitEmptyText:false
+                                        });
+                                    }
+                                }, {
+                                    text: '重置',
+                                    handler: function (v) {
+                                        v.up("form").getForm().reset()
+                                    }
+                                }]
+                            }],
+                            listeners: {
+                                beforeaction: function (form, action, options) {
+                                    orderStore.getProxy().extraParams = action.getParams();
+                                    orderStore.reload();
+                                    return false;
+                                }
+                            }
+                        }]
+                }]
 
         });
 
