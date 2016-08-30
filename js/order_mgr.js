@@ -10,6 +10,16 @@ Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel','Ext.ux.f
 
 Ext.QuickTips.init();
 
+// The data store containing the list of states
+var istatusStore = Ext.create('Ext.data.Store', {
+    fields: ['ename', 'cname'],
+    data : [
+        {"ename":"INIT", "cname":"用户未支付"},
+        {"ename":"OUTER_RECHARGED", "cname":"平台已收款"},
+        {"ename":"END", "cname":"游戏已到账"}
+        //...
+    ]
+});
 
 // 订单存储模块
 var orderStore = Ext
@@ -157,13 +167,9 @@ Ext.onReady(function () {
                                     xtype: 'combobox',
                                     fieldLabel: 'istatus',
                                     name: 'istatus',
-                                    valueField:"abbr",
-                                    displayField:"name",
-                                    store:[
-                                        {"abbr":"AL", "name":"Alabama"},
-                                        {"abbr":"AK", "name":"Alaska"},
-                                        {"abbr":"AZ", "name":"Arizona"}
-                                    ],
+                                    valueField:"ename",
+                                    displayField:"cname",
+                                    store:istatusStore,
                                     emptyText: "请选择状态"
                                 }
                             ],
