@@ -477,14 +477,14 @@ var addDataWindow = new Ext.Window({
                         fieldLabel: "内容",
                         name: "content",
                         url: URLS.MISC.FILE_UPLOAD,
-                        maxLength: 65535,
+                        maxLength: 3294967295,
                         //width:,
                         height: 300,
                         allowBlank: false,
                         listeners: {
                             change: function (editor, newValue, oldValue) {
                                 if (newValue && (newValue.length > editor.maxLength)) {
-                                    Ext.MessageBox.alert("提示", "内容长度超过65535", function () {
+                                    Ext.MessageBox.alert("提示", "内容长度超过3294967295", function () {
                                         Ext.getCmp("addSubmitBtn").enable();
                                     });
                                     editor.setValue("");
