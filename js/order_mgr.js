@@ -154,11 +154,15 @@ Ext.onReady(function () {
                             items: [
                                 {
                                     id: "istatusField",
-                                    xtype: 'textfield',
+                                    xtype: 'combobox',
                                     fieldLabel: 'istatus',
                                     name: 'istatus',
-                                    inputAttrTpl: [
-                                        "autocomplete=\"on\""
+                                    valueField:"abbr",
+                                    displayField:"name",
+                                    store:[
+                                        {"abbr":"AL", "name":"Alabama"},
+                                        {"abbr":"AK", "name":"Alaska"},
+                                        {"abbr":"AZ", "name":"Arizona"}
                                     ],
                                     emptyText: "请选择状态"
                                 }
