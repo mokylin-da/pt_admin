@@ -93,7 +93,7 @@ Ext.onReady(function () {
                 {
                     text: "状态",
                     width: 150,
-                    dataIndex: "istatus",
+                    dataIndex: "istatusVal",
                     renderer:function(v){
                         switch (v) {
                             case 0:
