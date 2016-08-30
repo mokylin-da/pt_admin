@@ -19,7 +19,6 @@ var orderStore = Ext
             autoLoad: true,
             fields: ["id","vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vplatformAccount','vplatformOrderNo','istatus'],
             pageSize:20,
-
             proxy: {
                 type: "jsonp",
                 url: URLS.PAY.PAGE_ORDER,
@@ -32,6 +31,16 @@ var orderStore = Ext
                     totalProperty: "data.total",
                     successProperty: "status"
                 }
+            },
+            listeners: {
+                prefetch: function (this_, operation, eOpts) {
+                    alert(operation);
+                },
+                load: function (_this, records, successful, eOpts) {
+                    var status = _this.proxy.reader.jsonData.status;
+                    GlobalUtil.status(status);
+                }
+
             }
         });
 
@@ -119,7 +128,14 @@ Ext.onReady(function () {
                     }
                 }
 
-            ]
+            ],
+            dockedItems: [{
+                id: "pagingToolbarID",
+                xtype: 'pagingtoolbar',
+                store: orderStore,   // same store GridPanel is using
+                dock: 'bottom',
+                displayInfo: true
+            }]
 
         });
 
