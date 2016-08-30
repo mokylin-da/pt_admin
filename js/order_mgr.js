@@ -165,12 +165,12 @@ Ext.onReady(function () {
                                 {
                                     id: "istatusField",
                                     xtype: 'combobox',
-                                    fieldLabel: 'istatus',
+                                    fieldLabel: '支付状态',
                                     name: 'istatus',
                                     valueField:"ename",
                                     displayField:"cname",
                                     store:istatusStore,
-                                    emptyText: "请选择状态"
+                                    emptyText: "请选择支付状态"
                                 }
                             ],
                             dockedItems: [{
