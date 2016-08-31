@@ -213,6 +213,60 @@ GlobalUtil = {
                 });
                 break;
             }
+
+            case 107:
+            {
+                Ext.MessageBox.alert("提示", "重复添加", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 20001:
+            {
+                return true;
+            }
+            case 20000:
+            {
+                Ext.MessageBox.alert("提示", "执行失败", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 20002:
+            {
+                Ext.MessageBox.alert("提示", "系统异常", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 20003:
+            {
+                Ext.MessageBox.alert("提示", "数量不够", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 20004:
+            {
+                Ext.MessageBox.alert("提示", "校验错误", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 20005:
+            {
+                Ext.MessageBox.alert("提示", "没有权限", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 20006:
+            {
+                Ext.MessageBox.alert("提示", "未登录", function () {
+                    callback && callback();
+                });
+                break;
+            }
             default:
             {
                 Ext.MessageBox.alert("提示", "未知错误", function () {
