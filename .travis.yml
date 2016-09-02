@@ -25,7 +25,7 @@ install:
 - sed -i "s/{{mokylin_ptadmin_version}}/$TRAVIS_BUILD_NUMBER/g" $TRAVIS_BUILD_DIR/_config.yml
 - echo $TRAVIS_BRANCH
 - echo $TRAVIS_BRANCH = $PROD_BRANCH_13YX
-- if [ $TRAVIS_BRANCH = $DEV_BRANCH ]; then ehco 1;cp -rf $TRAVIS_BUILD_DIR/docs/config_dev.js $TRAVIS_BUILD_DIR/js/config.js; elif [ $TRAVIS_BRANCH = $PROD_BRANCH_MLYX ]; then ehco 2;cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_mlyx.js $TRAVIS_BUILD_DIR/js/config.js;elif [ $TRAVIS_BRANCH = $PROD_BRANCH_13YX ]; then ehco 3; cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_13yx.js $TRAVIS_BUILD_DIR/js/config.js; fi;
+- if [ $TRAVIS_BRANCH = $DEV_BRANCH ]; then echo 1;cp -rf $TRAVIS_BUILD_DIR/docs/config_dev.js $TRAVIS_BUILD_DIR/js/config.js; elif [ $TRAVIS_BRANCH = $PROD_BRANCH_MLYX ]; then echo 2;cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_mlyx.js $TRAVIS_BUILD_DIR/js/config.js;elif [ $TRAVIS_BRANCH = $PROD_BRANCH_13YX ]; then echo 3; cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_13yx.js $TRAVIS_BUILD_DIR/js/config.js; fi;
 - cat $TRAVIS_BUILD_DIR/js/config.js
 - jekyll build
 - chmod +x $HOME/.download/qshell
