@@ -24,6 +24,7 @@ install:
 - wget -O $HOME/.download/qshell https://raw.githubusercontent.com/289048093/mvn/master/qiniu/qshell_linux_amd64
 - sed -i "s/{{mokylin_ptadmin_version}}/$TRAVIS_BUILD_NUMBER/g" $TRAVIS_BUILD_DIR/_config.yml
 - echo $TRAVIS_BRANCH
+- echo $TRAVIS_BRANCH = $PROD_BRANCH_13YX
 - if [ $TRAVIS_BRANCH = $DEV_BRANCH ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_dev.js $TRAVIS_BUILD_DIR/js/config.js; elif [ $TRAVIS_BRANCH = $PROD_BRANCH_MLYX ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_mlyx.js $TRAVIS_BUILD_DIR/js/config.js;elif [ $TRAVIS_BRANCH = $PROD_BRANCH_13YX ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_13yx.js $TRAVIS_BUILD_DIR/js/config.js; fi;
 - cat $TRAVIS_BUILD_DIR/js/config.js
 - jekyll build
