@@ -12,8 +12,8 @@ cache:
 env:
   global:
   - DEV_BRANCH=ptadmin-dev-mlplat-com
-
-  - PROD_BRANCH=ptadmin-mlplat-com
+  - PROD_BRANCH_MLYX=ptadmin-mlplat-com
+  - PROD_BRANCH_13YX==ptadmin-13yxplat-com
 
   - secure: w/R83DwWB1K67RMd2jYGxtcWCP/nNd7fNCWeZUz/UTpUh86TcLHmeM7QewXj1LXQdrZfSKn7smGbawp1Ygj/kkSCXHglkEzxKcplCMOLwfe9uho+T9birY8FvO9WohZLfQRPbPvizOUX2ye/2QF/uRsWKJRblUR3F0zkKwgoBWDT3M/bsS6JVUNcg3Twjjo7s8gAVQVFAlUxP2vydsm4SgR+IV6xKXL3rVcbxRuRBZwDVagrEwcZCUHziH93TAkl/sOIOpfknPbFLW6PMJu3mMI0xHuZCVBFml7qc6YJZP+hqWbr5bWO3icZVZSOHHoiesX7zr27UoUENy3UIECl0Lo5a+ZSinsprn5hWe/PurllzGR1R9q+p6tO00igj/IFBDlMzKsVmyyxofixAu6ZwoicJ03W1gUaXpakerPTImB3KVdgBzP4UQR6Aglt2Z7HeGTvuO2N0EOsWNJ1McvugWf2d1mCe/SVKqV+MUf4GXeSAy+xfUvKc5X69A77Go8/Xl59VBYMvW7LqiA0tr8NCh2S3RlQc2PMmnqSFsHKJUoPDfJ1m8rp1hFlTcQKEmR/muiXiC4MblCQlGhu03w2YrpE4am9W+kUe40IsfoFF744ErTCZIi6mR6Ms8mirBv/9ZSAjN44We+C5EM6PWW7nrFAI0mJw2ikbVB+jtNu3v4=
   - secure: iwYHoD71/YcuEp2vUaQ1sREx/kLHW+KaA4k4AOIhMuMJSp4fc79kMCKKY2SYNvtaG7RxBCAcbB5a2B32iiTP7Lw9sOmAWasPK4hrx75u5VTvlvpJ2AYkK/k8CHbXapW2hm5/bAdeDEdTYQzDBBUgB0VBRRafgGZQcFGI8slaKZEGrj7AInAiOG7T+Nw37hQtAkwZNcdAjfF9ieVZbgE+0BkkcJAaxizB53Er0T36KE44sCAw7qjOJtcuyuG+xftwUSEbvAvHLPuvcsdeo0BQ84gFBPSB08HNpqCbOprIW6w0J5sNKJ+IMlLn3NToHgPgh522VrkHgzeFlNwCpOYqChmOpECJ4LOQRXsZk9EsazcxGZD8+X4jTWFDKWhdfhs/9lfOkz9x9yLq6ciESE5c3HYy4yZbp1zxAJREJFWbqwFn6N/g2l5KbkF3MGy+ecXIskN83VVyjlE+Tvb2wyuwtNRSBfXqw0tiWZc/qcWeibFQVGR4r7RPIZ1ZVlGH5amXjXm2z2AtO0pTrXdRxOTO096Z99P9DYlpOkhyiXouNTTZA6qQprXpnCfHdaKsgKbXMJ8lWzUzCco7Cxt0HdINpVGXkC3nnTurEfCdaFeJx0pJCx/8hgc5IraJCE2xOCXsTDUZz/xJpJ8/Df+dwx3xFCAfUORpk7IN6yiy5R9hV48=
@@ -23,7 +23,7 @@ install:
 - if [ ! -e $HOME/.download ];then mkdir $HOME/.download;fi;
 - wget -O $HOME/.download/qshell https://raw.githubusercontent.com/289048093/mvn/master/qiniu/qshell_linux_amd64
 - sed -i "s/{{mokylin_ptadmin_version}}/$TRAVIS_BUILD_NUMBER/g" $TRAVIS_BUILD_DIR/_config.yml
-- if [ $TRAVIS_BRANCH = $DEV_BRANCH ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_dev.js $TRAVIS_BUILD_DIR/js/config.js; elif [ $TRAVIS_BRANCH = $PROD_BRANCH ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_prod.js $TRAVIS_BUILD_DIR/js/config.js; fi;
+- if [ $TRAVIS_BRANCH = $DEV_BRANCH ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_dev.js $TRAVIS_BUILD_DIR/js/config.js; elif [ $TRAVIS_BRANCH = $PROD_BRANCH_MLYX ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_mlyx.js $TRAVIS_BUILD_DIR/js/config.js;elif [ $TRAVIS_BRANCH = $PROD_BRANCH_13YX ]; then cp -rf $TRAVIS_BUILD_DIR/docs/config_prod_13yx.js $TRAVIS_BUILD_DIR/js/config.js; fi;
 - jekyll build
 - chmod +x $HOME/.download/qshell
 - $HOME/.download/qshell account $QINIU_KEY $QINIU_SECRET
