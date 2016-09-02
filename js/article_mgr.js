@@ -511,8 +511,8 @@ var addDataWindow = new Ext.Window({
                         Ext.getCmp("gidField").setValue(Ext.getCmp("gameCombo").getValue());
                         Ext.getCmp("catenameField").setValue(addDataWindow.ename);
                         var values = _this.getValues();
-                        if (values.content && (values.content.length > 65535)) {
-                            Ext.MessageBox.alert("提示", "内容长度超过65535", function () {
+                        if (values.content && (values.content.length > 1294967295)) {
+                            Ext.MessageBox.alert("提示", "内容长度超过1294967295", function () {
                                 Ext.getCmp("addSubmitBtn").enable();
                             });
                             return;
