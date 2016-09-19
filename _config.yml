@@ -11,8 +11,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 #url: "" # the base hostname & protocol for your site
 # Build settings
 #extjs库文件不上传到七牛，节省时间
-exclude: ["js/extjs","docs"]
-keep_files: ["_site/js/extjs"]
+#exclude: ["js/extjs","docs"]
+#keep_files: ["_site/js/extjs"]
 encoding: utf-8
 markdown: kramdown
 version: "{{mokylin_ptadmin_version}}"

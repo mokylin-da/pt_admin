@@ -48,7 +48,12 @@ URLS.MISC = {
     COMMON_CONFIG_CAT_LIST: URLS.MISC_BASE + "/misc/commonconfigcat/list",//通用配置列表（轮播图等）
     COMMON_CONFIG_CAT_DELETE: URLS.MISC_BASE + "/misc/commonconfigcat/delete",//通用配置列表（轮播图等）
     COMMON_CONFIG_CAT_UPDATE: URLS.MISC_BASE + "/misc/commonconfigcat/update",//通用配置列表（轮播图等）
-    COMMON_CONFIG_CAT_ADD: URLS.MISC_BASE + "/misc/commonconfigcat/add"//通用配置列表（轮播图等）
+    COMMON_CONFIG_CAT_ADD: URLS.MISC_BASE + "/misc/commonconfigcat/add",//通用配置列表（轮播图等）
+    ActivationCodeCat_LIST: URLS.MISC_BASE + "/misc/activationcodecat/list",
+    ActivationCodeCat_Add: URLS.MISC_BASE + "/misc/activationcodecat/add",
+    ActivationCodeCat_Delete: URLS.MISC_BASE + "/misc/activationcodecat/delete",
+    ActivationCodeCat_Update: URLS.MISC_BASE + "/misc/activationcodecat/update",
+    ActivationCode_List: URLS.MISC_BASE + "/misc/activationcode/list"
 };
 URLS.PAY={
     PAGE_ORDER:URLS.PAY_BASE+"/recharge/pageorder"//订单列表

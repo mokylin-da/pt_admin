@@ -201,7 +201,7 @@ var addDataWindow = new Ext.Window({
                     value: PLATFORM_IDENTIFIER
                 }, Ext.create("Ext.moux.GameCombo",{
                     name: "apivalue",
-                    allowBlank:false,
+                    allowBlank:false
                 }), {
                     xtype: "combobox",
                     fieldLabel: "分类",
@@ -216,7 +216,7 @@ var addDataWindow = new Ext.Window({
                 },
                     Ext.create("Ext.moux.MoUploader", {
                         name: "img",
-                        fieldLabel: "图片(320*180)"
+                        fieldLabel: "图片(296*160)"
                     }), {
                         xtype: "numberfield",
                         fieldLabel: "序号",

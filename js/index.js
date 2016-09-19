@@ -51,6 +51,12 @@ var allMenuTree = {
         url: "game_mgr.html",
         tabId: "22",
         permission: "menu_game"
+    }, {
+        text: "礼包分类",
+        leaf: true,
+        url: "activation_code_cat.html",
+        tabId: "23",
+        permission: "activation_code_cat"
     }],
     user:[{
         text: "权限管理",
