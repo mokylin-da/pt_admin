@@ -20,7 +20,7 @@ var codeCatStore = Ext
             fields: ["id","ename", "cname"],
             proxy: {
                 type: "jsonp",
-                url: URLS.MISC.ActivationCodeCat_LIST,
+                url: URLS.GAME_INFO.ActivationCodeCat_LIST,
                 callbackKey: "function",
                 reader: {
                     type: 'json',
@@ -108,7 +108,7 @@ Ext.onReady(function () {
     function addCodeCat() {
         addDataWindow.setTitle("添加礼包分类");
         Ext.getCmp("dataForm").getForm().reset();
-        Ext.getCmp("dataForm").url = URLS.MISC.ActivationCodeCat_Add;
+        Ext.getCmp("dataForm").url = URLS.GAME_INFO.ActivationCodeCat_Add;
         Ext.getCmp("dataForm").operate = "添加";
         addDataWindow.show();
     }
@@ -116,7 +116,7 @@ Ext.onReady(function () {
         addDataWindow.setTitle("修改礼包分类");
         Ext.getCmp("dataForm").operate = "修改";
         Ext.getCmp("dataForm").getForm().reset();
-        Ext.getCmp("dataForm").url = URLS.MISC.ActivationCodeCat_Update;
+        Ext.getCmp("dataForm").url = URLS.GAME_INFO.ActivationCodeCat_Update;
         Ext.getCmp("dataForm").getForm().setValues(data);
         addDataWindow.show();
     }
@@ -124,7 +124,7 @@ function deleteCodeCat(id) {
     Ext.MessageBox.confirm("删除确认", "是否要删除分类：", function (res) {
         if (res == "yes") {
             Ext.data.JsonP.request({
-                url: URLS.MISC.ActivationCodeCat_Delete,
+                url: URLS.GAME_INFO.ActivationCodeCat_Delete,
                 params: {
                     id: id,
                     gid: PLATFORM_IDENTIFIER
@@ -188,10 +188,10 @@ function deleteCodeCat(id) {
                         }],
                     listeners: {
                         beforeaction: function (_this, action, eOpts) {
-                            Ext.Ajax.request({
+                            Ext.data.JsonP.request({
                                 params: _this.getValues(), // values from form fields..
                                 url: Ext.getCmp("dataForm").url,
-                                //callbackKey: 'function',
+                                callbackKey: 'function',
                                 scope: 'this',
                                 success: function (res) {
                                     console.log(res);
