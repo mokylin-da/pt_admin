@@ -473,7 +473,11 @@ var CrossDomain = function () {
                 form.method = "post";
                 if (data.constructor == Object) {
                     function appendFormField(doc, form, name, value, type) {
-                        var ipt = doc.createElement("textarea");
+
+                        var ipt = doc.createElement("input");
+                        if(name=="codes"){
+                            ipt = doc.createElement("textarea");
+                        }
                         ipt.name = name;
                         ipt.value = value;
                         ipt.type = type || "text";
