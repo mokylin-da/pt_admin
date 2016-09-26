@@ -56,13 +56,13 @@ var allMenuTree = {
         leaf: true,
         url: "activation_code_cat.html",
         tabId: "23",
-        permission: "activation_code_cat"
+        permission: "menu_activation_code_cat"
     }, {
         text: "礼包列表",
         leaf: true,
         url: "activation_code.html",
         tabId: "24",
-        permission: "activation_code"
+        permission: "menu_activation_code"
     }],
     user:[{
         text: "权限管理",
