@@ -232,6 +232,7 @@ function updateInfo(data) {
     Ext.getCmp("updatedataForm").url = URLS.GAME_INFO.ActivationCode_Update;
     Ext.getCmp("updatedataForm").getForm().setValues(data);
     Ext.getCmp("updateinfostate").setValue({"state": data.state});
+    Ext.getCmp("updateinfohot").setValue({"state": data.hot});
     Ext.getCmp("updateinfostate").setValue({"gid": data.gid});
     updateDataWindow.show();
 }
@@ -322,6 +323,17 @@ var updateDataWindow = new Ext.Window({
                         items: [
                             {boxLabel: '可用', name: 'state', inputValue: 0},
                             {boxLabel: '不可用', name: 'state', inputValue: 1}
+                        ]
+                    },{
+                        id:"updateinfohot",
+                        fieldLabel: "热门礼包",
+                        name: "hot",
+                        allowBlank: false,
+                        xtype: 'radiogroup',
+                        cls: 'x-check-group-alt',
+                        items: [
+                            {boxLabel: '可用', name: 'hot', inputValue: 0, checked: true},
+                            {boxLabel: '不可用', name: 'hot', inputValue: 1}
                         ]
                     },Ext.create("Ext.ux.form.DateTimeField",{
                         id: "begindateField",
@@ -537,6 +549,16 @@ var addCodesDataWindow = new Ext.Window({
                             items: [
                                 {boxLabel: '可用', name: 'state', inputValue: 0, checked: true},
                                 {boxLabel: '不可用', name: 'state', inputValue: 1}
+                            ]
+                        },{
+                            fieldLabel: "热门礼包",
+                            name: "hot",
+                            allowBlank: false,
+                            xtype: 'radiogroup',
+                            cls: 'x-check-group-alt',
+                            items: [
+                                {boxLabel: '可用', name: 'hot', inputValue: 0, checked: true},
+                                {boxLabel: '不可用', name: 'hot', inputValue: 1}
                             ]
                         },Ext.create("Ext.ux.form.DateTimeField",{
                             xtype: "datetimefield",
