@@ -52,7 +52,7 @@ var codeStore = Ext
     .create(
         "Ext.data.Store",
         {
-            fields: ["id","catid", "getmethod", "gift", "state", "begindate","name","limitnum","remaining","begindateStr","picture","gid"],
+            fields: ["id","catid", "getmethod", "gift", "state", "begindate","name","limitnum","remaining","begindateStr","picture","gid","hot"],
             proxy: {
                 type: "jsonp",
                 url: URLS.GAME_INFO.ActivationCode_Page4admin,
@@ -161,7 +161,7 @@ Ext.onReady(function () {
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:addCodes({id:\'{id}\'});"><img src="js/extjs/resources/icons/add.png"  title="补充激活码" alt="补充激活码" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:clearCodes(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="清空激活码" alt="清空激活码" class="actionColumnImg" />&nbsp;</a>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateInfo({id:\'{id}\',name:\'{name}\',limitnum:\'{limitnum}\',begindate:\'{begindateStr}\',state:\'{state}\',getmethod:\'{getmethod}\',gift:\'{gift}\',picture:\'{picture}\',gid:\'{gid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改信息" alt="修改信息" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateInfo({id:\'{id}\',hot:\'{hot}\',name:\'{name}\',limitnum:\'{limitnum}\',begindate:\'{begindateStr}\',state:\'{state}\',getmethod:\'{getmethod}\',gift:\'{gift}\',picture:\'{picture}\',gid:\'{gid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改信息" alt="修改信息" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -349,7 +349,7 @@ var updateDataWindow = new Ext.Window({
                         var values = _this.getValues();
                         var crossDomain = new CrossDomain();
                         crossDomain.init(Ext.getCmp("updatedataForm").url, values, function (v) {
-                            if (v == 30001) {
+                            if (v == 10001) {
                                 GlobalUtil.tipMsg("提示", Ext.getCmp("updatedataForm").operate + "成功");
                                 codeStore.reload();
                                 updateDataWindow.hide();
@@ -431,7 +431,7 @@ var addCodesDataWindow = new Ext.Window({
                         var values = _this.getValues();
                         var crossDomain = new CrossDomain();
                         crossDomain.init(Ext.getCmp("codesDataForm").url, values, function (v) {
-                            if (v == 30001) {
+                            if (v == 10001) {
                                 GlobalUtil.tipMsg("提示", Ext.getCmp("codesDataForm").operate + "成功");
                                 codeStore.reload();
                                 addCodesDataWindow.hide();
