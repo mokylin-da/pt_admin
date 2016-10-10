@@ -245,7 +245,7 @@ function updateInfo(data) {
     Ext.getCmp("updatedataForm").url = URLS.GAME_INFO.ActivationCode_Update;
     Ext.getCmp("updatedataForm").getForm().setValues(data);
     Ext.getCmp("updateinfostate").setValue({"state": data.state});
-    Ext.getCmp("updateinfohot").setValue({"state": data.hot});
+    Ext.getCmp("updateinfohot").setValue({"hot": data.hot});
     Ext.getCmp("updateinfostate").setValue({"gid": data.gid});
     updateDataWindow.show();
 }
