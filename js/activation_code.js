@@ -332,8 +332,8 @@ var updateDataWindow = new Ext.Window({
                         xtype: 'radiogroup',
                         cls: 'x-check-group-alt',
                         items: [
-                            {boxLabel: '可用', name: 'hot', inputValue: 0, checked: true},
-                            {boxLabel: '不可用', name: 'hot', inputValue: 1}
+                            {boxLabel: '否', name: 'hot', inputValue: 0, checked: true},
+                            {boxLabel: '是', name: 'hot', inputValue: 1}
                         ]
                     },Ext.create("Ext.ux.form.DateTimeField",{
                         id: "begindateField",
@@ -557,8 +557,8 @@ var addCodesDataWindow = new Ext.Window({
                             xtype: 'radiogroup',
                             cls: 'x-check-group-alt',
                             items: [
-                                {boxLabel: '可用', name: 'hot', inputValue: 0, checked: true},
-                                {boxLabel: '不可用', name: 'hot', inputValue: 1}
+                                {boxLabel: '否', name: 'hot', inputValue: 0, checked: true},
+                                {boxLabel: '是', name: 'hot', inputValue: 1}
                             ]
                         },Ext.create("Ext.ux.form.DateTimeField",{
                             xtype: "datetimefield",
