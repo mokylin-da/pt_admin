@@ -152,6 +152,19 @@ Ext.onReady(function () {
                         }
                         return "未知"
                     }
+                },{
+                    text: "热门礼包",
+                    width: 80,
+                    dataIndex: "hot",
+                    renderer: function (v) {
+                        switch (v) {
+                            case 0:
+                                return "非";
+                            case 1:
+                                return "是";
+                        }
+                        return "未知"
+                    }
                 },
                 {
                     header: "操作",
