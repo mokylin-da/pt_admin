@@ -15,7 +15,7 @@ Ext.QuickTips.init();
 
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
-    fields: ['gname', 'gid', 'gurl', 'gtag', 'picture', 'catids', 'sequence', 'state', 'recharge_plat', 'serverurl', 'cuser', 'opentime', 'addtime'],
+    fields: ['gname', 'gid', 'gurl', 'gtag', 'picture', 'catids', 'sequence', 'state', 'recharge_plat', 'serverurl', 'cuser', 'opentime', 'addtime','idcardVerify'],
     pageSize: 20,
     proxy: {
         type: "jsonp",
@@ -121,7 +121,16 @@ Ext.onReady(function () {
                         var val = 1;
                         return (v & val) == val ? '显示' : '不显示';
                     }
-                }, {
+                },
+                {
+                    text: "防沉迷",
+                    width: 100,
+                    dataIndex: "idcardVerify",
+                    renderer: function (v) {
+                        return v==1 ? '开启' : '关闭';
+                    }
+                }
+                , {
                     text: "最新开服设置",
                     width: 100,
                     dataIndex: "state",
@@ -391,7 +400,20 @@ var addDataWindow = new Ext.Window({
                     fieldLabel: '游戏LOGO(296*160)',
                     name: "picture",
                     allowBlank: false
-                }), {
+                }),
+                    {
+                        id:"idcardVerifyField",
+                        fieldLabel: "防沉迷",
+                        name: "idcardVerify",
+                        allowBlank: false,
+                        xtype: 'radiogroup',
+                        cls: 'x-check-group-alt',
+                        items: [
+                            {boxLabel: '关闭', name: 'idcardVerify', inputValue: 0, checked: true},
+                            {boxLabel: '开启', name: 'idcardVerify', inputValue: 1}
+                        ]
+                    }
+                    ,{
                     id: "recharge_platField",
                     xtype: "hiddenfield",
                     name: "recharge_plat",//无效值，兼容？
