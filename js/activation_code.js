@@ -112,10 +112,9 @@ Ext.onReady(function () {
                     width: 200,
                     dataIndex: "gid",
                     renderer:function(v){
-
                         for(var i=0;i<gameStore.getCount();i++){
                             var tmp=gameStore.getAt(i);
-                            if(tmp.raw.gid=v){
+                            if(tmp.raw.gid==v){
                                 return tmp.raw.gname;
                             }
                         }
