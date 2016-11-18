@@ -12,7 +12,10 @@ URLS.USER = {
     SET_USER_AUTH: URLS.USER_BASE + "/user/pms/adduserpms",//用户授权
     QUERY_USER: URLS.USER_BASE + "/user/pms/searchuserbynickname",//用户查询
     Game_Task_List: URLS.USER_BASE + "/user/task/gametasklist",
-    Game_Task_Add: URLS.USER_BASE + "/user/task/addgametask"
+    Game_InnerTask_List: URLS.USER_BASE + "/user/task/innertasklist",
+    Game_Task_Add: URLS.USER_BASE + "/user/task/addgametask",
+    Game_Task_Update: URLS.USER_BASE + "/user/task/updategametask",
+    Game_InnerTask_Update: URLS.USER_BASE + "/user/task/updateinnertask"
 };
 URLS.GAME_INFO = {
     GAME_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/listgamelist",

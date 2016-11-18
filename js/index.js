@@ -69,6 +69,12 @@ var allMenuTree = {
         url: "gametask.html",
         tabId: "25",
         permission: "menu_gametask"
+    }, {
+        text: "内置任务",
+        leaf: true,
+        url: "innertask.html",
+        tabId: "26",
+        permission: "menu_innertask"
     }],
     user:[{
         text: "权限管理",

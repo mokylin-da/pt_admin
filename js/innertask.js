@@ -9,10 +9,6 @@ Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel','Ext.ux.f
  */
 
 Ext.QuickTips.init();
-//var gameStore2 = Ext.create('Ext.data.Store', {
-//    fields: ['gname', 'gameid'],
-//    data:[]
-//});
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['gname', 'gid'],
@@ -25,23 +21,6 @@ var gameStore = Ext.create('Ext.data.Store', {
             root: 'data'
         }
     }
-    //,
-    //listeners:{
-    //    load:function(store,records ,successful ,eOpts ){
-    //        if(successful){
-    //            console.log(records);
-    //            var dataArr=[];
-    //            for(var i = 0,j=records.length;i<j;i++){
-    //                dataArr.push({
-    //                    gameid:records[i].data.gid,
-    //                    gname:records[i].data.gname
-    //                })
-    //            }
-    //            gameStore2.loadData(dataArr);
-    //        }
-    //
-    //    }
-    //}
 });
 
 
@@ -55,7 +34,7 @@ var gametaskStore = Ext
             fields: ["id","cname", "ename", "description", "summary", "link", "growth", "points", "type", "gid", "opentimelimit", "levellimit", "exenumlimit", "cat"],
             proxy: {
                 type: "jsonp",
-                url: URLS.USER.Game_Task_List,
+                url: URLS.USER.Game_InnerTask_List,
                 callbackKey: "function",
                 reader: {
                     type: 'json',
@@ -112,22 +91,11 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateGametask({id:\'{id}\',gid:parseInt(\'{gid}\'),ename:\'{ename}\',cname:\'{cname}\',description:\'{description}\',summary:\'{summary}\',link:\'{link}\',growth:\'{growth}\',link:\'{link}\',points:\'{points}\',type:\'{type}\',opentimelimit:\'{opentimelimit}\',levellimit:\'{levellimit}\',exenumlimit:\'{exenumlimit}\',cat:\'{cat}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteCodeCat(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateInnertask({id:\'{id}\',gid:parseInt(\'{gid}\'),ename:\'{ename}\',cname:\'{cname}\',description:\'{description}\',summary:\'{summary}\',link:\'{link}\',growth:\'{growth}\',link:\'{link}\',points:\'{points}\',type:\'{type}\',opentimelimit:\'{opentimelimit}\',levellimit:\'{levellimit}\',exenumlimit:\'{exenumlimit}\',cat:\'{cat}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
-            ],
-            dockedItems: [{
-                xtype: "toolbar",
-                items: [{
-                    text: "添加游戏任务",
-                    icon: "js/extjs/resources/icons/add.png",
-                    handler: function () {
-                        addGametask();
-                    }
-                }]
-            }]
+            ]
 
         });
 
@@ -140,21 +108,12 @@ Ext.onReady(function () {
          renderTo: Ext.getBody()
     });
 });
-    function addGametask() {
-        addDataWindow.setTitle("添加游戏任务");
-        Ext.getCmp("dataForm").getForm().reset();
-        Ext.getCmp("dataForm").url = URLS.GAME_INFO.ActivationCodeCat_Add;
-        Ext.getCmp("dataForm").operate = "添加";
-        addDataWindow.show();
-    }
-    function updateGametask(data) {
+    function updateInnertask(data) {
         addDataWindow.setTitle("修改游戏任务");
         Ext.getCmp("dataForm").operate = "修改";
         Ext.getCmp("dataForm").getForm().reset();
-        Ext.getCmp("dataForm").url = URLS.USER.Game_Task_Update;
+        Ext.getCmp("dataForm").url = URLS.USER.Game_InnerTask_Update;
         Ext.getCmp("dataForm").getForm().setValues(data);
-        //alert(data.gid);
-        //Ext.getCmp("gidF").setValue(data.gid);
         addDataWindow.show();
 
     }
@@ -212,23 +171,6 @@ Ext.onReady(function () {
                             xtype: "hiddenfield",
                             name: "id"
                         }, {
-                            //id:"gidF",
-                            xtype: "combobox",
-                            fieldLabel: "所属游戏",
-                            name: "gid",
-                            store:gameStore,
-                            queryMode: 'local',
-                            displayField:"gname",
-                            valueField:"gid",
-                            allowBlank:false,
-                            editable: false,
-                            emptyText:"--请选择--"
-                        }, {
-                            xtype: "textfield",
-                            fieldLabel: "英文标识",
-                            name: "ename",
-                            allowBlank: false
-                        }, {
                             xtype: "textfield",
                             fieldLabel: "中文标识",
                             name: "cname",
@@ -257,16 +199,6 @@ Ext.onReady(function () {
                             xtype: "textfield",
                             fieldLabel: "积分",
                             name: "points",
-                            allowBlank: false
-                        }, {
-                            xtype: "textfield",
-                            fieldLabel: "开服天数限制",
-                            name: "opentimelimit",
-                            allowBlank: false
-                        }, {
-                            xtype: "textfield",
-                            fieldLabel: "等级限制",
-                            name: "levellimit",
                             allowBlank: false
                         }],
                     listeners: {
