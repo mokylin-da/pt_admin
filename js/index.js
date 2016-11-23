@@ -64,7 +64,7 @@ var allMenuTree = {
         tabId: "24",
         permission: "menu_activation_code"
     }, {
-        text: "游戏任务",
+        text: "游戏升级任务",
         leaf: true,
         url: "gametask.html",
         tabId: "25",
@@ -75,6 +75,12 @@ var allMenuTree = {
         url: "innertask.html",
         tabId: "26",
         permission: "menu_innertask"
+    }, {
+        text: "游戏首充任务",
+        leaf: true,
+        url: "firstpaytask.html",
+        tabId: "27",
+        permission: "menu_firstpaytask"
     }],
     user:[{
         text: "权限管理",

@@ -55,7 +55,7 @@ var gametaskStore = Ext
             fields: ["id","cname", "ename", "description", "summary", "link", "growth", "points", "type", "gid", "opentimelimit", "levellimit", "exenumlimit", "cat"],
             proxy: {
                 type: "jsonp",
-                url: URLS.USER.Game_Task_List,
+                url: URLS.USER.Game_First_pay_Task_List,
                 callbackKey: "function",
                 reader: {
                     type: 'json',
@@ -121,7 +121,7 @@ Ext.onReady(function () {
             dockedItems: [{
                 xtype: "toolbar",
                 items: [{
-                    text: "添加游戏任务",
+                    text: "添加游戏首充任务",
                     icon: "js/extjs/resources/icons/add.png",
                     handler: function () {
                         addGametask();
@@ -141,21 +141,18 @@ Ext.onReady(function () {
     });
 });
     function addGametask() {
-        addDataWindow.setTitle("添加游戏任务");
+        addDataWindow.setTitle("添加游戏首充任务");
         Ext.getCmp("dataForm").getForm().reset();
-        Ext.getCmp("dataForm").url = URLS.USER.Game_Task_Add;
+        Ext.getCmp("dataForm").url = URLS.USER.Game_First_pay_Task_Add;
         Ext.getCmp("dataForm").operate = "添加";
-        Ext.getCmp("dataForm").getForm().findField("enameFieldId").setVisible(true);
-
         addDataWindow.show();
     }
     function updateGametask(data) {
-        addDataWindow.setTitle("修改游戏任务");
+        addDataWindow.setTitle("修改游戏首充任务");
         Ext.getCmp("dataForm").operate = "修改";
         Ext.getCmp("dataForm").getForm().reset();
         Ext.getCmp("dataForm").url = URLS.USER.Game_Task_Update;
         Ext.getCmp("dataForm").getForm().setValues(data);
-        Ext.getCmp("dataForm").getForm().findField("enameFieldId").setVisible(false);
         //alert(data.gid);
         //Ext.getCmp("gidF").setValue(data.gid);
         addDataWindow.show();
@@ -227,7 +224,6 @@ Ext.onReady(function () {
                             editable: false,
                             emptyText:"--请选择--"
                         }, {
-                            id:"enameFieldId",
                             xtype: "textfield",
                             fieldLabel: "英文标识",
                             name: "ename",
@@ -266,11 +262,6 @@ Ext.onReady(function () {
                             xtype: "textfield",
                             fieldLabel: "开服天数限制",
                             name: "opentimelimit",
-                            allowBlank: false
-                        }, {
-                            xtype: "textfield",
-                            fieldLabel: "等级限制",
-                            name: "levellimit",
                             allowBlank: false
                         }],
                     listeners: {
