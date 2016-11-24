@@ -114,6 +114,7 @@ Ext.onReady(function () {
         Ext.getCmp("dataForm").getForm().reset();
         Ext.getCmp("dataForm").url = URLS.USER.Game_InnerTask_Update;
         Ext.getCmp("dataForm").getForm().setValues(data);
+        Ext.getCmp("updatecat").setValue({"cat": data.cat});
         addDataWindow.show();
 
     }
@@ -175,6 +176,17 @@ Ext.onReady(function () {
                             fieldLabel: "中文标识",
                             name: "cname",
                             allowBlank: false
+                        },{
+                            id:"updatecat",
+                            fieldLabel: "分类",
+                            name: "cat",
+                            allowBlank: false,
+                            xtype: 'radiogroup',
+                            cls: 'x-check-group-alt',
+                            items: [
+                                {boxLabel: '新手任务', name: 'cat', inputValue: 0, checked: true},
+                                {boxLabel: '日常任务', name: 'cat', inputValue: 1}
+                            ]
                         }, {
                             xtype: "textfield",
                             fieldLabel: "简要描述",
