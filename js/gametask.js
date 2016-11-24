@@ -226,7 +226,11 @@ Ext.onReady(function () {
                             allowBlank:false,
                             editable: false,
                             emptyText:"--请选择--"
-                        }, {
+                        },Ext.create("Ext.moux.MoUploader", {
+                            fieldLabel: '礼包图片',
+                            name: "pic",
+                            allowBlank: false
+                        }), {
                             id:"enameFieldId",
                             xtype: "textfield",
                             fieldLabel: "英文标识",

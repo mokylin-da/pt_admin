@@ -176,7 +176,11 @@ Ext.onReady(function () {
                             fieldLabel: "中文标识",
                             name: "cname",
                             allowBlank: false
-                        },{
+                        },Ext.create("Ext.moux.MoUploader", {
+                            fieldLabel: '礼包图片',
+                            name: "pic",
+                            allowBlank: false
+                        }),{
                             id:"updatecat",
                             fieldLabel: "分类",
                             name: "cat",

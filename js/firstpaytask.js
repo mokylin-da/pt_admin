@@ -211,7 +211,11 @@ Ext.onReady(function () {
                         {
                             xtype: "hiddenfield",
                             name: "id"
-                        }, {
+                        },Ext.create("Ext.moux.MoUploader", {
+                            fieldLabel: '礼包图片',
+                            name: "pic",
+                            allowBlank: false
+                        }), {
                             //id:"gidF",
                             xtype: "combobox",
                             fieldLabel: "所属游戏",
