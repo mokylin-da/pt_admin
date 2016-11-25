@@ -112,7 +112,7 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateGametask({id:\'{id}\',gid:parseInt(\'{gid}\'),ename:\'{ename}\',cname:\'{cname}\',description:\'{description}\',summary:\'{summary}\',link:\'{link}\',growth:\'{growth}\',link:\'{link}\',points:\'{points}\',type:\'{type}\',opentimelimit:\'{opentimelimit}\',levellimit:\'{levellimit}\',exenumlimit:\'{exenumlimit}\',cat:\'{cat}\'},pic:\'{pic}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateGametask({id:\'{id}\',gid:parseInt(\'{gid}\'),ename:\'{ename}\',cname:\'{cname}\',description:\'{description}\',summary:\'{summary}\',link:\'{link}\',growth:\'{growth}\',link:\'{link}\',points:\'{points}\',type:\'{type}\',opentimelimit:\'{opentimelimit}\',levellimit:\'{levellimit}\',exenumlimit:\'{exenumlimit}\',cat:\'{cat}\',pic:\'{pic}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteGametask(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
