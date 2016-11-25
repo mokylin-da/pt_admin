@@ -113,7 +113,7 @@ Ext.onReady(function () {
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateGametask({id:\'{id}\',gid:parseInt(\'{gid}\'),ename:\'{ename}\',cname:\'{cname}\',description:\'{description}\',summary:\'{summary}\',link:\'{link}\',growth:\'{growth}\',link:\'{link}\',points:\'{points}\',type:\'{type}\',opentimelimit:\'{opentimelimit}\',levellimit:\'{levellimit}\',exenumlimit:\'{exenumlimit}\',cat:\'{cat}\'},pic:\'{pic}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteCodeCat(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteGametask(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -158,32 +158,31 @@ Ext.onReady(function () {
         addDataWindow.show();
 
     }
-//function deleteCodeCat(id) {
-//    Ext.MessageBox.confirm("删除确认", "是否要删除分类：", function (res) {
-//        if (res == "yes") {
-//            Ext.data.JsonP.request({
-//                url: URLS.GAME_INFO.ActivationCodeCat_Delete,
-//                params: {
-//                    id: id,
-//                    gid: PLATFORM_IDENTIFIER
-//                },
-//                callbackKey: 'function',
-//                // scope: 'this',
-//                success: function (res) {
-//                    if (res && res.status == 1) {
-//                        GlobalUtil.tipMsg("提示", "删除成功");
-//                        codeCatStore.reload();
-//                        return;
-//                    }
-//                    Ext.MessageBox.alert("提示", "删除失败");
-//                },
-//                failure: function (response) {
-//                    Ext.MessageBox.alert("提示", "删除失败");
-//                }
-//            });
-//        }
-//    });
-//}
+function deleteGametask(id) {
+    Ext.MessageBox.confirm("删除确认", "是否要删除任务：", function (res) {
+        if (res == "yes") {
+            Ext.data.JsonP.request({
+                url: URLS.USER.Game_Delete_Task,
+                params: {
+                    id: id
+                },
+                callbackKey: 'function',
+                // scope: 'this',
+                success: function (res) {
+                    if (res && res.status == 1) {
+                        GlobalUtil.tipMsg("提示", "删除成功");
+                        gametaskStore.reload();
+                        return;
+                    }
+                    Ext.MessageBox.alert("提示", "删除失败");
+                },
+                failure: function (response) {
+                    Ext.MessageBox.alert("提示", "删除失败");
+                }
+            });
+        }
+    });
+}
     var addDataWindow = new Ext.Window({
         width: 800,
         height: 600,

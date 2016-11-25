@@ -18,7 +18,8 @@ URLS.USER = {
     Game_InnerTask_Update: URLS.USER_BASE + "/user/task/updateinnertask",
     Game_First_pay_Task_List: URLS.USER_BASE + "/user/task/gamefirstpaylist",
     Game_First_pay_Task_Add: URLS.USER_BASE + "/user/task/addfirstpaytask",
-    Game_First_pay_Task_Update: URLS.USER_BASE + "/user/task/updatefirstpaytask"
+    Game_First_pay_Task_Update: URLS.USER_BASE + "/user/task/updatefirstpaytask",
+    Game_Delete_Task: URLS.USER_BASE + "/user/task/deletetask"
 };
 URLS.GAME_INFO = {
     GAME_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/listgamelist",
