@@ -68,19 +68,19 @@ var allMenuTree = {
         leaf: true,
         url: "gametask.html",
         tabId: "25",
-        permission: "menu_gametask"
+        permission: "menu_taskcenter"
     }, {
         text: "内置任务",
         leaf: true,
         url: "innertask.html",
         tabId: "26",
-        permission: "menu_innertask"
+        permission: "menu_taskcenter"
     }, {
         text: "游戏首充任务",
         leaf: true,
         url: "firstpaytask.html",
         tabId: "27",
-        permission: "menu_firstpaytask"
+        permission: "menu_taskcenter"
     }],
     user:[{
         text: "权限管理",
