@@ -226,7 +226,7 @@ function deleteGametask(id) {
                             editable: false,
                             emptyText:"--请选择--"
                         },Ext.create("Ext.moux.MoUploader", {
-                            fieldLabel: '礼包图片',
+                            fieldLabel: '任务图标',
                             name: "pic",
                             allowBlank: false
                         }), {

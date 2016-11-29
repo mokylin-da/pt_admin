@@ -177,7 +177,7 @@ Ext.onReady(function () {
                             name: "cname",
                             allowBlank: false
                         },Ext.create("Ext.moux.MoUploader", {
-                            fieldLabel: '礼包图片',
+                            fieldLabel: '任务图标',
                             name: "pic",
                             allowBlank: false
                         }),{
