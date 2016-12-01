@@ -51,6 +51,36 @@ var allMenuTree = {
         url: "game_mgr.html",
         tabId: "22",
         permission: "menu_game"
+    }, {
+        text: "礼包分类",
+        leaf: true,
+        url: "activation_code_cat.html",
+        tabId: "23",
+        permission: "menu_activation_code_cat"
+    }, {
+        text: "礼包列表",
+        leaf: true,
+        url: "activation_code.html",
+        tabId: "24",
+        permission: "menu_activation_code"
+    }, {
+        text: "游戏升级任务",
+        leaf: true,
+        url: "gametask.html",
+        tabId: "25",
+        permission: "menu_taskcenter"
+    }, {
+        text: "内置任务",
+        leaf: true,
+        url: "innertask.html",
+        tabId: "26",
+        permission: "menu_taskcenter"
+    }, {
+        text: "游戏首充任务",
+        leaf: true,
+        url: "firstpaytask.html",
+        tabId: "27",
+        permission: "menu_taskcenter"
     }],
     user:[{
         text: "权限管理",

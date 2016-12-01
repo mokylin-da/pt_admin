@@ -10,7 +10,16 @@ URLS.USER = {
     CURRENT_USER_PERMISSION: URLS.USER_BASE + "/user/info/pms",//当前用户权限
     USER_PERMISSION: URLS.USER_BASE + "/user/pms/listuserpms",//用户权限
     SET_USER_AUTH: URLS.USER_BASE + "/user/pms/adduserpms",//用户授权
-    QUERY_USER: URLS.USER_BASE + "/user/pms/searchuserbynickname"//用户查询
+    QUERY_USER: URLS.USER_BASE + "/user/pms/searchuserbynickname",//用户查询
+    Game_Task_List: URLS.USER_BASE + "/user/task/gametasklist",
+    Game_InnerTask_List: URLS.USER_BASE + "/user/task/innertasklist",
+    Game_Task_Add: URLS.USER_BASE + "/user/task/addgametask",
+    Game_Task_Update: URLS.USER_BASE + "/user/task/updategametask",
+    Game_InnerTask_Update: URLS.USER_BASE + "/user/task/updateinnertask",
+    Game_First_pay_Task_List: URLS.USER_BASE + "/user/task/gamefirstpaylist",
+    Game_First_pay_Task_Add: URLS.USER_BASE + "/user/task/addfirstpaytask",
+    Game_First_pay_Task_Update: URLS.USER_BASE + "/user/task/updatefirstpaytask",
+    Game_Delete_Task: URLS.USER_BASE + "/user/task/deletetask"
 };
 URLS.GAME_INFO = {
     GAME_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/listgamelist",
@@ -26,7 +35,17 @@ URLS.GAME_INFO = {
     GAME_CAT_ADD: URLS.GAME_INFO_BASE + "/gameinfo/gamecat/add",
     GAME_CAT_DELETE: URLS.GAME_INFO_BASE + "/gameinfo/gamecat/delete",
     GAME_CAT_UPDATE: URLS.GAME_INFO_BASE + "/gameinfo/gamecat/update",
-    GAME_CAT_LIST: URLS.GAME_INFO_BASE + "/gameinfo/gamecat/list"
+    GAME_CAT_LIST: URLS.GAME_INFO_BASE + "/gameinfo/gamecat/list",
+    ActivationCodeCat_LIST: URLS.GAME_INFO_BASE + "/gameinfo/activationcodecat/list",
+    ActivationCodeCat_Add: URLS.GAME_INFO_BASE + "/gameinfo/activationcodecat/add",
+    ActivationCodeCat_Delete: URLS.GAME_INFO_BASE + "/gameinfo/activationcodecat/delete",
+    ActivationCodeCat_Update: URLS.GAME_INFO_BASE + "/gameinfo/activationcodecat/update",
+    ActivationCode_Page4admin: URLS.GAME_INFO_BASE + "/gameinfo/activationcode/page4admin",
+    ActivationCode_Get_Codes: URLS.GAME_INFO_BASE + "/gameinfo/activationcode/getcodes",
+    ActivationCode_Update: URLS.GAME_INFO_BASE + "/gameinfo/activationcode/update",
+    ActivationCode_Add: URLS.GAME_INFO_BASE + "/gameinfo/activationcode/add",
+    ActivationCode_Add_Codes: URLS.GAME_INFO_BASE + "/gameinfo/activationcode/addcodes",
+    ActivationCode_Clear_Codes: URLS.GAME_INFO_BASE + "/gameinfo/activationcode/clearodes"
 };
 URLS.MISC = {
     ARTICLE_LIST: URLS.MISC_BASE + "/misc/article/pageallbygid",//文章列表
@@ -49,6 +68,7 @@ URLS.MISC = {
     COMMON_CONFIG_CAT_DELETE: URLS.MISC_BASE + "/misc/commonconfigcat/delete",//通用配置列表（轮播图等）
     COMMON_CONFIG_CAT_UPDATE: URLS.MISC_BASE + "/misc/commonconfigcat/update",//通用配置列表（轮播图等）
     COMMON_CONFIG_CAT_ADD: URLS.MISC_BASE + "/misc/commonconfigcat/add"//通用配置列表（轮播图等）
+
 };
 URLS.PAY={
     PAGE_ORDER:URLS.PAY_BASE+"/recharge/pageorder"//订单列表
@@ -126,6 +146,22 @@ GlobalUtil = {
     status: function (e, callback) {
         switch (e) {
             case 1:
+            {
+                return true;
+            }
+            case 10001:
+            {
+                return true;
+            }
+            case 20001:
+            {
+                return true;
+            }
+            case 30001:
+            {
+                return true;
+            }
+            case 40001:
             {
                 return true;
             }
@@ -221,9 +257,76 @@ GlobalUtil = {
                 });
                 break;
             }
-            case 20001:
+
+            case 10000:
             {
-                return true;
+                Ext.MessageBox.alert("提示", "执行失败", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10002:
+            {
+                Ext.MessageBox.alert("提示", "未登录", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10004:
+            {
+                Ext.MessageBox.alert("提示", "没有权限", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10005:
+            {
+                Ext.MessageBox.alert("提示", "系统错误", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10006:
+            {
+                Ext.MessageBox.alert("提示", "区服不存在", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10009:
+            {
+                Ext.MessageBox.alert("提示", "已经过期", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10007:
+            {
+                Ext.MessageBox.alert("提示", "没有了", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10008:
+            {
+                Ext.MessageBox.alert("提示", "数量限制", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10011:
+            {
+                Ext.MessageBox.alert("提示", "处理中", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 10010:
+            {
+                Ext.MessageBox.alert("提示", "游戏接口请求错误", function () {
+                    callback && callback();
+                });
+                break;
             }
             case 20000:
             {
@@ -263,6 +366,55 @@ GlobalUtil = {
             case 20006:
             {
                 Ext.MessageBox.alert("提示", "未登录", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 30000:
+            {
+                Ext.MessageBox.alert("提示", "执行失败", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 30009:
+            {
+                Ext.MessageBox.alert("提示", "过期", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 30005:
+            {
+                Ext.MessageBox.alert("提示", "系统错误", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 30003:
+            {
+                Ext.MessageBox.alert("提示", "需要登录", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 30004:
+            {
+                Ext.MessageBox.alert("提示", "已经处理过了", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 30006:
+            {
+                Ext.MessageBox.alert("提示", "没有权限", function () {
+                    callback && callback();
+                });
+                break;
+            }
+            case 30107:
+            {
+                Ext.MessageBox.alert("提示", "已经存在", function () {
                     callback && callback();
                 });
                 break;
@@ -330,7 +482,11 @@ var CrossDomain = function () {
                 form.method = "post";
                 if (data.constructor == Object) {
                     function appendFormField(doc, form, name, value, type) {
+
                         var ipt = doc.createElement("input");
+                        if(name=="codes"){
+                            ipt = doc.createElement("textarea");
+                        }
                         ipt.name = name;
                         ipt.value = value;
                         ipt.type = type || "text";
