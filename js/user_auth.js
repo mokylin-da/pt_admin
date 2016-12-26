@@ -4,7 +4,7 @@
 Ext.require(['Ext.grid.*']);
 
 var userStore = Ext.create('Ext.data.Store', {
-    fields: ['uid', 'email', 'nickname', 'cDate', 'emailVerifyed', 'status', 'idcard', 'name', 'come_from', 'accountname','sqes'],
+    fields: ['uid', 'email', 'nickname', 'cDate', 'emailVerifyed', 'status', 'idcard', 'name', 'come_from', 'accountname','sqes','phone'],
     proxy: {
         type: "jsonp",
         url: URLS.USER.QUERY_USER,
