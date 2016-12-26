@@ -1,8 +1,8 @@
 URLS.SELF=location.href;
 
 URLS.USER = {
-    LOGIN: URLS.WWW_BASE + "/login?_surl=" + URLS.SELF,
-    LOGOUT: URLS.USER_BASE + "/user/login/go2out?surl=" + URLS.WWW_BASE + "/login?_surl=" + URLS.SELF,
+    LOGIN: URLS.WWW_BASE + "/login?surl=" + encodeURIComponent(URLS.SELF),
+    LOGOUT: URLS.USER_BASE + "/user/login/go2out?surl=" + URLS.WWW_BASE + "/login?surl=" + encodeURIComponent(URLS.SELF),
     PERMISSION_LIST: URLS.USER_BASE + "/user/pms/listbygame",
     ADD_PERMISSION: URLS.USER_BASE + "/user/pms/additem",
     UPDATE_PERMISSION: URLS.USER_BASE + "/user/pms/updateitem",
