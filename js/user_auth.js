@@ -4,7 +4,7 @@
 Ext.require(['Ext.grid.*']);
 
 var userStore = Ext.create('Ext.data.Store', {
-    fields: ['uid', 'nickname', 'email', 'cDate', 'emailVerifyed', 'status'],
+    fields: ['uid', 'email', 'nickname', 'cDate', 'emailVerifyed', 'status', 'idcard', 'name', 'come_from', 'accountname','sqes'],
     proxy: {
         type: "jsonp",
         url: URLS.USER.QUERY_USER,
@@ -34,9 +34,14 @@ Ext.onReady(function () {
             columns: [
                 Ext.create("Ext.grid.RowNumberer"),
                 {
-                    text: "uid",
+                    text: "账号ID",
                     width: 200,
                     dataIndex: "uid"
+                },
+                {
+                    text: "账号名",
+                    width: 150,
+                    dataIndex: "accountname"
                 },
                 {
                     text: "昵称",
@@ -44,9 +49,29 @@ Ext.onReady(function () {
                     dataIndex: "nickname"
                 },
                 {
-                    text: "email",
+                    text: "密保邮箱",
                     width: 150,
                     dataIndex: "email"
+                },
+                {
+                    text: "手机号码",
+                    width: 150,
+                    dataIndex: "phone"
+                },
+                {
+                    text: "密保问题",
+                    width: 150,
+                    dataIndex: "nickname"
+                },
+                {
+                    text: "身份证号码",
+                    width: 150,
+                    dataIndex: "idcard"
+                },
+                {
+                    text: "注册时间",
+                    width: 150,
+                    dataIndex: "cDate"
                 }, {
                     header: "操作",
                     width: 150,
@@ -77,12 +102,21 @@ Ext.onReady(function () {
                             {
                                 id: "uidField",
                                 xtype: 'textfield',
-                                fieldLabel: 'uid',
+                                fieldLabel: '账号ID',
                                 name: 'uid',
                                 inputAttrTpl: [
                                     "autocomplete=\"on\""
                                 ],
-                                emptyText: "请输入uid"
+                                emptyText: "请输入账号ID"
+                            },{
+                                id: "accountnameField",
+                                xtype: 'textfield',
+                                fieldLabel: '账号',
+                                name: 'accountname',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入账号"
                             }, {
                                 id: "nicknameField",
                                 xtype: 'textfield',
@@ -92,6 +126,24 @@ Ext.onReady(function () {
                                     "autocomplete=\"on\""
                                 ],
                                 emptyText: "请输入昵称"
+                            }, {
+                                id: "emailField",
+                                xtype: 'textfield',
+                                fieldLabel: '邮箱',
+                                name: 'email',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入邮箱"
+                            }, {
+                                id: "phoneField",
+                                xtype: 'textfield',
+                                fieldLabel: '手机',
+                                name: 'phone',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入手机"
                             }
                         ],
                         dockedItems: [{
