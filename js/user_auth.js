@@ -4,7 +4,7 @@
 Ext.require(['Ext.grid.*']);
 
 var userStore = Ext.create('Ext.data.Store', {
-    fields: ['uid', 'email', 'nickname', 'cDate', 'emailVerifyed', 'status', 'idcard', 'name', 'come_from', 'accountname','sqes','phone'],
+    fields: ['uid', 'email', 'nickname', 'cDate', 'emailVerifyed', 'status', 'idcard', 'name', 'come_from', 'accountname','sqes','phone','question'],
     proxy: {
         type: "jsonp",
         url: URLS.USER.QUERY_USER,
@@ -61,7 +61,7 @@ Ext.onReady(function () {
                 {
                     text: "密保问题",
                     width: 150,
-                    dataIndex: "nickname"
+                    dataIndex: "question"
                 },
                 {
                     text: "身份证号码",
