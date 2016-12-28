@@ -60,32 +60,34 @@ Ext.onReady(function () {
                 },
                 {
                     text: "密保问题",
-                    width: 150,
+                    width: 300,
                     dataIndex: "question",
                     renderer: function(value){
                         var rs="";
                         var arr = value.split(",");
-                        arr.each(function(item){
-                            if(item==1){
+                        for(var i = 0, l = arr.length; i < l; i++) {
+                            var item=arr[i];
+                            if(item=='1'){
                                 rs+="您母亲的姓名是？";
-                            }else if(item==2){
+                            }else if(item=='2'){
                                 rs+="您父亲的姓名是？";
-                            }else if(item==3){
+                            }else if(item=='3'){
                                 rs+="您配偶的生日是？";
-                            }else if(item==4){
+                            }else if(item=='4'){
                                 rs+="您的学号（工号）是？";
-                            }else if(item==5){
+                            }else if(item=='5'){
                                 rs+="您高中班主任的名字是？";
-                            }else if(item==6){
+                            }else if(item=='6'){
                                 rs+="您最喜欢的颜色是？";
-                            }else if(item==7){
+                            }else if(item=='7'){
                                 rs+="您最好的朋友姓名是？";
-                            }else if(item==8){
+                            }else if(item=='8'){
                                 rs+="您就读的小学校名是？";
-                            }else if(item==9){
+                            }else if(item=='9'){
                                 rs+="您最喜欢的食物是？";
                             }
-                        });
+                        }
+
                         return rs;
                     }
                 },

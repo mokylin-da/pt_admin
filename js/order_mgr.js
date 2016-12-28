@@ -1,5 +1,5 @@
 /**
- * Created by 李朝(Li.Zhao) on 2016/4/15.
+ * Created by 曾维刚 on 2016/4/15.
  */
 
 Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel','Ext.ux.form.DateTimeField']);
@@ -72,7 +72,7 @@ Ext.onReady(function () {
             columns: [
                 Ext.create("Ext.grid.RowNumberer"),
                 {
-                    text: "ID",
+                    text: "序号",
                     width: 200,
                     dataIndex: "id"
                 },
@@ -145,33 +145,73 @@ Ext.onReady(function () {
                 store: orderStore,   // same store GridPanel is using
                 dock: 'bottom',
                 displayInfo: true
-            },
-                {
+            },{
                     xtype: "toolbar",
                     items: [
                         {
                             xtype: 'form',
                             id: "dataForm",
                             fieldDefaults: {
-                                labelAlign: 'left',
+                                labelAlign: 'right',
                                 labelWidth: 100,
                                 anchor: '150%'
                             },
                             frame: false,
                             border: false,
-                            bodyStyle: 'padding:10 10',
+                            // bodyStyle: 'padding:10 10',
                             layout: 'hbox',
                             items: [
                                 {
                                     id: "istatusField",
                                     xtype: 'combobox',
                                     fieldLabel: '支付状态',
-                                    name: 'istatus',
+                                    name: 'istatusVal',
                                     valueField:"ename",
                                     displayField:"cname",
                                     store:istatusStore,
                                     emptyText: "请选择支付状态"
-                                }
+                                },{
+                                    xtype: 'textfield',
+                                    fieldLabel: '订单号',
+                                    name: 'vOrderNo',
+                                    inputAttrTpl: [
+                                        "autocomplete=\"on\""
+                                    ],
+                                    emptyText: "请输入订单号"
+                                },{
+                                    xtype: 'textfield',
+                                    fieldLabel: '用户ID',
+                                    name: 'vUserId',
+                                    inputAttrTpl: [
+                                        "autocomplete=\"on\""
+                                    ]
+                                },{
+                                    xtype: 'textfield',
+                                    fieldLabel: '游戏ID',
+                                    name: 'iGameId',
+                                    inputAttrTpl: [
+                                        "autocomplete=\"on\""
+                                    ]
+                                },{
+                                    xtype: 'textfield',
+                                    fieldLabel: '区服ID',
+                                    name: 'iWorldId',
+                                    inputAttrTpl: [
+                                        "autocomplete=\"on\""
+                                    ]
+                                }, Ext.create('Ext.ux.form.DateTimeField', {
+                                    fieldLabel: "时间从",
+                                    name: "dtCreateTime1",
+                                    value: new Date(),
+                                    format: 'Y-m-d H:i:s',
+                                    allowBlank: false
+                                }), Ext.create('Ext.ux.form.DateTimeField', {
+                                    fieldLabel: "至",
+                                    name: "dtCreateTime2",
+                                    value: new Date(),
+                                    format: 'Y-m-d H:i:s',
+                                    allowBlank: false
+                                })
                             ],
                             dockedItems: [{
                                 xtype: 'toolbar',
