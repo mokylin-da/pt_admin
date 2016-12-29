@@ -14,9 +14,9 @@ Ext.QuickTips.init();
 var istatusStore = Ext.create('Ext.data.Store', {
     fields: ['ename', 'cname'],
     data : [
-        {"ename":"INIT", "cname":"用户未支付"},
-        {"ename":"OUTER_RECHARGED", "cname":"平台已收款"},
-        {"ename":"END", "cname":"游戏已到账"}
+        {"ename":0, "cname":"用户未支付"},
+        {"ename":1, "cname":"平台已收款"},
+        {"ename":3, "cname":"游戏已到账"}
         //...
     ]
 });
@@ -87,11 +87,6 @@ Ext.onReady(function () {
                     dataIndex: "vuserId"
                 },
                 {
-                    text: "角色id",
-                    width: 150,
-                    dataIndex: "iplayerId"
-                },
-                {
                     text: "人民币",
                     width: 150,
                     dataIndex: "irmb"
@@ -112,17 +107,17 @@ Ext.onReady(function () {
                 {
                     text: "状态",
                     width: 150,
-                    dataIndex: "istatusVal",
+                    dataIndex: "istatus",
                     renderer:function(v){
-                        switch (v) {
-                            case 0:
-                                return "用户未支付";
-                            case 1:
-                                return "平台已收款";
-                            case 3:
-                                return "游戏已到账";
+                        if (v=='INIT'){
+                            return "用户未支付";
+                        }else  if (v=='OUTER_RECHARGED'){
+                            return "平台已收款";
+                        }else  if (v=='END'){
+                            return "游戏已到账";
+                        }else {
+                            return "未知"
                         }
-                        return "未知"
                     }
                 },
                 {
@@ -159,65 +154,93 @@ Ext.onReady(function () {
                             frame: false,
                             border: false,
                             // bodyStyle: 'padding:10 10',
-                            layout: 'hbox',
+                            layout: 'column',
                             items: [
                                 {
-                                    id: "istatusField",
-                                    xtype: 'combobox',
-                                    fieldLabel: '支付状态',
-                                    name: 'istatusVal',
-                                    valueField:"ename",
-                                    displayField:"cname",
-                                    store:istatusStore,
-                                    emptyText: "请选择支付状态"
-                                },{
-                                    xtype: 'textfield',
-                                    fieldLabel: '订单号',
-                                    name: 'vOrderNo',
-                                    inputAttrTpl: [
-                                        "autocomplete=\"on\""
-                                    ],
-                                    emptyText: "请输入订单号"
-                                },{
-                                    xtype: 'textfield',
-                                    fieldLabel: '用户ID',
-                                    name: 'vUserId',
-                                    inputAttrTpl: [
-                                        "autocomplete=\"on\""
+                                    xtype: 'panel',
+                                    columnWidth: 0.2,
+                                    border: 0,
+                                    items: [
+                                        {
+                                            id: "istatusField",
+                                            xtype: 'combobox',
+                                            fieldLabel: '支付状态',
+                                            name: 'istatusVal',
+                                            valueField:"ename",
+                                            displayField:"cname",
+                                            store:istatusStore,
+                                            emptyText: "请选择支付状态"
+                                        },{
+                                            xtype: 'textfield',
+                                            fieldLabel: '订单号',
+                                            name: 'vOrderNo',
+                                            inputAttrTpl: [
+                                                "autocomplete=\"on\""
+                                            ],
+                                            emptyText: "请输入订单号"
+                                        }
                                     ]
-                                },{
-                                    xtype: 'textfield',
-                                    fieldLabel: '游戏ID',
-                                    name: 'iGameId',
-                                    inputAttrTpl: [
-                                        "autocomplete=\"on\""
+                                }, {
+                                    xtype: 'panel',
+                                    columnWidth: 0.2,
+                                    border: 0,
+                                    items: [
+                                        {
+                                            xtype: 'textfield',
+                                            fieldLabel: '用户ID',
+                                            name: 'vUserId',
+                                            inputAttrTpl: [
+                                                "autocomplete=\"on\""
+                                            ]
+                                        },{
+                                            xtype: 'textfield',
+                                            fieldLabel: '游戏ID',
+                                            name: 'iGameId',
+                                            inputAttrTpl: [
+                                                "autocomplete=\"on\""
+                                            ]
+                                        }
                                     ]
-                                },{
-                                    xtype: 'textfield',
-                                    fieldLabel: '区服ID',
-                                    name: 'iWorldId',
-                                    inputAttrTpl: [
-                                        "autocomplete=\"on\""
+                                }, {
+                                    xtype: 'panel',
+                                    columnWidth: 0.2,
+                                    border: 0,
+                                    items: [
+                                        {
+                                            xtype: 'textfield',
+                                            fieldLabel: '区服ID',
+                                            name: 'iWorldId',
+                                            inputAttrTpl: [
+                                                "autocomplete=\"on\""
+                                            ]
+                                        }
                                     ]
-                                }, Ext.create('Ext.ux.form.DateTimeField', {
-                                    fieldLabel: "时间从",
-                                    name: "dtCreateTime1",
-                                    value: new Date(),
-                                    format: 'Y-m-d H:i:s',
-                                    allowBlank: false
-                                }), Ext.create('Ext.ux.form.DateTimeField', {
-                                    fieldLabel: "至",
-                                    name: "dtCreateTime2",
-                                    value: new Date(),
-                                    format: 'Y-m-d H:i:s',
-                                    allowBlank: false
-                                })
+                                }, {
+                                    xtype: 'panel',
+                                    columnWidth: 0.2,
+                                    border: 0,
+                                    items: [
+                                        Ext.create('Ext.ux.form.DateTimeField', {
+                                            fieldLabel: "时间从",
+                                            name: "dtCreateTime1",
+                                            value: new Date(),
+                                            format: 'Y-m-d H:i:s',
+                                            allowBlank: false
+                                        }), Ext.create('Ext.ux.form.DateTimeField', {
+                                            fieldLabel: "至",
+                                            name: "dtCreateTime2",
+                                            value: new Date(),
+                                            format: 'Y-m-d H:i:s',
+                                            allowBlank: false
+                                        })
+                                    ]
+                                }
                             ],
                             dockedItems: [{
                                 xtype: 'toolbar',
                                 dock: 'right',
                                 layout: 'hbox',
-                                border: false,
+                                border: 0,
                                 items: [{
                                     text: "搜索",
                                     icon: "js/extjs/resources/icons/search.png",
