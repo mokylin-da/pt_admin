@@ -103,6 +103,19 @@ Ext.onReady(function () {
                     text: "支付平台",
                     width: 150,
                     dataIndex: "iplatformType"
+                },{
+                    text: "时间",
+                    width: 150,
+                    dataIndex: "dtUpdateTime"
+                    ,
+                    renderer : function(value) {
+                        if (value == null || value == 0) {
+                            return '未知'
+                        } else {
+                            return Ext.util.Format.date(new Date(parseInt(value)),"Y-m-d\\TH:i:s");
+                            // return  new Date(parseInt(value)).format("Y-m-d H:i:s");
+                        }
+                    }
                 },
                 {
                     text: "状态",
@@ -223,7 +236,6 @@ Ext.onReady(function () {
                                         Ext.create('Ext.ux.form.DateTimeField', {
                                             fieldLabel: "时间从",
                                             name: "dtCreateTime1",
-                                            value: new Date(),
                                             format: 'Y-m-d H:i:s',
                                             allowBlank: false
                                         }), Ext.create('Ext.ux.form.DateTimeField', {
@@ -254,6 +266,18 @@ Ext.onReady(function () {
                                     text: '重置',
                                     handler: function (v) {
                                         v.up("form").getForm().reset()
+                                    }
+                                },{
+                                    text:'下载订单',
+                                    handler: function (v) {
+                                        console.log(v.up("form").getForm().getValues());
+                                        var values = v.up("form").getForm().getValues();
+                                        var u=URLS.PAY.DOWN_ORDER+"?x=1";
+                                        for(var key in values){
+                                            u+="&"+key+"="+values[key];
+
+                                        }
+                                        window.open(u)
                                     }
                                 }]
                             }],
