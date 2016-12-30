@@ -107,7 +107,7 @@ Ext.onReady(function () {
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateAuth(\'{uid}\');"><img src="js/extjs/resources/icons/lock_edit.png"  title="授权" alt="授权" class="actionColumnImg" />&nbsp;</a>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:addemail({uid:\'{uid}\',email:\'{email}\'});"><img src="js/extjs/resources/icons/add.png"  title="授权" alt="授权" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:addemail({uid:\'{uid}\',email:\'{email}\'});"><img src="js/extjs/resources/icons/add.png"  title="绑定邮箱" alt="绑定邮箱" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -392,7 +392,7 @@ function addemail(data) {
         Ext.getCmp("addemailForm").getForm().setValues(data);
         addemailWindow.show();
     }else {
-        alert(data.email);
+        alert("邮箱已经存在 无法绑定");
     }
 
 }
