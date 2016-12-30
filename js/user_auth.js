@@ -442,15 +442,15 @@ var addemailWindow = new Ext.Window({
                             success: function (res) {
                                 console.log(res);
                                 if (res && res.status == 1) {
-                                    GlobalUtil.tipMsg("提示", Ext.getCmp("dataForm").operate + "成功");
-                                    gameCatStore.reload();
-                                    addDataWindow.hide();
+                                    GlobalUtil.tipMsg("提示", Ext.getCmp("addemailForm").operate + "成功");
+                                    userStore.reload();
+                                    addemailWindow.hide();
                                     return;
                                 }
-                                top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "失败");
+                                top.Ext.MessageBox.alert("提示", Ext.getCmp("addemailForm").operate + "失败");
                             },
                             failure: function (response) {
-                                top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "失败");
+                                top.Ext.MessageBox.alert("提示", Ext.getCmp("addemailForm").operate + "失败");
                             }
                         });
                         return false;
