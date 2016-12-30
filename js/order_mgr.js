@@ -58,6 +58,8 @@ var orderStore = Ext
                 },
                 load: function (_this, records, successful, eOpts) {
                     var status = _this.proxy.reader.jsonData.status;
+                    var msg=_this.proxy.reader.jsonData.data.totalrmb;
+                    Ext.getCmp("showmsg").setText("总金额："+msg+"分");
                     GlobalUtil.status(status);
                 }
 
@@ -297,6 +299,9 @@ Ext.onReady(function () {
                                         }
                                         window.open(u)
                                     }
+                                },,{
+                                    id:"showmsg",
+                                    text:''
                                 }]
                             }],
                             listeners: {
