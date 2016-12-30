@@ -23,10 +23,10 @@ var istatusStore = Ext.create('Ext.data.Store', {
 var iPlatformTypeStore = Ext.create('Ext.data.Store', {
     fields: ['ename', 'cname'],
     data : [
-        {"ALIPAY":0, "cname":"支付宝"},
-        {"WEICHAT":1, "cname":"微信"},
-        {"YIBAO":1, "cname":"易宝"},
-        {"Swiftpass":3, "cname":"威富通"}
+        {"ename":"ALIPAY", "cname":"支付宝"},
+        {"ename":"WEICHAT", "cname":"微信"},
+        {"ename":"YIBAO", "cname":"易宝"},
+        {"ename":"Swiftpass", "cname":"威富通"}
         //...
     ]
 });
