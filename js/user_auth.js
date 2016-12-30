@@ -408,7 +408,7 @@ var addemailWindow = new Ext.Window({
     layout: 'fit',
     listeners: {
         beforeshow: function (_this, eOpts) {
-            Ext.getCmp("addSubmitBtn").enable();
+            Ext.getCmp("addemailSubmitBtn").enable();
         }
     },
     items: [
@@ -436,7 +436,7 @@ var addemailWindow = new Ext.Window({
                     beforeaction: function (_this, action, eOpts) {
                         Ext.data.JsonP.request({
                             params: _this.getValues(), // values from form fields..
-                            url: Ext.getCmp("dataForm").url,
+                            url: Ext.getCmp("addemailForm").url,
                             callbackKey: 'function',
                             scope: 'this',
                             success: function (res) {
@@ -464,7 +464,7 @@ var addemailWindow = new Ext.Window({
                     items: [{
                         text: '确定',
                         formBind: true,
-                        id: "addSubmitBtn",
+                        id: "addemailSubmitBtn",
                         handler: function (v) {
                             var form = v.up("form").getForm();
                             if (v.up("form").isValid()) {
