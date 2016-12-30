@@ -107,6 +107,7 @@ Ext.onReady(function () {
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateAuth(\'{uid}\');"><img src="js/extjs/resources/icons/lock_edit.png"  title="授权" alt="授权" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:addemail({uid:\'{uid}\',email:\'{email}\'});"><img src="js/extjs/resources/icons/add.png"  title="授权" alt="授权" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -383,3 +384,101 @@ function updateAuth(uid) {
     Ext.getCmp("permissionGridId").getSelectionModel().deselectAll();
     loadUserPermission(Ext.getCmp("gameCombo").getValue());
 }
+function addemail(data) {
+    Ext.getCmp("addemailForm").getForm().reset();
+    Ext.getCmp("addemailForm").url = URLS.USER.ADD_Email;
+    Ext.getCmp("addemailForm").operate = "添加";
+    if (data.email ==null||data.email ==""){
+        Ext.getCmp("addemailForm").getForm().setValues(data);
+        addemailWindow.show();
+    }else {
+        alert(data.email);
+    }
+
+}
+
+var addemailWindow = new Ext.Window({
+    title: "绑定邮箱",
+    width: 300,
+    height: 200,
+    resizable: true,
+    modal: true,
+    autoShow: false,
+    closable: false,
+    layout: 'fit',
+    listeners: {
+        beforeshow: function (_this, eOpts) {
+            Ext.getCmp("addSubmitBtn").enable();
+        }
+    },
+    items: [
+        new Ext.form.Panel({
+                id: "addemailForm",
+                fieldDefaults: {
+                    labelAlign: 'right',
+                    labelWidth: 100,
+                    anchor: '90%'
+                },
+                frame: false,
+                bodyStyle: 'padding:10 10',
+                items: [
+                    {
+                        xtype: "hiddenfield",
+                        name: "uid"
+                    }, {
+                        id: "nameField",
+                        xtype: "textfield",
+                        fieldLabel: "邮箱",
+                        name: "email",
+                        allowBlank: false
+                    }],
+                listeners: {
+                    beforeaction: function (_this, action, eOpts) {
+                        Ext.data.JsonP.request({
+                            params: _this.getValues(), // values from form fields..
+                            url: Ext.getCmp("dataForm").url,
+                            callbackKey: 'function',
+                            scope: 'this',
+                            success: function (res) {
+                                console.log(res);
+                                if (res && res.status == 1) {
+                                    GlobalUtil.tipMsg("提示", Ext.getCmp("dataForm").operate + "成功");
+                                    gameCatStore.reload();
+                                    addDataWindow.hide();
+                                    return;
+                                }
+                                top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "失败");
+                            },
+                            failure: function (response) {
+                                top.Ext.MessageBox.alert("提示", Ext.getCmp("dataForm").operate + "失败");
+                            }
+                        });
+                        return false;
+                    }
+                },
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    layout: {pack: 'end'},
+                    border: false,
+                    items: [{
+                        text: '确定',
+                        formBind: true,
+                        id: "addSubmitBtn",
+                        handler: function (v) {
+                            var form = v.up("form").getForm();
+                            if (v.up("form").isValid()) {
+                                v.disable();
+                                form.submit();
+                            }
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function (v) {
+                            v.up("window").hide();
+                        }
+                    }]
+                }]
+            }
+        )]
+});
