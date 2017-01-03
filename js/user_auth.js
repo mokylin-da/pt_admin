@@ -119,7 +119,7 @@ Ext.onReady(function () {
                         xtype: 'form',
                         id: "dataForm",
                         fieldDefaults: {
-                            labelAlign: 'left',
+                            labelAlign: 'right',
                             labelWidth: 100,
                             anchor: '150%'
                         },
