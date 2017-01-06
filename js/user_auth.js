@@ -4,7 +4,7 @@
 Ext.require(['Ext.grid.*']);
 
 var userStore = Ext.create('Ext.data.Store', {
-    fields: ['uid', 'nickname', 'email', 'cDate', 'emailVerifyed', 'status'],
+    fields: ['uid', 'email', 'nickname', 'cDate', 'emailVerifyed', 'status', 'idcard', 'name', 'come_from', 'accountname','sqes','phone','question'],
     proxy: {
         type: "jsonp",
         url: URLS.USER.QUERY_USER,
@@ -34,9 +34,14 @@ Ext.onReady(function () {
             columns: [
                 Ext.create("Ext.grid.RowNumberer"),
                 {
-                    text: "uid",
+                    text: "账号ID",
                     width: 200,
                     dataIndex: "uid"
+                },
+                {
+                    text: "账号名",
+                    width: 150,
+                    dataIndex: "accountname"
                 },
                 {
                     text: "昵称",
@@ -44,9 +49,57 @@ Ext.onReady(function () {
                     dataIndex: "nickname"
                 },
                 {
-                    text: "email",
+                    text: "密保邮箱",
                     width: 150,
                     dataIndex: "email"
+                },
+                {
+                    text: "手机号码",
+                    width: 150,
+                    dataIndex: "phone"
+                },
+                {
+                    text: "密保问题",
+                    width: 300,
+                    dataIndex: "question",
+                    renderer: function(value){
+                        var rs="";
+                        var arr = value.split(",");
+                        for(var i = 0, l = arr.length; i < l; i++) {
+                            var item=arr[i];
+                            if(item=='1'){
+                                rs+="您母亲的姓名是？";
+                            }else if(item=='2'){
+                                rs+="您父亲的姓名是？";
+                            }else if(item=='3'){
+                                rs+="您配偶的生日是？";
+                            }else if(item=='4'){
+                                rs+="您的学号（工号）是？";
+                            }else if(item=='5'){
+                                rs+="您高中班主任的名字是？";
+                            }else if(item=='6'){
+                                rs+="您最喜欢的颜色是？";
+                            }else if(item=='7'){
+                                rs+="您最好的朋友姓名是？";
+                            }else if(item=='8'){
+                                rs+="您就读的小学校名是？";
+                            }else if(item=='9'){
+                                rs+="您最喜欢的食物是？";
+                            }
+                        }
+
+                        return rs;
+                    }
+                },
+                {
+                    text: "身份证号码",
+                    width: 150,
+                    dataIndex: "idcard"
+                },
+                {
+                    text: "注册时间",
+                    width: 150,
+                    dataIndex: "cDate"
                 }, {
                     header: "操作",
                     width: 150,
@@ -54,6 +107,7 @@ Ext.onReady(function () {
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateAuth(\'{uid}\');"><img src="js/extjs/resources/icons/lock_edit.png"  title="授权" alt="授权" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:addemail({uid:\'{uid}\',email:\'{email}\'});"><img src="js/extjs/resources/icons/add.png"  title="绑定邮箱" alt="绑定邮箱" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
 
@@ -65,7 +119,7 @@ Ext.onReady(function () {
                         xtype: 'form',
                         id: "dataForm",
                         fieldDefaults: {
-                            labelAlign: 'left',
+                            labelAlign: 'right',
                             labelWidth: 100,
                             anchor: '150%'
                         },
@@ -77,12 +131,21 @@ Ext.onReady(function () {
                             {
                                 id: "uidField",
                                 xtype: 'textfield',
-                                fieldLabel: 'uid',
+                                fieldLabel: '账号ID',
                                 name: 'uid',
                                 inputAttrTpl: [
                                     "autocomplete=\"on\""
                                 ],
-                                emptyText: "请输入uid"
+                                emptyText: "请输入账号ID"
+                            },{
+                                id: "accountnameField",
+                                xtype: 'textfield',
+                                fieldLabel: '账号',
+                                name: 'accountname',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入账号"
                             }, {
                                 id: "nicknameField",
                                 xtype: 'textfield',
@@ -92,6 +155,24 @@ Ext.onReady(function () {
                                     "autocomplete=\"on\""
                                 ],
                                 emptyText: "请输入昵称"
+                            }, {
+                                id: "emailField",
+                                xtype: 'textfield',
+                                fieldLabel: '邮箱',
+                                name: 'email',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入邮箱"
+                            }, {
+                                id: "phoneField",
+                                xtype: 'textfield',
+                                fieldLabel: '手机',
+                                name: 'phone',
+                                inputAttrTpl: [
+                                    "autocomplete=\"on\""
+                                ],
+                                emptyText: "请输入手机"
                             }
                         ],
                         dockedItems: [{
@@ -303,3 +384,101 @@ function updateAuth(uid) {
     Ext.getCmp("permissionGridId").getSelectionModel().deselectAll();
     loadUserPermission(Ext.getCmp("gameCombo").getValue());
 }
+function addemail(data) {
+    Ext.getCmp("addemailForm").getForm().reset();
+    Ext.getCmp("addemailForm").url = URLS.USER.ADD_Email;
+    Ext.getCmp("addemailForm").operate = "添加";
+    if (data.email ==null||data.email ==""){
+        Ext.getCmp("addemailForm").getForm().setValues(data);
+        addemailWindow.show();
+    }else {
+        alert("邮箱已经存在 无法绑定");
+    }
+
+}
+
+var addemailWindow = new Ext.Window({
+    title: "绑定邮箱",
+    width: 300,
+    height: 200,
+    resizable: true,
+    modal: true,
+    autoShow: false,
+    closable: false,
+    layout: 'fit',
+    listeners: {
+        beforeshow: function (_this, eOpts) {
+            Ext.getCmp("addemailSubmitBtn").enable();
+        }
+    },
+    items: [
+        new Ext.form.Panel({
+                id: "addemailForm",
+                fieldDefaults: {
+                    labelAlign: 'right',
+                    labelWidth: 100,
+                    anchor: '90%'
+                },
+                frame: false,
+                bodyStyle: 'padding:10 10',
+                items: [
+                    {
+                        xtype: "hiddenfield",
+                        name: "uid"
+                    }, {
+                        id: "nameField",
+                        xtype: "textfield",
+                        fieldLabel: "邮箱",
+                        name: "email",
+                        allowBlank: false
+                    }],
+                listeners: {
+                    beforeaction: function (_this, action, eOpts) {
+                        Ext.data.JsonP.request({
+                            params: _this.getValues(), // values from form fields..
+                            url: Ext.getCmp("addemailForm").url,
+                            callbackKey: 'function',
+                            scope: 'this',
+                            success: function (res) {
+                                console.log(res);
+                                if (res && res.status == 1) {
+                                    GlobalUtil.tipMsg("提示", Ext.getCmp("addemailForm").operate + "成功");
+                                    userStore.reload();
+                                    addemailWindow.hide();
+                                    return;
+                                }
+                                top.Ext.MessageBox.alert("提示", Ext.getCmp("addemailForm").operate + "失败");
+                            },
+                            failure: function (response) {
+                                top.Ext.MessageBox.alert("提示", Ext.getCmp("addemailForm").operate + "失败");
+                            }
+                        });
+                        return false;
+                    }
+                },
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    dock: 'bottom',
+                    layout: {pack: 'end'},
+                    border: false,
+                    items: [{
+                        text: '确定',
+                        formBind: true,
+                        id: "addemailSubmitBtn",
+                        handler: function (v) {
+                            var form = v.up("form").getForm();
+                            if (v.up("form").isValid()) {
+                                v.disable();
+                                form.submit();
+                            }
+                        }
+                    }, {
+                        text: '取消',
+                        handler: function (v) {
+                            v.up("window").hide();
+                        }
+                    }]
+                }]
+            }
+        )]
+});

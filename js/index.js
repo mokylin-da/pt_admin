@@ -89,7 +89,7 @@ var allMenuTree = {
         tabId: "31",
         permission: "menu_permission"
     }, {
-        text: "授权中心",
+        text: "用户中心",
         leaf: true,
         url: "user_auth.html",
         tabId: "32",

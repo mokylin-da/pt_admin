@@ -1,8 +1,8 @@
 URLS.SELF=location.href;
 
 URLS.USER = {
-    LOGIN: URLS.WWW_BASE + "/login?_surl=" + URLS.SELF,
-    LOGOUT: URLS.USER_BASE + "/user/login/go2out?surl=" + URLS.WWW_BASE + "/login?_surl=" + URLS.SELF,
+    LOGIN: URLS.WWW_BASE + "/login?surl=" + encodeURIComponent(URLS.SELF),
+    LOGOUT: URLS.USER_BASE + "/user/login/go2out?surl=" + URLS.WWW_BASE + "/login?surl=" + encodeURIComponent(URLS.SELF),
     PERMISSION_LIST: URLS.USER_BASE + "/user/pms/listbygame",
     ADD_PERMISSION: URLS.USER_BASE + "/user/pms/additem",
     UPDATE_PERMISSION: URLS.USER_BASE + "/user/pms/updateitem",
@@ -10,7 +10,7 @@ URLS.USER = {
     CURRENT_USER_PERMISSION: URLS.USER_BASE + "/user/info/pms",//当前用户权限
     USER_PERMISSION: URLS.USER_BASE + "/user/pms/listuserpms",//用户权限
     SET_USER_AUTH: URLS.USER_BASE + "/user/pms/adduserpms",//用户授权
-    QUERY_USER: URLS.USER_BASE + "/user/pms/searchuserbynickname",//用户查询
+    QUERY_USER: URLS.USER_BASE + "/user/pms/searchuser",//用户查询
     Game_Task_List: URLS.USER_BASE + "/user/task/gametasklist",
     Game_InnerTask_List: URLS.USER_BASE + "/user/task/innertasklist",
     Game_Task_Add: URLS.USER_BASE + "/user/task/addgametask",
@@ -19,7 +19,8 @@ URLS.USER = {
     Game_First_pay_Task_List: URLS.USER_BASE + "/user/task/gamefirstpaylist",
     Game_First_pay_Task_Add: URLS.USER_BASE + "/user/task/addfirstpaytask",
     Game_First_pay_Task_Update: URLS.USER_BASE + "/user/task/updatefirstpaytask",
-    Game_Delete_Task: URLS.USER_BASE + "/user/task/deletetask"
+    Game_Delete_Task: URLS.USER_BASE + "/user/task/deletetask",
+    ADD_Email: URLS.USER_BASE + "/user/info/addemail"
 };
 URLS.GAME_INFO = {
     GAME_LIST: URLS.GAME_INFO_BASE + "/gameinfo/game/listgamelist",
@@ -71,7 +72,8 @@ URLS.MISC = {
 
 };
 URLS.PAY={
-    PAGE_ORDER:URLS.PAY_BASE+"/recharge/pageorder"//订单列表
+    PAGE_ORDER:URLS.PAY_BASE+"/recharge/pageorder",//订单列表
+    DOWN_ORDER:URLS.PAY_BASE+"/recharge/downorder"//下载订单列表
 };
 SUPER_ADMIN_UID = "ef8af187-d37b-4ad2-96d0-6a88a9c8fa46";
 

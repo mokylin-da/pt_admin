@@ -32,7 +32,7 @@ Ext.onReady(function() {
     if (Ext.Date) {
         Ext.Date.monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
 
-        Ext.Date.dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+        Ext.Date.dayNames = ["日", "一", "二", "三", "四", "五", "六"];
 
         Ext.Date.formatCodes.a = "(this.getHours() < 12 ? '上午' : '下午')";
         Ext.Date.formatCodes.A = "(this.getHours() < 12 ? '上午' : '下午')";
