@@ -230,7 +230,7 @@ Ext.onReady(function () {
                                                 "autocomplete=\"on\""
                                             ]
                                         },{
-                                            xtype: 'textfield',
+                                            xtype: 'combobox',
                                             fieldLabel: '游戏ID',
                                             name: 'iGameId',
                                             valueField:"gid",
