@@ -312,7 +312,7 @@ Ext.onReady(function () {
                                         }
                                         window.open(u)
                                     }
-                                },,{
+                                },{
                                     id:"showmsg",
                                     text:''
                                 }]
