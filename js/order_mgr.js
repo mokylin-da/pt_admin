@@ -9,7 +9,19 @@ Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel','Ext.ux.f
  */
 
 Ext.QuickTips.init();
-
+var gameStore = Ext.create('Ext.data.Store', {
+    autoLoad: true,
+    fields: ['gname', 'gid'],
+    proxy: {
+        type: "jsonp",
+        url: URLS.GAME_INFO.GAME_LIST,
+        callbackKey: "function",
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    }
+});
 // The data store containing the list of states
 var istatusStore = Ext.create('Ext.data.Store', {
     fields: ['ename', 'cname'],
@@ -221,9 +233,10 @@ Ext.onReady(function () {
                                             xtype: 'textfield',
                                             fieldLabel: '游戏ID',
                                             name: 'iGameId',
-                                            inputAttrTpl: [
-                                                "autocomplete=\"on\""
-                                            ]
+                                            valueField:"gid",
+                                            displayField:"gname",
+                                            store:gameStore,
+                                            emptyText: "请选择游戏"
                                         }
                                     ]
                                 }, {
