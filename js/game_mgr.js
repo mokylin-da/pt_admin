@@ -413,6 +413,18 @@ var addDataWindow = new Ext.Window({
                             {boxLabel: '开启', name: 'idcardVerify', inputValue: 1}
                         ]
                     }
+                    ,
+                    {
+                        fieldLabel: "是否需要激活",
+                        name: "needactivation",
+                        allowBlank: false,
+                        xtype: 'radiogroup',
+                        cls: 'x-check-group-alt',
+                        items: [
+                            {boxLabel: '否', name: 'idcardVerify', inputValue: 0, checked: true},
+                            {boxLabel: '是', name: 'idcardVerify', inputValue: 1}
+                        ]
+                    }
                     ,{
                     id: "recharge_platField",
                     xtype: "hiddenfield",
