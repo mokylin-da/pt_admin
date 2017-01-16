@@ -15,7 +15,7 @@ Ext.QuickTips.init();
 
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
-    fields: ['gname', 'gid', 'gurl', 'gtag', 'picture', 'catids', 'sequence', 'state', 'recharge_plat', 'serverurl', 'cuser', 'opentime', 'addtime','idcardVerify'],
+    fields: ['gname', 'gid', 'gurl', 'gtag', 'picture', 'catids', 'sequence', 'state', 'recharge_plat', 'serverurl', 'cuser', 'opentime', 'addtime','idcardVerify','needactivation'],
     pageSize: 20,
     proxy: {
         type: "jsonp",
@@ -145,6 +145,13 @@ Ext.onReady(function () {
                     renderer: function (v) {
                         var val = 4;
                         return (v & val) == val ? '显示' : '不显示';
+                    }
+                }, {
+                    text: "是否需要激活",
+                    width: 100,
+                    dataIndex: "needactivation",
+                    renderer: function (v) {
+                        return v==1 ? '是' : '否';
                     }
                 },
                 {
