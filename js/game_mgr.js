@@ -428,8 +428,8 @@ var addDataWindow = new Ext.Window({
                         xtype: 'radiogroup',
                         cls: 'x-check-group-alt',
                         items: [
-                            {boxLabel: '否', name: 'idcardVerify', inputValue: 0, checked: true},
-                            {boxLabel: '是', name: 'idcardVerify', inputValue: 1}
+                            {boxLabel: '否', name: 'needactivation', inputValue: 0, checked: true},
+                            {boxLabel: '是', name: 'needactivation', inputValue: 1}
                         ]
                     }
                     ,{
