@@ -522,7 +522,7 @@ function updateGame(data) {
     Ext.getCmp("dataForm").getForm().reset();
     Ext.getCmp("dataForm").url = URLS.GAME_INFO.UPDATE_GAME;
     Ext.getCmp("dataForm").getForm().setValues(data);
-    Ext.getCmp("dataForm").setValue({"needactivationField": data.needactivation});
+    Ext.getCmp("needactivationField").setValue(data.needactivation);
     addDataWindow.show();
 }
 
