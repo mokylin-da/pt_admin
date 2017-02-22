@@ -422,6 +422,7 @@ var addDataWindow = new Ext.Window({
                     }
                     ,
                     {
+                        id:"needactivationField",
                         fieldLabel: "是否需要激活",
                         name: "needactivation",
                         allowBlank: false,
@@ -521,6 +522,7 @@ function updateGame(data) {
     Ext.getCmp("dataForm").getForm().reset();
     Ext.getCmp("dataForm").url = URLS.GAME_INFO.UPDATE_GAME;
     Ext.getCmp("dataForm").getForm().setValues(data);
+    Ext.getCmp("dataForm").setValue({"needactivationField": data.needactivation});
     addDataWindow.show();
 }
 
