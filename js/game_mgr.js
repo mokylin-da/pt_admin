@@ -416,7 +416,7 @@ var addDataWindow = new Ext.Window({
                         xtype: 'radiogroup',
                         cls: 'x-check-group-alt',
                         items: [
-                            {boxLabel: '关闭', name: 'idcardVerify', inputValue: 0, checked: true},
+                            {boxLabel: '关闭', name: 'idcardVerify', inputValue: 0},
                             {boxLabel: '开启', name: 'idcardVerify', inputValue: 1}
                         ]
                     }
@@ -429,7 +429,7 @@ var addDataWindow = new Ext.Window({
                         xtype: 'radiogroup',
                         cls: 'x-check-group-alt',
                         items: [
-                            {boxLabel: '否', name: 'needactivation', inputValue: 0, checked: true},
+                            {boxLabel: '否', name: 'needactivation', inputValue: 0},
                             {boxLabel: '是', name: 'needactivation', inputValue: 1}
                         ]
                     }
