@@ -356,7 +356,7 @@ var addDataWindow = new Ext.Window({
                     name: "recharge_ratio",
                     allowBlank: false
                 }, {
-                    id: "recharge_tokenField",
+                    // id: "recharge_tokenField",
                     xtype: "textfield",
                     fieldLabel: "充值token",
                     name: "recharge_token",
@@ -407,9 +407,7 @@ var addDataWindow = new Ext.Window({
                     fieldLabel: '游戏LOGO(296*160)',
                     name: "picture",
                     allowBlank: false
-                }),
-                    {
-                        id:"idcardVerifyField",
+                }),{
                         fieldLabel: "防沉迷",
                         name: "idcardVerify",
                         allowBlank: false,
@@ -422,12 +420,11 @@ var addDataWindow = new Ext.Window({
                     }
                     ,
                     {
-                        id:"needactivationField",
                         fieldLabel: "是否需要激活",
-                        name: "needactivation",
+                            name: "needactivation",
                         allowBlank: false,
                         xtype: 'radiogroup',
-                        cls: 'x-check-group-alt',
+                        // cls: 'x-check-group-alt',
                         items: [
                             {boxLabel: '否', name: 'needactivation', inputValue: 0},
                             {boxLabel: '是', name: 'needactivation', inputValue: 1}
@@ -522,7 +519,6 @@ function updateGame(data) {
     Ext.getCmp("dataForm").getForm().reset();
     Ext.getCmp("dataForm").url = URLS.GAME_INFO.UPDATE_GAME;
     Ext.getCmp("dataForm").getForm().setValues(data);
-    Ext.getCmp("needactivationField").setValue(data.needactivation);
     addDataWindow.show();
 }
 

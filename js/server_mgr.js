@@ -33,7 +33,7 @@ var serverStore = Ext
     .create(
         "Ext.data.Store",
         {
-            fields: ["gid", "sid", "sname", 'surl','opentime','addtime'],
+            fields: ["gid", "sid", "sname", 'surl','opentime','addtime','state'],
             proxy: {
                 type: "jsonp",
                 url: URLS.GAME_INFO.SERVER_LIST,
@@ -86,17 +86,20 @@ Ext.onReady(function () {
                     text: "添加时间",
                     width: 150,
                     dataIndex: "addtime"
+                },{
+                    text: "状态",
+                    width: 80,
+                    dataIndex: "state",
+                    renderer: function (v) {
+                        switch (v) {
+                            case 0:
+                                return "正常";
+                            case 1:
+                                return "维护";
+                        }
+                        return "未知"
+                    }
                 },
-                //{
-                //    header: "操作",
-                //    width: 150,
-                //    align: 'center',
-                //    xtype: 'templatecolumn',
-                //    tpl: '<tpl>'
-                //    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updateServer(\'{gid}\',\'{sid}\');"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                //    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteServer(\'{gid}\',\'{sid}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
-                //    + '</tpl>'
-                //},
                 {
                     header: "操作",
                     width: 150,
@@ -216,6 +219,17 @@ var addDataWindow = new Ext.Window({
                         id: "gidField",
                         xtype: "hiddenfield",
                         name: "gid"
+                    },{
+                        id: "stateField",
+                        fieldLabel: "状态",
+                        name: "state",
+                        allowBlank: false,
+                        xtype: 'radiogroup',
+                        cls: 'x-check-group-alt',
+                        items: [
+                            {boxLabel: '正常', name: 'state', inputValue: 0, checked: true},
+                            {boxLabel: '维护', name: 'state', inputValue: 1}
+                        ]
                     }],
                 listeners: {
                     beforeaction: function (_this, action, eOpts) {
