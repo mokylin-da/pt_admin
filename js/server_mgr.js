@@ -281,6 +281,7 @@ function addServer() {
     Ext.getCmp("serverForm").url = URLS.GAME_INFO.ADD_SERVER;
     Ext.getCmp("serverForm").operate = "添加";
     Ext.getCmp("sidField").setReadOnly(false);
+
     addDataWindow.show();
 }
 function updateServer(data) {
@@ -289,7 +290,9 @@ function updateServer(data) {
     Ext.getCmp("serverForm").getForm().reset();
     Ext.getCmp("serverForm").url = URLS.GAME_INFO.UPDATE_SERVER;
     Ext.getCmp("serverForm").getForm().setValues(data);
+    Ext.getCmp("serverForm").doLayout();
     Ext.getCmp("sidField").setReadOnly(true);
+    Ext.getCmp("stateField").items.get(data.state).setValue(true);
     addDataWindow.show();
 }
 
