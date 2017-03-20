@@ -96,6 +96,8 @@ Ext.onReady(function () {
                                 return "正常";
                             case 1:
                                 return "维护";
+                            case 2:
+                                return "灰度服";
                         }
                         return "未知"
                     }
@@ -228,7 +230,8 @@ var addDataWindow = new Ext.Window({
                         cls: 'x-check-group-alt',
                         items: [
                             {boxLabel: '正常', name: 'state', inputValue: 0, checked: true},
-                            {boxLabel: '维护', name: 'state', inputValue: 1}
+                            {boxLabel: '维护', name: 'state', inputValue: 1},
+                            {boxLabel: '灰度服', name: 'state', inputValue: 2}
                         ]
                     }],
                 listeners: {
