@@ -28,8 +28,8 @@ var gameStore = Ext.create('Ext.data.Store', {
     },
     listeners: {
         load: function (_this, records, successful, eOpts) {
-            gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "平台后台管理"});
-            gameStore.add({gid: COMMON_PERMISSION_IDENTIFIER, gname: "平台公共权限项"});
+            gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
+            gameStore.add({gid: COMMON_PERMISSION_IDENTIFIER, gname: "公共权限项"});
             gameStore.add({gid: USER_UNION, gname: "工会系统"});
         }
     }
@@ -99,7 +99,7 @@ Ext.onReady(function () {
                 items: [
                     Ext.create("Ext.moux.GameCombo", {
                         id: "gameCombo",
-                        extraItems: [{gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"}, {gid: COMMON_PERMISSION_IDENTIFIER,gname: "公共权限项"}],
+                        extraItems: [{gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"}, {gid: COMMON_PERMISSION_IDENTIFIER,gname: "公共权限项"},{gid: USER_UNION, gname: "工会系统"}],
                         listeners: {
                             select: function (_this, records, eOpts) {
                                 permissionListStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
