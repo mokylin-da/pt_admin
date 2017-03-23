@@ -85,6 +85,7 @@ var COMMON_CONFIG = {
 
 var PLATFORM_IDENTIFIER = 0;
 var COMMON_PERMISSION_IDENTIFIER = -1;
+var USER_UNION = -2;
 
 Ext.Loader.setConfig({
     enabled: true,
