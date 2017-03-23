@@ -28,8 +28,8 @@ var gameStore = Ext.create('Ext.data.Store', {
     },
     listeners: {
         load: function (_this, records, successful, eOpts) {
-            gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "官网管理平台"});
-            gameStore.add({gid: COMMON_PERMISSION_IDENTIFIER, gname: "公共权限项"});
+            gameStore.add({gid: PLATFORM_IDENTIFIER, gname: "平台后台管理"});
+            gameStore.add({gid: COMMON_PERMISSION_IDENTIFIER, gname: "平台公共权限项"});
             gameStore.add({gid: USER_UNION, gname: "工会系统"});
         }
     }
