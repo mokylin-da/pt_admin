@@ -95,6 +95,9 @@ Ext.Loader.setConfig({
     }
 });
 var isLogin = false;
+/**
+ * 判断用户是否登录
+ */
 Ext.data.JsonP.request({
     url: URLS.USER.CURRENT_USER,
     callbackKey: 'function',
