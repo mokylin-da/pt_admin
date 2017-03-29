@@ -9,10 +9,6 @@ Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel','Ext.ux.f
  */
 
 Ext.QuickTips.init();
-//var gameStore2 = Ext.create('Ext.data.Store', {
-//    fields: ['gname', 'gameid'],
-//    data:[]
-//});
 var gameStore = Ext.create('Ext.data.Store', {
     autoLoad: true,
     fields: ['gname', 'gid'],
@@ -25,23 +21,6 @@ var gameStore = Ext.create('Ext.data.Store', {
             root: 'data'
         }
     }
-    //,
-    //listeners:{
-    //    load:function(store,records ,successful ,eOpts ){
-    //        if(successful){
-    //            console.log(records);
-    //            var dataArr=[];
-    //            for(var i = 0,j=records.length;i<j;i++){
-    //                dataArr.push({
-    //                    gameid:records[i].data.gid,
-    //                    gname:records[i].data.gname
-    //                })
-    //            }
-    //            gameStore2.loadData(dataArr);
-    //        }
-    //
-    //    }
-    //}
 });
 
 
