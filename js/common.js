@@ -98,9 +98,10 @@ var isLogin = false;
 Ext.data.JsonP.request({
     url: URLS.USER.CURRENT_USER,
     callbackKey: 'function',
-    // scope: 'this',
+    headers: {
+        'authorization': Ext.util.Cookies.get("u_c1")
+    },
     success: function (res) {
-        // alert(JSON.stringify(res));
         if (res && res.status == 1) {
             isLogin = true;
             GlobalUtil.superAdmin = res.data && res.data.uid == SUPER_ADMIN_UID;
@@ -111,15 +112,9 @@ Ext.data.JsonP.request({
             return
         }
         parent.toLogin();
-        //Ext.MessageBox.alert("提示", "未登录", function () {
-        //
-        //});
     },
     failure: function (response) {
         parent.toLogin();
-        //location.href = URLS.USER.LOGIN;
-        //Ext.MessageBox.alert("提示", "未登录", function () {
-        //});
     }
 });
 
