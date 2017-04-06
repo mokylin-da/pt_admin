@@ -277,7 +277,7 @@ var userAuthWindow = new Ext.Window({
                 items: [
                     Ext.create("Ext.moux.GameCombo",{
                     id: "gameCombo",
-                    extraItems:[{gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"},{gid: USER_UNION, gname: "工会系统"}],
+                    extraItems:[{gid:PLATFORM_IDENTIFIER,gname:"官网管理平台"},{gid: USER_UNION, gname: "公会系统"}],
                     listeners: {
                         select: function (_this, records, eOpts) {
                             permissionListStore.getProxy().extraParams = {"gid": records[0].get('gid')};//游戏改变的时候重新加载权限数据
