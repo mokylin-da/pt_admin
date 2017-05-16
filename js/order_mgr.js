@@ -49,7 +49,7 @@ var orderStore = Ext
         "Ext.data.Store",
         {
             autoLoad: true,
-            fields: ["id","vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vplatformAccount','vplatformOrderNo','istatus','istatusVal'],
+            fields: ["id","vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vcategory','vplatformAccount','vplatformOrderNo','istatus','istatusVal'],
             pageSize:20,
             proxy: {
                 type: "jsonp",
@@ -127,7 +127,13 @@ Ext.onReady(function () {
                     text: "支付平台",
                     width: 150,
                     dataIndex: "iplatformType"
-                },{
+                },
+				{
+					text: "支付类型",
+                    width: 100,
+                    dataIndex: "vcategory"
+				},
+				{
                     text: "时间",
                     width: 150,
                     dataIndex: "dtUpdateTime"
@@ -364,7 +370,6 @@ function resetRequestNum(OrderNo,istatus)
 									callbackKey: 'function',
 									// scope: 'this',
 									success: function (res) {
-										console.log(res);
 										if (res && res.status == 20001) {
 											GlobalUtil.tipMsg("提示", "重置成功");
 											orderStore.reload();
