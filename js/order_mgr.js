@@ -157,17 +157,19 @@ Ext.onReady(function () {
                         }
                     }
                 },
+				{
+                    text: "发货次数",
+                    width: 100,
+                    dataIndex: "requestgamenum"
+                },
                 {
                     header: "操作",
                     width: 150,
-                    dataIndex: "sequence",
-                    renderer:function(val,metaData,record,rowIndex,store,view){
-                        var value = record.raw;
-                        value.opentime = value.opentime.replace(/\..*$/,"");
-                        var records = JSON.stringify(value).replace(/"/g,'\"');
-                        return    '<a style="text-decoration:none;margin-right:5px;" href=\'javascript:updateServer('+records+');\'><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                            + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteServer(\''+value.gid+'\',\''+value.sid+'\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>';
-                    }
+                    align: 'center',
+                    xtype: 'templatecolumn',
+					tpl: '<tpl>'
+						+ '<a style="text-decoration:none;margin-right:5px;" href="javascript:resetRequestNum(\'{vorderNo}\',\'{istatus}\');"><img src="js/extjs/resources/icons/arrow_refresh.png"  title="重置" alt="重置" class="actionColumnImg" />&nbsp;</a>'
+						+ '</tpl>'
                 }
 
             ],
@@ -341,4 +343,40 @@ Ext.onReady(function () {
 
 });
 
-
+/**
+* 重置订单发货次数
+*/
+function resetRequestNum(OrderNo,istatus)
+{
+	if (istatus != 'OUTER_RECHARGED')
+		return;
+	
+	Ext.MessageBox.confirm("操作确认", "是否要重置发货次数：" + OrderNo,
+						function (res)
+						{
+							if (res == "yes")
+							{
+								Ext.data.JsonP.request({
+									url: URLS.PAY.RESET_ORDER,
+									params: {
+										vOrderNo: OrderNo
+									},
+									callbackKey: 'function',
+									// scope: 'this',
+									success: function (res) {
+										console.log(res);
+										if (res && res.status == 20001) {
+											GlobalUtil.tipMsg("提示", "重置成功");
+											orderStore.reload();
+											return;
+										}
+										Ext.MessageBox.alert("提示", "重置失败:" + res ? res.msg : "");
+									},
+									failure: function (response) {
+										Ext.MessageBox.alert("提示", "重置失败");
+									}
+								});
+							}
+						}
+						);
+}

@@ -73,7 +73,8 @@ URLS.MISC = {
 };
 URLS.PAY={
     PAGE_ORDER:URLS.PAY_BASE+"/recharge/pageorder",//订单列表
-    DOWN_ORDER:URLS.PAY_BASE+"/recharge/downorder"//下载订单列表
+    DOWN_ORDER:URLS.PAY_BASE+"/recharge/downorder",//下载订单列表
+	RESET_ORDER:URLS.PAY_BASE+"/recharge/resetRequestNum"//重置订单
 };
 SUPER_ADMIN_UID = "ef8af187-d37b-4ad2-96d0-6a88a9c8fa46";
 
