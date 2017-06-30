@@ -296,7 +296,9 @@ var addDataWindow = new Ext.Window({
                 },
                 frame: false,
                 width: '100%',
-                bodyStyle: 'padding:10 10',
+                height: 600,    
+                bodyStyle: 'padding:30 10',
+                autoScroll: true,
                 items: [{
                     id: 'catCheckBoxGroup',
                     xtype: 'checkboxgroup',
