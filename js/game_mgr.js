@@ -376,6 +376,22 @@ var addDataWindow = new Ext.Window({
                     format: 'Y-m-d H:i:s',
                     allowBlank: false
                 }), {
+                    id: "gameintroField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏简介",
+                    name: "gameintro",
+                    allowBlank: false,
+                    height: 80,
+                    width:150
+                }, {
+                    id: "gamedescField",
+                    xtype: "textfield",
+                    fieldLabel: "游戏详情",
+                    name: "gamedesc",
+                    allowBlank: false,
+                    height: 100,
+                    width:250
+                }, {
                     xtype: 'radiogroup',
                     items: [{boxLabel: "显示", name: 'display', inputValue: 1, checked: true}, {
                         boxLabel: "不显示",
