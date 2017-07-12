@@ -46,7 +46,7 @@ var picTurnCatStore =  Ext.create('Ext.data.Store', {
 
 var picTurnStore = Ext.create('Ext.data.Store', {
     autoLoad: false,
-    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','catid','desc'],
+    fields: ['type', 'gid', 'sequence', 'state', 'title', 'link', 'img','catid','desc','ownerid'],
     listeners: {
         beforeload: function (_this) {
             Ext.data.JsonP.request({
@@ -69,7 +69,6 @@ var picTurnStore = Ext.create('Ext.data.Store', {
                             finalData.push(tmpData);
                         }
                         window.datas = finalData;
-                        console.dir(finalData);
                         _this.add(finalData);
                         Ext.getCmp("addPicTurnBtn").enable();
                     } else {
@@ -119,11 +118,20 @@ Ext.onReady(function () {
                 },
                 {
                     text: "分类",
-                    width: 200,
+                    width: 150,
                     dataIndex: "catid",
                     renderer:function(v){
                         var record = picTurnCatStore.findRecord("id",v);
                         return !record?"":record.get("cname");
+                    }
+                },
+                {
+                    text:"所属游戏",
+                    width: 150,
+                    dataIndex: "ownerid",
+                    renderer:function(v){
+                        var record = gameStore.findRecord("gid",v);
+                        return !record?"":record.get("gname");
                     }
                 },
                 {
@@ -154,7 +162,7 @@ Ext.onReady(function () {
                     align: 'center',
                     xtype: 'templatecolumn',
                     tpl: '<tpl>'
-                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:{state},title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\',catid:\'{catid}\',desc:\'{desc}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:updatePicTurn({id:\'{id}\',sequence:\'{sequence}\',state:{state},title:\'{title}\',link:\'{link}\',img:\'{img}\',type:\'{type}\',gid:\'{gid}\',catid:\'{catid}\',desc:\'{desc}\',ownerid:\'{ownerid}\'});"><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
                     + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deletePicTurn(\'{id}\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>'
                     + '</tpl>'
                 }
@@ -248,7 +256,19 @@ var addDataWindow = new Ext.Window({
                     },
                         Ext.create("Ext.moux.MoUploader", {
                             name: "img"
-                        }), {
+                        })
+                        , {
+                            xtype: "combobox",
+                            fieldLabel: "所属游戏",
+                            name: "ownerid",
+                            store:gameStore,
+                            queryMode: 'local',
+                            displayField:"gname",
+                            valueField:"gid",
+                            allowBlank:false,
+                            editable: false,
+                            emptyText:"--请选择--"
+                        }, {
                             xtype: "textfield",
                             fieldLabel: "标题",
                             name: "title",
@@ -286,7 +306,6 @@ var addDataWindow = new Ext.Window({
                                 callbackKey: 'function',
                                 scope: 'this',
                                 success: function (res) {
-                                    console.log(res);
                                     if (res && res.status == 1) {
                                         GlobalUtil.tipMsg("提示", Ext.getCmp("dataForm").operate + "成功");
                                         picTurnStore.reload();
