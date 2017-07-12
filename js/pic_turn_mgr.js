@@ -7,6 +7,8 @@ Ext.require(['Ext.grid.*', 'Ext.data.*', 'Ext.selection.CheckboxModel', 'Ext.mou
  *权限管理
  */
 
+var API_TYPE = "GAME_INFO_INTERNAL_ENDPOINT", API_NAME = "gameinfo/game/allgamelistlimitfields", API_VALUE = "", API_KEY = "gid";
+
 Ext.QuickTips.init();
 // ##########################################################
 // 数据源存储块 开始
@@ -298,6 +300,9 @@ var addDataWindow = new Ext.Window({
                     listeners: {
                         beforeaction: function (_this, action, eOpts) {
                             var params = _this.getValues();
+                            params.apiname = API_NAME;
+                            params.apitype = API_TYPE;
+                            params.apikey = 'gid';
                             convertParams(params, ["title", "link", "img","desc"]);
                             params.gid=Ext.getCmp("gameCombo").getValue();
                             Ext.data.JsonP.request({
