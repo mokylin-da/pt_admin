@@ -49,7 +49,7 @@ var orderStore = Ext
         "Ext.data.Store",
         {
             autoLoad: true,
-            fields: ["id","vorderNo", "vuserId", "iplayerId", 'irmb','igameId','iworldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iplatformType','vplatformAccount','vplatformOrderNo','istatus','istatusVal'],
+            fields: ["id","vOrderNo", "vUserId", "iplayerId", 'iRmb','iGameId','iWorldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iPlatformType','vPlatformAccount','vPlatformOrderNo','iStatus','istatusVal'],
             pageSize:20,
             proxy: {
                 type: "jsonp",
@@ -103,30 +103,30 @@ Ext.onReady(function () {
                 {
                     text: "订单号",
                     width: 200,
-                    dataIndex: "vorderNo"
+                    dataIndex: "vOrderNo"
                 },
                 {
                     text: "用户id",
                     width: 150,
-                    dataIndex: "vuserId"
+                    dataIndex: "vUserId"
                 },
                 {
                     text: "人民币",
                     width: 150,
-                    dataIndex: "irmb"
+                    dataIndex: "iRmb"
                 },
                 {
                     text: "游戏id",
                     width: 150,
-                    dataIndex: "igameId"
+                    dataIndex: "iGameId"
                 },{
                     text: "区服id",
                     width: 150,
-                    dataIndex: "iworldId"
+                    dataIndex: "iWorldId"
                 },{
                     text: "支付平台",
                     width: 150,
-                    dataIndex: "iplatformType"
+                    dataIndex: "iPlatformType"
                 },{
                     text: "时间",
                     width: 150,
