@@ -49,7 +49,7 @@ var orderStore = Ext
         "Ext.data.Store",
         {
             autoLoad: true,
-            fields: ["id","vOrderNo", "vUserId", "iplayerId", 'iRmb','iGameId','iWorldId','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iPlatformType','vPlatformAccount','vPlatformOrderNo','iStatus','istatusVal'],
+            fields: ["id","vOrderNo", "vUserId", "iPlayerId",'iPlayerName', 'iRmb','iGameId','iGameName','iWorldId','iWorldName','bValidated','requestgamenum','dtCreateTime','dtUpdateTime','iPlatformType','vCategory','vPlatformAccount','vPlatformOrderNo','iStatus','istatusVal'],
             pageSize:20,
             proxy: {
                 type: "jsonp",
@@ -97,54 +97,78 @@ Ext.onReady(function () {
                 Ext.create("Ext.grid.RowNumberer"),
                 {
                     text: "序号",
-                    width: 200,
+                    width: 80,
                     dataIndex: "id"
                 },
                 {
                     text: "订单号",
-                    width: 200,
+                    width: 250,
                     dataIndex: "vOrderNo"
                 },
                 {
                     text: "用户id",
-                    width: 150,
+                    width: 270,
                     dataIndex: "vUserId"
                 },
                 {
                     text: "人民币",
-                    width: 150,
+                    width: 74,
                     dataIndex: "iRmb"
                 },
                 {
                     text: "游戏id",
-                    width: 150,
+                    width: 74,
                     dataIndex: "iGameId"
                 },{
                     text: "区服id",
-                    width: 150,
+                    width: 74,
                     dataIndex: "iWorldId"
                 },{
-                    text: "支付平台",
-                    width: 150,
-                    dataIndex: "iPlatformType"
+                    text: "角色id",
+                    width: 74,
+                    dataIndex: "iPlayerId"
                 },{
-                    text: "时间",
-                    width: 150,
+                    text: "支付平台",
+                    width: 98,
+                    dataIndex: "iPlatformType"
+                },
+                {
+                    text: "支付类型",
+                    width: 98,
+                    dataIndex: "vCategory"
+                },
+                {
+                    text: "订单创建时间",
+                    width: 146,
+                    dataIndex: "dtCreateTime"
+                    ,
+                    renderer : function(value) {
+                        if (value == null || value == 0) {
+                            return '未知'
+                        } else {
+                            return Ext.util.Format.date(new Date(parseInt(value)),"Y-m-d H:i:s");
+                            // return  new Date(parseInt(value)).format("Y-m-d H:i:s");
+                        }
+                    }
+                },
+                {
+                    text: "订单刷新时间",
+                    width: 146,
                     dataIndex: "dtUpdateTime"
                     ,
                     renderer : function(value) {
                         if (value == null || value == 0) {
                             return '未知'
                         } else {
-                            return Ext.util.Format.date(new Date(parseInt(value)),"Y-m-d\\TH:i:s");
+                            return Ext.util.Format.date(new Date(parseInt(value)),"Y-m-d H:i:s");
                             // return  new Date(parseInt(value)).format("Y-m-d H:i:s");
                         }
                     }
                 },
                 {
                     text: "状态",
-                    width: 150,
-                    dataIndex: "istatus",
+                    width: 92,
+                    dataIndex: "iStatus",
                     renderer:function(v){
                         if (v=='INIT'){
                             return "用户未支付";
@@ -158,16 +182,33 @@ Ext.onReady(function () {
                     }
                 },
                 {
+                    text: "发货次数",
+                    width: 86,
+                    dataIndex: "requestgamenum"
+                },
+                {
                     header: "操作",
-                    width: 150,
-                    dataIndex: "sequence",
-                    renderer:function(val,metaData,record,rowIndex,store,view){
-                        var value = record.raw;
-                        value.opentime = value.opentime.replace(/\..*$/,"");
-                        var records = JSON.stringify(value).replace(/"/g,'\"');
-                        return    '<a style="text-decoration:none;margin-right:5px;" href=\'javascript:updateServer('+records+');\'><img src="js/extjs/resources/icons/pencil.png"  title="修改" alt="修改" class="actionColumnImg" />&nbsp;</a>'
-                            + '<a style="text-decoration:none;margin-right:5px;" href="javascript:deleteServer(\''+value.gid+'\',\''+value.sid+'\');"><img src="js/extjs/resources/icons/delete.png"  title="删除" alt="删除" class="actionColumnImg" />&nbsp;</a>';
-                    }
+                    width: 78,
+                    align: 'center',
+                    xtype: 'templatecolumn',
+                    tpl: '<tpl>'
+                    + '<a style="text-decoration:none;margin-right:5px;" href="javascript:resetRequestNum(\'{vOrderNo}\',\'{iStatus}\');"><img src="js/extjs/resources/icons/arrow_refresh.png"  title="重置" alt="重置" class="actionColumnImg" />&nbsp;</a>'
+                    + '</tpl>'
+                },
+                {
+                    text: "游戏名",
+                    width: 86,
+                    dataIndex: "iGameName"
+                },
+                {
+                    text: "服务器名",
+                    width: 86,
+                    dataIndex: "iWorldName"
+                },
+                {
+                    text: "角色名",
+                    width: 86,
+                    dataIndex: "iPlayerName"
                 }
 
             ],
@@ -178,167 +219,202 @@ Ext.onReady(function () {
                 dock: 'bottom',
                 displayInfo: true
             },{
-                    xtype: "toolbar",
-                    items: [
-                        {
-                            xtype: 'form',
-                            id: "dataForm",
-                            fieldDefaults: {
-                                labelAlign: 'right',
-                                labelWidth: 100,
-                                anchor: '150%'
-                            },
-                            frame: false,
-                            border: false,
-                            // bodyStyle: 'padding:10 10',
-                            layout: 'column',
-                            items: [
-                                {
-                                    xtype: 'panel',
-                                    columnWidth: 0.2,
-                                    border: 0,
-                                    items: [
-                                        {
-                                            id: "istatusField",
-                                            xtype: 'combobox',
-                                            fieldLabel: '支付状态',
-                                            name: 'istatusVal',
-                                            valueField:"ename",
-                                            displayField:"cname",
-                                            store:istatusStore,
-                                            emptyText: "请选择支付状态"
-                                        },{
-                                            xtype: 'textfield',
-                                            fieldLabel: '订单号',
-                                            name: 'vOrderNo',
-                                            inputAttrTpl: [
-                                                "autocomplete=\"on\""
-                                            ],
-                                            emptyText: "请输入订单号"
-                                        }
-                                    ]
-                                }, {
-                                    xtype: 'panel',
-                                    columnWidth: 0.2,
-                                    border: 0,
-                                    items: [
-                                        {
-                                            xtype: 'textfield',
-                                            fieldLabel: '用户ID',
-                                            name: 'vUserId',
-                                            inputAttrTpl: [
-                                                "autocomplete=\"on\""
-                                            ]
-                                        },{
-                                            xtype: 'combobox',
-                                            fieldLabel: '游戏ID',
-                                            name: 'iGameId',
-                                            valueField:"gid",
-                                            displayField:"gname",
-                                            store:gameStore,
-                                            emptyText: "请选择游戏"
-                                        }
-                                    ]
-                                }, {
-                                    xtype: 'panel',
-                                    columnWidth: 0.2,
-                                    border: 0,
-                                    items: [
-                                        {
-                                            xtype: 'textfield',
-                                            fieldLabel: '区服ID',
-                                            name: 'iWorldId',
-                                            inputAttrTpl: [
-                                                "autocomplete=\"on\""
-                                            ]
-                                        },{
-                                            xtype: 'combobox',
-                                            fieldLabel: '支付平台',
-                                            name: 'iPlatformTypeName',
-                                            valueField:"ename",
-                                            displayField:"cname",
-                                            store:iPlatformTypeStore,
-                                            emptyText: "请选择支付平台"
-                                        }
-                                    ]
-                                }, {
-                                    xtype: 'panel',
-                                    columnWidth: 0.2,
-                                    border: 0,
-                                    items: [
-                                        Ext.create('Ext.ux.form.DateTimeField', {
-                                            fieldLabel: "时间从",
-                                            name: "dtCreateTime1",
-                                            format: 'Y-m-d H:i:s',
-                                            allowBlank: false
-                                        }), Ext.create('Ext.ux.form.DateTimeField', {
-                                            fieldLabel: "至",
-                                            name: "dtCreateTime2",
-                                            value: new Date(),
-                                            format: 'Y-m-d H:i:s',
-                                            allowBlank: false
-                                        })
-                                    ]
-                                }
-                            ],
-                            dockedItems: [{
-                                xtype: 'toolbar',
-                                dock: 'right',
-                                layout: 'hbox',
+                xtype: "toolbar",
+                items: [
+                    {
+                        xtype: 'form',
+                        id: "dataForm",
+                        fieldDefaults: {
+                            labelAlign: 'right',
+                            labelWidth: 100,
+                            anchor: '150%'
+                        },
+                        frame: false,
+                        border: false,
+                        // bodyStyle: 'padding:10 10',
+                        layout: 'column',
+                        items: [
+                            {
+                                xtype: 'panel',
+                                columnWidth: 0.2,
                                 border: 0,
-                                items: [{
-                                    text: "搜索",
-                                    icon: "js/extjs/resources/icons/search.png",
-                                    formBind: true,
-                                    handler: function (v) {
-                                        v.up("form").submit({
-                                            submitEmptyText:false
-                                        });
+                                items: [
+                                    {
+                                        id: "istatusField",
+                                        xtype: 'combobox',
+                                        fieldLabel: '支付状态',
+                                        name: 'istatusVal',
+                                        valueField:"ename",
+                                        displayField:"cname",
+                                        store:istatusStore,
+                                        emptyText: "请选择支付状态"
+                                    },{
+                                        xtype: 'textfield',
+                                        fieldLabel: '订单号',
+                                        name: 'vOrderNo',
+                                        inputAttrTpl: [
+                                            "autocomplete=\"on\""
+                                        ],
+                                        emptyText: "请输入订单号"
                                     }
-                                }, {
-                                    text: '重置',
-                                    handler: function (v) {
-                                        v.up("form").getForm().reset()
+                                ]
+                            }, {
+                                xtype: 'panel',
+                                columnWidth: 0.2,
+                                border: 0,
+                                items: [
+                                    {
+                                        xtype: 'textfield',
+                                        fieldLabel: '用户ID',
+                                        name: 'vUserId',
+                                        inputAttrTpl: [
+                                            "autocomplete=\"on\""
+                                        ]
+                                    },{
+                                        xtype: 'combobox',
+                                        fieldLabel: '游戏ID',
+                                        name: 'iGameId',
+                                        valueField:"gid",
+                                        displayField:"gname",
+                                        store:gameStore,
+                                        emptyText: "请选择游戏"
                                     }
-                                },{
-                                    text:'下载订单',
-                                    handler: function (v) {
-                                        console.log(v.up("form").getForm().getValues());
-                                        var values = v.up("form").getForm().getValues();
-                                        var u=URLS.PAY.DOWN_ORDER+"?x=1";
-                                        for(var key in values){
-                                            u+="&"+key+"="+values[key];
-
-                                        }
-                                        window.open(u)
+                                ]
+                            }, {
+                                xtype: 'panel',
+                                columnWidth: 0.2,
+                                border: 0,
+                                items: [
+                                    {
+                                        xtype: 'textfield',
+                                        fieldLabel: '区服ID',
+                                        name: 'iWorldId',
+                                        inputAttrTpl: [
+                                            "autocomplete=\"on\""
+                                        ]
+                                    },{
+                                        xtype: 'combobox',
+                                        fieldLabel: '支付平台',
+                                        name: 'iPlatformTypeName',
+                                        valueField:"ename",
+                                        displayField:"cname",
+                                        store:iPlatformTypeStore,
+                                        emptyText: "请选择支付平台"
                                     }
-                                },{
-                                    id:"showmsg",
-                                    text:''
-                                }]
-                            }],
-                            listeners: {
-                                beforeaction: function (form, action, options) {
-                                    orderStore.getProxy().extraParams = action.getParams();
-                                    orderStore.reload();
-                                    return false;
-                                }
+                                ]
+                            }, {
+                                xtype: 'panel',
+                                columnWidth: 0.2,
+                                border: 0,
+                                items: [
+                                    Ext.create('Ext.ux.form.DateTimeField', {
+                                        fieldLabel: "时间从",
+                                        name: "dtCreateTime1",
+                                        format: 'Y-m-d H:i:s',
+                                        allowBlank: false
+                                    }), Ext.create('Ext.ux.form.DateTimeField', {
+                                        fieldLabel: "至",
+                                        name: "dtCreateTime2",
+                                        value: new Date(),
+                                        format: 'Y-m-d H:i:s',
+                                        allowBlank: false
+                                    })
+                                ]
                             }
-                        }]
-                }]
+                        ],
+                        dockedItems: [{
+                            xtype: 'toolbar',
+                            dock: 'right',
+                            layout: 'hbox',
+                            border: 0,
+                            items: [{
+                                text: "搜索",
+                                icon: "js/extjs/resources/icons/search.png",
+                                formBind: true,
+                                handler: function (v) {
+                                    v.up("form").submit({
+                                        submitEmptyText:false
+                                    });
+                                }
+                            }, {
+                                text: '重置',
+                                handler: function (v) {
+                                    v.up("form").getForm().reset()
+                                }
+                            },{
+                                text:'下载订单',
+                                handler: function (v) {
+                                    console.log(v.up("form").getForm().getValues());
+                                    var values = v.up("form").getForm().getValues();
+                                    var u=URLS.PAY.DOWN_ORDER+"?x=1";
+                                    for(var key in values){
+                                        u+="&"+key+"="+values[key];
+
+                                    }
+                                    window.open(u)
+                                }
+                            },{
+                                id:"showmsg",
+                                text:''
+                            }]
+                        }],
+                        listeners: {
+                            beforeaction: function (form, action, options) {
+                                orderStore.getProxy().extraParams = action.getParams();
+                                orderStore.reload();
+                                return false;
+                            }
+                        }
+                    }]
+            }]
 
         });
 
     /**
-      * 布局
-      */
+     * 布局
+     */
     new Ext.Viewport({
-         layout: "fit",
-         items: [orderGrid],
-         renderTo: Ext.getBody()
+        layout: "fit",
+        items: [orderGrid],
+        renderTo: Ext.getBody()
     });
 
 
 });
 
+/**
+ * 重置订单发货次数
+ */
+function resetRequestNum(OrderNo,istatus)
+{
+    if (istatus != 'OUTER_RECHARGED')
+        return;
 
+    Ext.MessageBox.confirm("操作确认", "是否要重置发货次数：" + OrderNo,
+        function (res)
+        {
+            if (res == "yes")
+            {
+                Ext.data.JsonP.request({
+                    url: URLS.PAY.RESET_ORDER,
+                    params: {
+                        vOrderNo: OrderNo
+                    },
+                    callbackKey: 'function',
+                    // scope: 'this',
+                    success: function (res) {
+                        if (res && res.status == 20001) {
+                            GlobalUtil.tipMsg("提示", "重置成功");
+                            orderStore.reload();
+                            return;
+                        }
+                        Ext.MessageBox.alert("提示", "重置失败:" + res ? res.msg : "");
+                    },
+                    failure: function (response) {
+                        Ext.MessageBox.alert("提示", "重置失败");
+                    }
+                });
+            }
+        }
+    );
+}
